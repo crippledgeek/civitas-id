@@ -9,16 +9,11 @@ import { randomInt } from "./faker-utils.js";
 import { PersonalIdFaker } from "./personal-id-faker.js";
 
 const LEGAL_PERSON_MINIMUM_MONTH = 20;
-const ORGANISATION_NUMBER_MAXIMUM_MONTH = 99;
 
 function randomRegistrationDate(): LocalDate {
-  const month = randomInt(LEGAL_PERSON_MINIMUM_MONTH, ORGANISATION_NUMBER_MAXIMUM_MONTH + 1);
-  const day = randomInt(1, 100);
-
-  const now = LocalDate.now();
-  const effectiveMonth = month > 12 ? 1 : month;
-  const effectiveDay = day > 28 ? 1 : day;
-  return LocalDate.of(now.year, effectiveMonth, effectiveDay);
+  const month = randomInt(1, 13);
+  const day = randomInt(1, 29);
+  return LocalDate.of(LocalDate.now().year, month, day);
 }
 
 function randomIdNumber(registrationDate: LocalDate): OrganisationId {
