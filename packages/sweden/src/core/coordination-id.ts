@@ -1,27 +1,11 @@
 import { LocalDate } from "@civitas-id/core";
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { AbstractPersonId } from "./abstract-person-id.js";
 import { OrganisationId } from "./organisation-id.js";
-import {
-  getPossibleFullIdNumber,
-  isIdNumberFull,
-  isValidCoordinationDate,
-} from "./person-official-id-base.js";
+import { getPossibleFullIdNumber, isCoordinationNumberFull } from "./person-official-id-base.js";
 import { PersonalId } from "./personal-id.js";
 import { createMatcher } from "./swedish-id-matcher.js";
-
-/**
- * Returns `true` if `fullCoordinationNumber` is a syntactically valid 13-character
- * samordningsnummer in long internal format with a valid coordination date (day + 60)
- * and Luhn checksum.
- *
- * @param fullCoordinationNumber - the full-length ID string to validate
- * @returns `true` when valid
- */
-export function isCoordinationNumberFull(fullCoordinationNumber: string): boolean {
-  return isIdNumberFull(fullCoordinationNumber, isValidCoordinationDate);
-}
 
 /**
  * Represents a Swedish coordination ID (samordningsnummer).
@@ -45,10 +29,12 @@ export class CoordinationId extends AbstractPersonId {
    * @returns a `CoordinationId` instance, or `undefined` if `text` is invalid
    */
   static parse(text: string | null | undefined): CoordinationId | undefined {
+    if (text == null) return undefined;
     try {
-      return CoordinationId.parseOrThrow(text as string);
-    } catch {
-      return undefined;
+      return CoordinationId.parseOrThrow(text);
+    } catch (e) {
+      if (e instanceof InvalidIdNumberError) return undefined;
+      throw e;
     }
   }
 
@@ -61,11 +47,11 @@ export class CoordinationId extends AbstractPersonId {
    */
   static parseOrThrow(text: string): CoordinationId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new IllegalIdNumberException(`Invalid coordination ID: ${text}`);
+    if (m.noMatch()) throw new InvalidIdNumberError(`Invalid coordination ID: ${text}`);
 
     const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
     if (!isCoordinationNumberFull(full))
-      throw new IllegalIdNumberException(`Invalid coordination ID: ${text}`);
+      throw new InvalidIdNumberError(`Invalid coordination ID: ${text}`);
     return new CoordinationId(full);
   }
 
@@ -88,13 +74,15 @@ export class CoordinationId extends AbstractPersonId {
    * @returns `true` when valid
    */
   static isValid(text: string | null | undefined): boolean {
+    if (text == null) return false;
     try {
-      const m = createMatcher(text as string);
+      const m = createMatcher(text);
       if (m.noMatch()) return false;
       const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
       return isCoordinationNumberFull(full);
-    } catch {
-      return false;
+    } catch (e) {
+      if (e instanceof InvalidIdNumberError) return false;
+      throw e;
     }
   }
 
@@ -162,6 +150,6 @@ export const PersonOfficialIdBase = {
   format(text: string, format: PnrFormat): string {
     if (CoordinationId.isValid(text)) return CoordinationId.parseOrThrow(text).formatted(format);
     if (PersonalId.isValid(text)) return PersonalId.parseOrThrow(text).formatted(format);
-    throw new IllegalIdNumberException(`Invalid person official ID: ${text}`);
+    throw new InvalidIdNumberError(`Invalid person official ID: ${text}`);
   },
 };

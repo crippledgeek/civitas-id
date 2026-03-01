@@ -1,7 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import type { PersonIdFaker } from "@civitas-id/test-common";
-import { CoordinationId } from "../../core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../error/illegal-id-number-exception.js";
+import { CoordinationId } from "../../core/coordination-id.js";
+import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import {
   buildIdString,
   makeFemaleBirthNumber,
@@ -23,45 +23,39 @@ function createIdWithBirthNumber(birthDate: LocalDate, birthNumber: number): Coo
 /**
  * Faker for Swedish coordination IDs (samordningsnummer).
  */
-export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
+export const CoordinationIdFaker: PersonIdFaker<CoordinationId> & {
+  createMale(): CoordinationId;
+  createFemale(): CoordinationId;
+  createCentenarian(): CoordinationId;
+} = {
   /**
-   * Creates a new {@link CoordinationIdFaker} instance.
+   * Creates a random coordination ID, optionally for a specific birth date.
    *
-   * @example
-   * const faker = CoordinationIdFaker.coordinationId();
-   * const id = faker.create();
-   */
-  static coordinationId(): CoordinationIdFaker {
-    return new CoordinationIdFaker();
-  }
-
-  /** Creates a random coordination ID with a random birth date. */
-  create(): CoordinationId;
-  /** Creates a random coordination ID for the given birth date. @param date - the birth date */
-  create(date: LocalDate): CoordinationId;
-  /**
    * @param date - optional birth date; random if omitted
    * @returns a valid {@link CoordinationId}
    */
   create(date?: LocalDate): CoordinationId {
+    if (date && !date.isValid()) {
+      throw new InvalidIdNumberError("Invalid coordination ID: birth date is invalid");
+    }
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   /**
    * @param year - four-digit birth year
-   * @param month - birth month (1–12)
-   * @param dayOfMonth - birth day (1–31)
+   * @param month - birth month (1-12)
+   * @param dayOfMonth - birth day (1-31)
    * @returns a valid {@link CoordinationId} for the specified date
    * @throws {IllegalIdNumberException} if the birth date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): CoordinationId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
     if (!birthDate.isValid()) {
-      throw new IllegalIdNumberException("Invalid coordination ID: birth date is invalid");
+      throw new InvalidIdNumberError("Invalid coordination ID: birth date is invalid");
     }
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   /**
    * Creates a random valid coordination ID with a male birth number (odd third digit).
@@ -71,7 +65,7 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
     const birthDate = randomBirthDate();
     const birthNumber = makeMaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   /**
    * Creates a random valid coordination ID with a female birth number (even third digit).
@@ -81,10 +75,10 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
     const birthDate = randomBirthDate();
     const birthNumber = makeFemaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   /**
-   * Creates a random valid coordination ID for a person who is 100–110 years old (uses `+` separator).
+   * Creates a random valid coordination ID for a person who is 100-110 years old (uses `+` separator).
    * @returns a valid {@link CoordinationId} with a `+` separator
    */
   createCentenarian(): CoordinationId {
@@ -93,12 +87,12 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
     const year = now.year - yearsOld;
     const birthDate = LocalDate.of(year, now.month, 1);
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   /**
    * @returns the ISO 3166-1 alpha-2 country code `"SE"`
    */
   getCountryCode(): string {
     return "SE";
-  }
-}
+  },
+};

@@ -6,7 +6,7 @@ import type { ValidationResult } from "./validation-result.js";
  *
  * @typeParam T - the concrete {@link OfficialId} type this validator handles
  */
-export interface IdValidator<T extends OfficialId<never>> {
+export interface IdValidator<T extends OfficialId> {
   /**
    * Returns `true` if the given raw string is a syntactically and semantically valid ID.
    *

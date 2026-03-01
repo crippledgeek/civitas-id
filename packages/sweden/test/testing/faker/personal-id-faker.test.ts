@@ -4,7 +4,7 @@ import { PersonalId } from "../../../src/core/swedish-ids.js";
 import { PersonalIdFaker } from "../../../src/testing/faker/personal-id-faker.js";
 
 describe("PersonalIdFaker", () => {
-  const faker = PersonalIdFaker.personalId();
+  const faker = PersonalIdFaker;
 
   it("create() returns a valid PersonalId", () => {
     const id = faker.create();
@@ -91,12 +91,6 @@ describe("PersonalIdFaker", () => {
 
   it("getCountryCode() returns SE", () => {
     expect(faker.getCountryCode()).toBe("SE");
-  });
-
-  it("personalId() factory method creates new instance", () => {
-    const fakerInstance = PersonalIdFaker.personalId();
-    expect(fakerInstance).toBeDefined();
-    expect(fakerInstance).not.toBe(faker);
   });
 
   it("create() generates diverse PersonalIds", () => {

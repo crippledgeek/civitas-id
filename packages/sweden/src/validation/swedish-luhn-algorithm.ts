@@ -1,6 +1,6 @@
 import { LuhnAlgorithm } from "@civitas-id/core";
 import type { ChecksumAlgorithm } from "@civitas-id/core";
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 
 const LUHN = LuhnAlgorithm.getInstance();
 
@@ -12,13 +12,13 @@ const LUHN = LuhnAlgorithm.getInstance();
 export const SwedishLuhnAlgorithm: ChecksumAlgorithm & { toString(): string } = {
   calculateCheckDigit(input: string): number {
     if (!input || input.length === 0) {
-      throw new IllegalIdNumberException("Input cannot be null or empty");
+      throw new InvalidIdNumberError("Input cannot be null or empty");
     }
     try {
       return LUHN.calculateCheckDigit(input, 9);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Invalid input";
-      throw new IllegalIdNumberException(msg);
+      throw new InvalidIdNumberError(msg, { cause: e });
     }
   },
 

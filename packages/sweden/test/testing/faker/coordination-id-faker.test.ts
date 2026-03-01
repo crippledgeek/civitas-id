@@ -4,7 +4,7 @@ import { CoordinationId } from "../../../src/core/swedish-ids.js";
 import { CoordinationIdFaker } from "../../../src/testing/faker/coordination-id-faker.js";
 
 describe("CoordinationIdFaker", () => {
-  const faker = CoordinationIdFaker.coordinationId();
+  const faker = CoordinationIdFaker;
 
   it("create() returns a valid CoordinationId", () => {
     const id = faker.create();
@@ -100,12 +100,6 @@ describe("CoordinationIdFaker", () => {
 
   it("getCountryCode() returns SE", () => {
     expect(faker.getCountryCode()).toBe("SE");
-  });
-
-  it("coordinationId() factory method creates new instance", () => {
-    const fakerInstance = CoordinationIdFaker.coordinationId();
-    expect(fakerInstance).toBeDefined();
-    expect(fakerInstance).not.toBe(faker);
   });
 
   it("create() generates diverse CoordinationIds", () => {

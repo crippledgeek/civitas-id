@@ -1,5 +1,3 @@
-import type { IdFormat } from "./id-format.js";
-
 /**
  * Base interface for all official identification numbers.
  *
@@ -8,7 +6,7 @@ import type { IdFormat } from "./id-format.js";
  *
  * @typeParam F - the format discriminator type for this ID (e.g. a `PnrFormat` string union)
  */
-export interface OfficialId<F extends IdFormat> {
+export interface OfficialId<F extends string = string> {
   /**
    * Returns the long (12-digit) string representation without a separator.
    *

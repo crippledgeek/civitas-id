@@ -1,26 +1,10 @@
 import { LocalDate } from "@civitas-id/core";
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { AbstractPersonId } from "./abstract-person-id.js";
 import { OrganisationId } from "./organisation-id.js";
-import {
-  getPossibleFullIdNumber,
-  isIdNumberFull,
-  isValidPersonDate,
-} from "./person-official-id-base.js";
+import { getPossibleFullIdNumber, isPersonalNumberFull } from "./person-official-id-base.js";
 import { createMatcher } from "./swedish-id-matcher.js";
-
-/**
- * Returns `true` if `fullPersonalNumber` is a syntactically valid 13-character
- * personnummer in long internal format (`YYYYMMDD-XXXX`/`YYYYMMDD+XXXX`) with
- * a valid birth date and Luhn checksum.
- *
- * @param fullPersonalNumber - the full-length ID string to validate
- * @returns `true` when valid
- */
-export function isPersonalNumberFull(fullPersonalNumber: string): boolean {
-  return isIdNumberFull(fullPersonalNumber, isValidPersonDate);
-}
 
 /**
  * Represents a Swedish personal identification number (personnummer).
@@ -44,10 +28,12 @@ export class PersonalId extends AbstractPersonId {
    * @returns a `PersonalId` instance, or `undefined` if `text` is invalid
    */
   static parse(text: string | null | undefined): PersonalId | undefined {
+    if (text == null) return undefined;
     try {
-      return PersonalId.parseOrThrow(text as string);
-    } catch {
-      return undefined;
+      return PersonalId.parseOrThrow(text);
+    } catch (e) {
+      if (e instanceof InvalidIdNumberError) return undefined;
+      throw e;
     }
   }
 
@@ -60,11 +46,10 @@ export class PersonalId extends AbstractPersonId {
    */
   static parseOrThrow(text: string): PersonalId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new IllegalIdNumberException(`Invalid personal ID: ${text}`);
+    if (m.noMatch()) throw new InvalidIdNumberError(`Invalid personal ID: ${text}`);
 
     const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
-    if (!isPersonalNumberFull(full))
-      throw new IllegalIdNumberException(`Invalid personal ID: ${text}`);
+    if (!isPersonalNumberFull(full)) throw new InvalidIdNumberError(`Invalid personal ID: ${text}`);
     return new PersonalId(full);
   }
 
@@ -87,13 +72,15 @@ export class PersonalId extends AbstractPersonId {
    * @returns `true` when valid
    */
   static isValid(text: string | null | undefined): boolean {
+    if (text == null) return false;
     try {
-      const m = createMatcher(text as string);
+      const m = createMatcher(text);
       if (m.noMatch()) return false;
       const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
       return isPersonalNumberFull(full);
-    } catch {
-      return false;
+    } catch (e) {
+      if (e instanceof InvalidIdNumberError) return false;
+      throw e;
     }
   }
 

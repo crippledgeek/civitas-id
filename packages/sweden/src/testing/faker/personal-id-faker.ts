@@ -1,7 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import type { PersonIdFaker } from "@civitas-id/test-common";
-import { PersonalId } from "../../core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../error/illegal-id-number-exception.js";
+import { PersonalId } from "../../core/personal-id.js";
+import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import {
   buildIdString,
   makeFemaleBirthNumber,
@@ -23,45 +23,39 @@ function createIdWithBirthNumber(birthDate: LocalDate, birthNumber: number): Per
 /**
  * Faker for Swedish personal IDs (personnummer).
  */
-export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
+export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
+  createMale(): PersonalId;
+  createFemale(): PersonalId;
+  createCentenarian(): PersonalId;
+} = {
   /**
-   * Creates a new {@link PersonalIdFaker} instance.
+   * Creates a random personal ID, optionally for a specific birth date.
    *
-   * @example
-   * const faker = PersonalIdFaker.personalId();
-   * const id = faker.create();
-   */
-  static personalId(): PersonalIdFaker {
-    return new PersonalIdFaker();
-  }
-
-  /** Creates a random personal ID with a random birth date. */
-  create(): PersonalId;
-  /** Creates a random personal ID for the given birth date. @param date - the birth date */
-  create(date: LocalDate): PersonalId;
-  /**
    * @param date - optional birth date; random if omitted
    * @returns a valid {@link PersonalId}
    */
   create(date?: LocalDate): PersonalId {
+    if (date && !date.isValid()) {
+      throw new InvalidIdNumberError("Invalid personal ID: birth date is invalid");
+    }
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   /**
    * @param year - four-digit birth year
-   * @param month - birth month (1–12)
-   * @param dayOfMonth - birth day (1–31)
+   * @param month - birth month (1-12)
+   * @param dayOfMonth - birth day (1-31)
    * @returns a valid {@link PersonalId} for the specified date
    * @throws {IllegalIdNumberException} if the birth date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): PersonalId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
     if (!birthDate.isValid()) {
-      throw new IllegalIdNumberException("Invalid personal ID: birth date is invalid");
+      throw new InvalidIdNumberError("Invalid personal ID: birth date is invalid");
     }
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   /**
    * Creates a random valid personal ID with a male birth number (odd third digit).
@@ -71,7 +65,7 @@ export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
     const birthDate = randomBirthDate();
     const birthNumber = makeMaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   /**
    * Creates a random valid personal ID with a female birth number (even third digit).
@@ -81,10 +75,10 @@ export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
     const birthDate = randomBirthDate();
     const birthNumber = makeFemaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   /**
-   * Creates a random valid personal ID for a person who is 100–110 years old (uses `+` separator).
+   * Creates a random valid personal ID for a person who is 100-110 years old (uses `+` separator).
    * @returns a valid {@link PersonalId} with a `+` separator
    */
   createCentenarian(): PersonalId {
@@ -94,12 +88,12 @@ export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
     const candidate = LocalDate.of(year, now.month, now.day);
     const birthDate = candidate.isValid() ? candidate : LocalDate.of(year, now.month, 1);
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   /**
    * @returns the ISO 3166-1 alpha-2 country code `"SE"`
    */
   getCountryCode(): string {
     return "SE";
-  }
-}
+  },
+};

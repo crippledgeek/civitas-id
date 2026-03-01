@@ -1,4 +1,3 @@
-import type { IdFormat } from "./id-format.js";
 import type { LocalDate } from "./local-date.js";
 import type { OfficialId } from "./official-id.js";
 
@@ -9,7 +8,7 @@ import type { OfficialId } from "./official-id.js";
  *
  * @typeParam F - the format discriminator type for this ID
  */
-export interface OrganisationOfficialId<F extends IdFormat> extends OfficialId<F> {
+export interface OrganisationOfficialId<F extends string = string> extends OfficialId<F> {
   /**
    * Returns `true` if this organisation is a legal person (juridisk person).
    *

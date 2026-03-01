@@ -1,4 +1,4 @@
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { CoordinationId } from "./coordination-id.js";
@@ -34,7 +34,7 @@ export const SwedishOfficialId = {
   isValid(text: string | null | undefined): boolean {
     return (
       PersonOfficialIdBase.isValid(text) ||
-      OrganisationId.isValid(text as string, OrganisationNumberType.LEGAL_PERSON)
+      OrganisationId.isValid(text, OrganisationNumberType.LEGAL_PERSON)
     );
   },
 
@@ -47,11 +47,11 @@ export const SwedishOfficialId = {
    * @returns a `SwedishOfficialId` instance, or `undefined` if `text` is invalid
    */
   parseAny(text: string | null | undefined): SwedishOfficialId | undefined {
-    const personal = PersonalId.parse(text as string);
+    const personal = PersonalId.parse(text);
     if (personal !== undefined) return personal;
-    const coord = CoordinationId.parse(text as string);
+    const coord = CoordinationId.parse(text);
     if (coord !== undefined) return coord;
-    return OrganisationId.parse(text as string);
+    return OrganisationId.parse(text);
   },
 
   /**
@@ -63,8 +63,7 @@ export const SwedishOfficialId = {
    */
   parseAnyOrThrow(text: string): SwedishOfficialId {
     const result = SwedishOfficialId.parseAny(text);
-    if (result === undefined)
-      throw new IllegalIdNumberException(`Invalid Swedish ID number: ${text}`);
+    if (result === undefined) throw new InvalidIdNumberError(`Invalid Swedish ID number: ${text}`);
     return result;
   },
 
@@ -85,7 +84,7 @@ export const SwedishOfficialId = {
         format,
       );
     }
-    throw new IllegalIdNumberException(`Invalid Swedish ID number: ${text}`);
+    throw new InvalidIdNumberError(`Invalid Swedish ID number: ${text}`);
   },
 };
 

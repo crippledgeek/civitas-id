@@ -1,29 +1,27 @@
 import type { ChecksumAlgorithm } from "./checksum-algorithm.js";
 
 /**
- * Singleton implementation of the Luhn algorithm.
+ * Const object implementation of the Luhn algorithm.
  *
  * Implements {@link ChecksumAlgorithm} and supports an optional `maxDigits` window
  * so that only the last N digits of a longer string are considered during validation.
  *
  * @example
- * const luhn = LuhnAlgorithm.getInstance();
- * luhn.isChecksumValid("79927398713"); // true
- * luhn.calculateCheckDigit("7992739871"); // 3
+ * LuhnAlgorithm.isChecksumValid("79927398713"); // true
+ * LuhnAlgorithm.calculateCheckDigit("7992739871"); // 3
  */
-export class LuhnAlgorithm implements ChecksumAlgorithm {
-  private static readonly INSTANCE = new LuhnAlgorithm();
-
-  private constructor() {}
-
+export const LuhnAlgorithm: ChecksumAlgorithm & {
+  getInstance(): typeof LuhnAlgorithm;
+  toString(): string;
+} = {
   /**
-   * Returns the shared singleton instance.
+   * Returns the shared singleton-compatible reference.
    *
-   * @returns the single `LuhnAlgorithm` instance
+   * @returns the `LuhnAlgorithm` const object
    */
-  static getInstance(): LuhnAlgorithm {
-    return LuhnAlgorithm.INSTANCE;
-  }
+  getInstance() {
+    return LuhnAlgorithm;
+  },
 
   calculateCheckDigit(input: string, maxDigits = Number.MAX_SAFE_INTEGER): number {
     if (!input || input.length === 0) throw new Error("Input cannot be empty");
@@ -40,25 +38,25 @@ export class LuhnAlgorithm implements ChecksumAlgorithm {
       sum += digit;
     }
     return (10 - (sum % 10)) % 10;
-  }
+  },
 
   isChecksumValid(input: string, maxDigits = Number.MAX_SAFE_INTEGER): boolean {
     if (!input || input.length < 2) return false;
     try {
       const slice = input.length > maxDigits ? input.slice(input.length - maxDigits) : input;
       const actualCheck = slice.charCodeAt(slice.length - 1) - 48;
-      const expected = this.calculateCheckDigit(slice.slice(0, -1), maxDigits - 1);
+      const expected = LuhnAlgorithm.calculateCheckDigit(slice.slice(0, -1), maxDigits - 1);
       return actualCheck === expected;
     } catch {
       return false;
     }
-  }
+  },
 
   getAlgorithmName(): string {
     return "LUHN";
-  }
+  },
 
   toString(): string {
     return "LuhnAlgorithm";
-  }
-}
+  },
+};

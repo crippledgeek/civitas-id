@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
 
 describe("SwedishLuhnAlgorithm", () => {
@@ -36,25 +36,25 @@ describe("SwedishLuhnAlgorithm", () => {
       expect(d6).toBeLessThanOrEqual(9);
     });
 
-    it("throws IllegalIdNumberException for empty input", () => {
-      expect(() => SwedishLuhnAlgorithm.calculateCheckDigit("")).toThrow(IllegalIdNumberException);
+    it("throws InvalidIdNumberError for empty input", () => {
+      expect(() => SwedishLuhnAlgorithm.calculateCheckDigit("")).toThrow(InvalidIdNumberError);
     });
 
-    it("throws IllegalIdNumberException for invalid character", () => {
+    it("throws InvalidIdNumberError for invalid character", () => {
       expect(() => SwedishLuhnAlgorithm.calculateCheckDigit("99010112A")).toThrow(
-        IllegalIdNumberException,
+        InvalidIdNumberError,
       );
     });
 
-    it("throws IllegalIdNumberException for space character", () => {
+    it("throws InvalidIdNumberError for space character", () => {
       expect(() => SwedishLuhnAlgorithm.calculateCheckDigit("990101 123")).toThrow(
-        IllegalIdNumberException,
+        InvalidIdNumberError,
       );
     });
 
-    it("throws IllegalIdNumberException for dash character", () => {
+    it("throws InvalidIdNumberError for dash character", () => {
       expect(() => SwedishLuhnAlgorithm.calculateCheckDigit("990101-123")).toThrow(
-        IllegalIdNumberException,
+        InvalidIdNumberError,
       );
     });
 

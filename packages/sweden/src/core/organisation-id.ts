@@ -1,15 +1,19 @@
 import type { LocalDate } from "@civitas-id/core";
 import type { OrganisationOfficialId } from "@civitas-id/core";
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import { OrganisationForm } from "../format/organisation-form.js";
 import type { OrganisationFormEntry } from "../format/organisation-form.js";
 import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import { PnrFormat } from "../format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
-import { CoordinationId, isCoordinationNumberFull } from "./coordination-id.js";
+import { CoordinationId } from "./coordination-id.js";
 import type { PersonOfficialIdBase } from "./coordination-id.js";
-import { getPossibleFullIdNumber } from "./person-official-id-base.js";
-import { PersonalId, isPersonalNumberFull } from "./personal-id.js";
+import {
+  getPossibleFullIdNumber,
+  isCoordinationNumberFull,
+  isPersonalNumberFull,
+} from "./person-official-id-base.js";
+import { PersonalId } from "./personal-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX, createMatcher } from "./swedish-id-matcher.js";
 
 export const ORGANISATION_NUMBER_MINIMUM_MONTH = 20;
@@ -30,6 +34,10 @@ function formatOrgId(id: string, format: PnrFormat): string {
     case "LONG_FORMAT":
     case "SHORT_FORMAT":
       return datePart + serialPart;
+    default: {
+      const _: never = format;
+      throw new Error(`Unhandled PnrFormat: ${_}`);
+    }
   }
 }
 
@@ -53,6 +61,10 @@ function isValidPerson(full: string, type: OrganisationNumberType): boolean {
       return (
         isOrganisationNumber(full) || isPersonalNumberFull(full) || isCoordinationNumberFull(full)
       );
+    default: {
+      const _: never = type;
+      throw new Error(`Unhandled OrganisationNumberType: ${_}`);
+    }
   }
 }
 
@@ -78,10 +90,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
    * @returns an `OrganisationId` instance, or `undefined` if `text` is invalid
    */
   static parse(text: string | null | undefined): OrganisationId | undefined {
-    return OrganisationId.parseWithType(
-      text as string,
-      OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
-    );
+    return OrganisationId.parseWithType(text, OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON);
   }
 
   /**
@@ -96,10 +105,12 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     text: string | null | undefined,
     type: OrganisationNumberType,
   ): OrganisationId | undefined {
+    if (text == null) return undefined;
     try {
-      return OrganisationId.parseOrThrow(text as string, type);
-    } catch {
-      return undefined;
+      return OrganisationId.parseOrThrow(text, type);
+    } catch (e) {
+      if (e instanceof InvalidIdNumberError) return undefined;
+      throw e;
     }
   }
 
@@ -116,7 +127,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     type: OrganisationNumberType = OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
   ): OrganisationId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new IllegalIdNumberException(`Invalid organisation ID: ${text}`);
+    if (m.noMatch()) throw new InvalidIdNumberError(`Invalid organisation ID: ${text}`);
 
     let full: string;
     if (m.hasCentury()) {
@@ -132,7 +143,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     }
 
     if (!isValidPerson(full, type)) {
-      throw new IllegalIdNumberException(`Invalid organisation ID: ${text}`);
+      throw new InvalidIdNumberError(`Invalid organisation ID: ${text}`);
     }
     return new OrganisationId(full);
   }
@@ -171,8 +182,9 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     text: string | null | undefined,
     type: OrganisationNumberType = OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
   ): boolean {
+    if (text == null) return false;
     try {
-      const m = createMatcher(text as string);
+      const m = createMatcher(text);
       if (m.noMatch()) return false;
 
       let full: string;
@@ -187,8 +199,9 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
         }
       }
       return isValidPerson(full, type);
-    } catch {
-      return false;
+    } catch (e) {
+      if (e instanceof InvalidIdNumberError) return false;
+      throw e;
     }
   }
 
@@ -263,7 +276,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     if (coordParsed !== undefined) return coordParsed;
     const personalParsed = PersonalId.parse(lf);
     if (personalParsed !== undefined) return personalParsed;
-    throw new IllegalIdNumberException(
+    throw new InvalidIdNumberError(
       `Invalid person official ID: ${this.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)}`,
     );
   }
