@@ -1,17 +1,12 @@
 import { LocalDate } from "@civitas-id/core";
-import type { PersonOfficialId as IPersonOfficialId } from "@civitas-id/core";
 import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
-import { PnrFormat } from "../format/pnr-format.js";
+import type { PnrFormat } from "../format/pnr-format.js";
+import { AbstractPersonId } from "./abstract-person-id.js";
 import { ChecksumValidator } from "./checksum-validator.js";
 import type { PersonOfficialIdBase } from "./coordination-id.js";
 import { OrganisationId } from "./organisation-id.js";
-import {
-  formatPersonId,
-  getGenderDigit,
-  getPossibleFullIdNumber,
-  isValidPersonDate,
-} from "./person-official-id-base.js";
-import { LEGAL_PERSON_CENTURY_PREFIX, createMatcher } from "./swedish-id-matcher.js";
+import { getPossibleFullIdNumber, isValidPersonDate } from "./person-official-id-base.js";
+import { createMatcher } from "./swedish-id-matcher.js";
 
 export function isPersonalNumberFull(fullPersonalNumber: string): boolean {
   if (!isValidPersonDate(fullPersonalNumber)) return false;
@@ -22,10 +17,12 @@ export function isPersonalNumberFull(fullPersonalNumber: string): boolean {
 /**
  * Represents a Swedish personal identification number (personnummer).
  */
-export class PersonalId implements IPersonOfficialId<PnrFormat> {
+export class PersonalId extends AbstractPersonId {
   readonly type = "PERSONAL" as const;
 
-  private constructor(private readonly _id: string) {}
+  private constructor(id: string) {
+    super(id);
+  }
 
   static parse(text: string | null | undefined): PersonalId | undefined {
     try {
@@ -69,52 +66,8 @@ export class PersonalId implements IPersonOfficialId<PnrFormat> {
     );
   }
 
-  getAge(clock?: () => LocalDate): number {
-    const now = clock ? clock() : LocalDate.now();
-    return this.getBirthDate().age(now);
-  }
-
-  isFemale(): boolean {
-    return getGenderDigit(this._id) % 2 === 0;
-  }
-  isMale(): boolean {
-    return !this.isFemale();
-  }
-  isAdult(clock?: () => LocalDate): boolean {
-    return this.getAge(clock) >= 18;
-  }
-  isChild(clock?: () => LocalDate): boolean {
-    const a = this.getAge(clock);
-    return a >= 0 && a < 18;
-  }
-
-  longFormat(): string {
-    return this.formatted(PnrFormat.LONG_FORMAT);
-  }
-  shortFormat(): string {
-    return this.formatted(PnrFormat.SHORT_FORMAT);
-  }
-  longFormatWithSeparator(): string {
-    return this.formatted(PnrFormat.LONG_FORMAT_WITH_STANDARD_SEPARATOR);
-  }
-  shortFormatWithSeparator(): string {
-    return this.formatted(PnrFormat.SHORT_FORMAT_WITH_STANDARD_SEPARATOR);
-  }
-  formatted(format: PnrFormat): string {
-    return formatPersonId(this._id, format);
-  }
-  getCountryCode(): string {
-    return "SE";
-  }
   getIdType(): string {
     return "PERSONAL";
-  }
-
-  isLegalPerson(): boolean {
-    return this._id.substring(0, 2) === LEGAL_PERSON_CENTURY_PREFIX;
-  }
-  isPhysicalPerson(): boolean {
-    return !this.isLegalPerson();
   }
 
   toOrganisationId(): OrganisationId {
@@ -128,9 +81,5 @@ export class PersonalId implements IPersonOfficialId<PnrFormat> {
   equals(other: unknown): boolean {
     if (!(other instanceof PersonalId)) return false;
     return this.longFormat() === other.longFormat();
-  }
-
-  toString(): string {
-    return this.longFormat();
   }
 }
