@@ -51,12 +51,12 @@ export class SwedishOfficialIdFaker implements IdFaker<SwedishOfficialId> {
   }
 
   private toCoordinationId(personalId: PersonalId): CoordinationId {
-    // longFormat is YYYYMMDD-XXXX or YYYYMMDD+XXXX
+    // longFormat() returns YYYYMMDDBBBC (12 chars, no separator)
     const idStr = personalId.longFormat();
     const year = idStr.substring(0, 4);
     const month = idStr.substring(4, 6);
     const day = idStr.substring(6, 8);
-    const birthNumber = idStr.substring(9, 12);
+    const birthNumber = idStr.substring(8, 11);
 
     const dayValue = Number.parseInt(day, 10);
     const coordDay = String(dayValue + 60).padStart(2, "0");
