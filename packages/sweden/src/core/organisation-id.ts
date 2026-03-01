@@ -5,14 +5,14 @@ import { OrganisationForm } from "../format/organisation-form.js";
 import type { OrganisationFormEntry } from "../format/organisation-form.js";
 import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import { PnrFormat } from "../format/pnr-format.js";
-import { ChecksumValidator } from "./checksum-validator.js";
+import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import { CoordinationId, isCoordinationNumberFull } from "./coordination-id.js";
 import type { PersonOfficialIdBase } from "./coordination-id.js";
 import { getPossibleFullIdNumber } from "./person-official-id-base.js";
 import { PersonalId, isPersonalNumberFull } from "./personal-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX, createMatcher } from "./swedish-id-matcher.js";
 
-const ORGANISATION_NUMBER_MINIMUM_MONTH = 20;
+export const ORGANISATION_NUMBER_MINIMUM_MONTH = 20;
 
 function formatOrgId(id: string, format: PnrFormat): string {
   // id is stored internally as "16NNNNNN-NNNN" or "16NNNNNN+NNNN"
@@ -40,7 +40,7 @@ function isOrganisationNumber(full: string): boolean {
   const month = Number.parseInt(full.substring(4, 6), 10);
   if (month < ORGANISATION_NUMBER_MINIMUM_MONTH) return false;
   const tenDigits = full.substring(2, 8) + full.substring(9);
-  return ChecksumValidator.isChecksumValid(tenDigits);
+  return SwedishLuhnAlgorithm.isChecksumValid(tenDigits);
 }
 
 function isValidPerson(full: string, type: OrganisationNumberType): boolean {

@@ -2,16 +2,16 @@ import { LocalDate } from "@civitas-id/core";
 import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { AbstractPersonId } from "./abstract-person-id.js";
-import { ChecksumValidator } from "./checksum-validator.js";
-import type { PersonOfficialIdBase } from "./coordination-id.js";
 import { OrganisationId } from "./organisation-id.js";
-import { getPossibleFullIdNumber, isValidPersonDate } from "./person-official-id-base.js";
+import {
+  getPossibleFullIdNumber,
+  isIdNumberFull,
+  isValidPersonDate,
+} from "./person-official-id-base.js";
 import { createMatcher } from "./swedish-id-matcher.js";
 
 export function isPersonalNumberFull(fullPersonalNumber: string): boolean {
-  if (!isValidPersonDate(fullPersonalNumber)) return false;
-  const tenDigits = fullPersonalNumber.substring(2, 8) + fullPersonalNumber.substring(9);
-  return ChecksumValidator.isChecksumValid(tenDigits);
+  return isIdNumberFull(fullPersonalNumber, isValidPersonDate);
 }
 
 /**
@@ -72,14 +72,5 @@ export class PersonalId extends AbstractPersonId {
 
   toOrganisationId(): OrganisationId {
     return OrganisationId.parseOrThrow(this._id);
-  }
-
-  toPersonOfficialId(): PersonOfficialIdBase {
-    return this;
-  }
-
-  equals(other: unknown): boolean {
-    if (!(other instanceof PersonalId)) return false;
-    return this.longFormat() === other.longFormat();
   }
 }

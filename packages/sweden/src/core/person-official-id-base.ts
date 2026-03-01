@@ -1,6 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
 import type { PnrFormat } from "../format/pnr-format.js";
+import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import type { SwedishIdMatcher } from "./swedish-id-matcher.js";
 
 /**
@@ -8,6 +9,16 @@ import type { SwedishIdMatcher } from "./swedish-id-matcher.js";
  * gender resolution, and age calculation.
  * Not exported from the public barrel.
  */
+
+/**
+ * Shared checksum validation for full 12-digit IDs (YYYYMMDD-XXXX).
+ * Delegates date validation to the provided dateValidator.
+ */
+export function isIdNumberFull(full: string, dateValidator: (s: string) => boolean): boolean {
+  if (!dateValidator(full)) return false;
+  const tenDigits = full.substring(2, 8) + full.substring(9);
+  return SwedishLuhnAlgorithm.isChecksumValid(tenDigits);
+}
 
 /**
  * Resolves the full 12-digit ID string from a short-format matcher,
