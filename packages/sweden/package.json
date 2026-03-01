@@ -1,0 +1,26 @@
+{
+  "name": "@civitas-id/sweden",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@civitas-id/core": "workspace:*",
+    "@civitas-id/test-common": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsup": "*",
+    "typescript": "*",
+    "vitest": "*"
+  }
+}
