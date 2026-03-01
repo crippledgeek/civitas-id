@@ -160,17 +160,22 @@ export const OrganisationForm = {
 
   /**
    * Finds the organisation form by its numeric code.
-   * Returns undefined if not found.
+   *
+   * @param code - the numeric organisation form code (e.g. `49` for AB)
+   * @returns the matching {@link OrganisationFormEntry}, or `undefined` if not found
    */
   fromCode(code: number): OrganisationFormEntry | undefined {
     return CODE_MAP.get(code);
   },
 
   /**
-   * Extracts and returns the organisation form from an organisation number string.
+   * Extracts the organisation form from an organisation number string.
+   *
    * The form code is found in the first 2 digits of the 10-digit number.
-   * For 12-digit numbers (16NNNNNNNNNN), skips the "16" prefix.
-   * Returns JURIDISK_FORM_EJ_UTREDD if not found or invalid.
+   * For 12-digit numbers with a `16` prefix, the prefix is skipped.
+   *
+   * @param organisationNumber - a 10-digit or 12-digit organisation number (separators are stripped)
+   * @returns the matching {@link OrganisationFormEntry}, or `OrganisationForm.JURIDISK_FORM_EJ_UTREDD` if not found
    */
   fromOrganisationNumber(organisationNumber: string): OrganisationFormEntry {
     const cleaned = organisationNumber.replace(/[-\s+]/g, "");
