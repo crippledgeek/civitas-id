@@ -43,7 +43,7 @@ export class CoordinationId extends AbstractPersonId {
    *
    * @param text - the ID string to parse (any supported format)
    * @returns a valid `CoordinationId` instance
-   * @throws {IllegalIdNumberException} if `text` is not a valid samordningsnummer
+   * @throws {InvalidIdNumberError} if `text` is not a valid samordningsnummer
    */
   static parseOrThrow(text: string): CoordinationId {
     const m = createMatcher(text);
@@ -61,7 +61,7 @@ export class CoordinationId extends AbstractPersonId {
    * @param text - the ID string to parse (any supported format)
    * @param format - the desired output format
    * @returns the formatted ID string
-   * @throws {IllegalIdNumberException} if `text` is not a valid samordningsnummer
+   * @throws {InvalidIdNumberError} if `text` is not a valid samordningsnummer
    */
   static format(text: string, format: PnrFormat): string {
     return CoordinationId.parseOrThrow(text).formatted(format);
@@ -105,7 +105,7 @@ export class CoordinationId extends AbstractPersonId {
    * Converts this coordination ID to an {@link OrganisationId} representation.
    *
    * @returns the equivalent `OrganisationId`
-   * @throws {IllegalIdNumberException} if the underlying ID cannot be parsed as an organisation number
+   * @throws {InvalidIdNumberError} if the underlying ID cannot be parsed as an organisation number
    */
   toOrganisationId(): OrganisationId {
     return OrganisationId.parseOrThrow(this._id);
@@ -145,7 +145,7 @@ export const PersonOfficialIdBase = {
    * @param text - the ID string to parse (any supported format)
    * @param format - the desired output format
    * @returns the formatted ID string
-   * @throws {IllegalIdNumberException} if `text` is neither a valid personnummer nor a samordningsnummer
+   * @throws {InvalidIdNumberError} if `text` is neither a valid personnummer nor a samordningsnummer
    */
   format(text: string, format: PnrFormat): string {
     if (CoordinationId.isValid(text)) return CoordinationId.parseOrThrow(text).formatted(format);

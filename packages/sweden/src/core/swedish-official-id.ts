@@ -59,7 +59,7 @@ export const SwedishOfficialId = {
    *
    * @param text - the ID string to parse (any supported format)
    * @returns a valid `SwedishOfficialId` instance
-   * @throws {IllegalIdNumberException} if `text` is not a valid Swedish ID number
+   * @throws {InvalidIdNumberError} if `text` is not a valid Swedish ID number
    */
   parseAnyOrThrow(text: string): SwedishOfficialId {
     const result = SwedishOfficialId.parseAny(text);
@@ -75,7 +75,7 @@ export const SwedishOfficialId = {
    * @param text - the ID string to parse (any supported format)
    * @param format - the desired output format
    * @returns the formatted ID string
-   * @throws {IllegalIdNumberException} if `text` is not a valid Swedish ID number
+   * @throws {InvalidIdNumberError} if `text` is not a valid Swedish ID number
    */
   format(text: string, format: PnrFormat): string {
     if (PersonOfficialIdBase.isValid(text)) return PersonOfficialIdBase.format(text, format);

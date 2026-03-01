@@ -47,7 +47,7 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
    * @param month - birth month (1-12)
    * @param dayOfMonth - birth day (1-31)
    * @returns a valid {@link PersonalId} for the specified date
-   * @throws {IllegalIdNumberException} if the birth date is invalid
+   * @throws {InvalidIdNumberError} if the birth date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): PersonalId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);

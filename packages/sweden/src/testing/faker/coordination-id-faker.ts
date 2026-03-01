@@ -47,7 +47,7 @@ export const CoordinationIdFaker: PersonIdFaker<CoordinationId> & {
    * @param month - birth month (1-12)
    * @param dayOfMonth - birth day (1-31)
    * @returns a valid {@link CoordinationId} for the specified date
-   * @throws {IllegalIdNumberException} if the birth date is invalid
+   * @throws {InvalidIdNumberError} if the birth date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): CoordinationId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);

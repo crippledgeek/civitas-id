@@ -120,7 +120,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
    * @param text - the ID string to parse (any supported format)
    * @param type - the accepted person categories; defaults to `LEGAL_OR_PHYSICAL_PERSON`
    * @returns a valid `OrganisationId` instance
-   * @throws {IllegalIdNumberException} if `text` is not a valid organisation number for `type`
+   * @throws {InvalidIdNumberError} if `text` is not a valid organisation number for `type`
    */
   static parseOrThrow(
     text: string,
@@ -164,7 +164,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
    * @param text - the ID string to parse (any supported format)
    * @param format - the desired output format
    * @returns the formatted ID string
-   * @throws {IllegalIdNumberException} if `text` is not a valid organisation number
+   * @throws {InvalidIdNumberError} if `text` is not a valid organisation number
    */
   static format(text: string, format: PnrFormat): string {
     return OrganisationId.parseOrThrow(text).formatted(format);
@@ -268,7 +268,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
    * Tries {@link CoordinationId} first, then {@link PersonalId}.
    *
    * @returns the equivalent `PersonalId` or `CoordinationId`
-   * @throws {IllegalIdNumberException} if the underlying number cannot be parsed as a person ID
+   * @throws {InvalidIdNumberError} if the underlying number cannot be parsed as a person ID
    */
   toPersonOfficialId(): PersonOfficialIdBase {
     const lf = this.longFormat();

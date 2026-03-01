@@ -56,7 +56,7 @@ export const SwedishOrganisationIdFaker: OrganisationIdFaker<OrganisationId> & {
    * @param month - registration month (1-12)
    * @param dayOfMonth - registration day (1-31)
    * @returns a valid {@link OrganisationId} for the specified date
-   * @throws {IllegalIdNumberException} if the registration date is invalid
+   * @throws {InvalidIdNumberError} if the registration date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): OrganisationId {
     return randomIdNumber(LocalDate.of(year, month, dayOfMonth));
