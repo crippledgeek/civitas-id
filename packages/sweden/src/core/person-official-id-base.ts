@@ -77,7 +77,8 @@ export function isValidCoordinationDate(fullCoordinationNumber: string): boolean
 }
 
 /**
- * Returns the gender digit (character at index 10 of a 12-digit full ID string).
+ * Returns the gender digit from the internal 13-character storage format
+ * (YYYYMMDD-BBBC or YYYYMMDD+BBBC). The gender digit is at index 11.
  */
 export function getGenderDigit(longFormat: string): number {
   // Internal storage is YYYYMMDD-BBBC (13 chars with separator)

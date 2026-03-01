@@ -24,7 +24,8 @@ function randomRegistrationDate(): LocalDate {
 function randomIdNumber(registrationDate: LocalDate): OrganisationId {
   const uniqueNumber = randomInt(0, 1000);
   const yy = String(registrationDate.year % 100).padStart(2, "0");
-  const mm = String(LEGAL_PERSON_MINIMUM_MONTH).padStart(2, "0");
+  const encodedMonth = registrationDate.month + LEGAL_PERSON_MINIMUM_MONTH;
+  const mm = String(encodedMonth).padStart(2, "0");
   const dd = String(registrationDate.day).padStart(2, "0");
   const uuu = String(uniqueNumber).padStart(3, "0");
 

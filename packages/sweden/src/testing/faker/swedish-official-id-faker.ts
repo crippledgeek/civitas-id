@@ -1,4 +1,4 @@
-import type { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@civitas-id/core";
 import type { IdFaker } from "@civitas-id/test-common";
 import { CoordinationId } from "../../core/coordination-id.js";
 import { OrganisationId } from "../../core/organisation-id.js";
@@ -40,7 +40,7 @@ export class SwedishOfficialIdFaker implements IdFaker<SwedishOfficialId> {
   }
 
   createFor(year: number, month: number, dayOfMonth: number): SwedishOfficialId {
-    return PersonalIdFaker.personalId().createFor(year, month, dayOfMonth);
+    return this.create(LocalDate.of(year, month, dayOfMonth));
   }
 
   createMany(count: number): ReadonlyArray<SwedishOfficialId> {
