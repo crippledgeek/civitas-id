@@ -30,8 +30,7 @@ export function getPossibleFullIdNumber(matcher: SwedishIdMatcher): string {
   const rawBirthYear = century + twoDigitYear;
   const possibleBirthYear = rawBirthYear > nowYear ? rawBirthYear - 100 : rawBirthYear;
 
-  const delimiter = matcher.getDelimiter();
-  if (delimiter === undefined || delimiter === "-") {
+  if (!matcher.hasDelimiter() || matcher.getDelimiter() === "-") {
     return matcher.withBirthYearAndDelimiter(possibleBirthYear, "-");
   }
   // delimiter === "+"
