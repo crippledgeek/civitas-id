@@ -282,9 +282,9 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
   }
 
   /**
-   * Returns `this` as an `OrganisationId` (identity conversion).
+   * Re-parses this organisation number and returns a new `OrganisationId` instance.
    *
-   * @returns a re-parsed `OrganisationId` from the long format
+   * @returns a new `OrganisationId` parsed from the long format
    */
   toOrganisationId(): OrganisationId {
     return OrganisationId.parseOrThrow(this.longFormat());

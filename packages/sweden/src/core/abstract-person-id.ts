@@ -89,7 +89,7 @@ export abstract class AbstractPersonId implements IPersonOfficialId<PnrFormat> {
   }
 
   /**
-   * Returns `this`, satisfying the {@link IPersonOfficialId} contract.
+   * Returns `this`, satisfying the {@link PersonOfficialId} contract.
    *
    * @returns the same instance
    */
