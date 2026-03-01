@@ -7,8 +7,8 @@ import type { ChecksumAlgorithm } from "./checksum-algorithm.js";
  * so that only the last N digits of a longer string are considered during validation.
  *
  * @example
- * LuhnAlgorithm.isChecksumValid("79927398713"); // true
- * LuhnAlgorithm.calculateCheckDigit("7992739871"); // 3
+ * LuhnAlgorithm.isChecksumValid("799273987138"); // true
+ * LuhnAlgorithm.calculateCheckDigit("79927398713"); // 8
  */
 export const LuhnAlgorithm: ChecksumAlgorithm & {
   getInstance(): typeof LuhnAlgorithm;
