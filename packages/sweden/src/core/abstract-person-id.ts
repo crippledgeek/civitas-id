@@ -66,8 +66,9 @@ export abstract class AbstractPersonId implements IPersonOfficialId<PnrFormat> {
   }
 
   equals(other: unknown): boolean {
-    if (!other || this.constructor !== (other as object).constructor) return false;
-    return this.longFormat() === (other as AbstractPersonId).longFormat();
+    if (!(other instanceof AbstractPersonId)) return false;
+    if (this.constructor !== other.constructor) return false;
+    return this.longFormat() === other.longFormat();
   }
 
   toString(): string {
