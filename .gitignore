@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+.env
+.env.local
+CLAUDE.md
+.claude/
+.idea/
