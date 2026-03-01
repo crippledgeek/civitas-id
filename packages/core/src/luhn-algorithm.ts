@@ -1,9 +1,24 @@
 import type { ChecksumAlgorithm } from "./checksum-algorithm.js";
 
+/**
+ * Const object implementation of the Luhn algorithm.
+ *
+ * Implements {@link ChecksumAlgorithm} and supports an optional `maxDigits` window
+ * so that only the last N digits of a longer string are considered during validation.
+ *
+ * @example
+ * LuhnAlgorithm.isChecksumValid("799273987138"); // true
+ * LuhnAlgorithm.calculateCheckDigit("79927398713"); // 8
+ */
 export const LuhnAlgorithm: ChecksumAlgorithm & {
   getInstance(): typeof LuhnAlgorithm;
   toString(): string;
 } = {
+  /**
+   * Returns the shared singleton-compatible reference.
+   *
+   * @returns the `LuhnAlgorithm` const object
+   */
   getInstance() {
     return LuhnAlgorithm;
   },

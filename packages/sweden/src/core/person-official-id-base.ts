@@ -102,7 +102,7 @@ export function isCoordinationNumberFull(fullCoordinationNumber: string): boolea
 
 /**
  * Returns the formatted ID string for a given PnrFormat given the internal
- * 12-digit storage format "YYYYMMDD-XXXX" or "YYYYMMDD+XXXX".
+ * 13-character storage format "YYYYMMDD-XXXX" or "YYYYMMDD+XXXX".
  */
 export function formatPersonId(id: string, format: PnrFormat): string {
   switch (format) {

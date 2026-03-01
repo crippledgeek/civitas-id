@@ -70,18 +70,37 @@ function isValidPerson(full: string, type: OrganisationNumberType): boolean {
 
 /**
  * Represents a Swedish organisation number (organisationsnummer).
- * Input: accepts 10-digit or 12-digit (16-prefix legacy) format.
- * Output: always normalized to official 10-digit format.
+ *
+ * An organisationsnummer identifies a legal or physical person in a commercial
+ * or administrative context. This class accepts both 10-digit and 12-digit
+ * (legacy `16`-prefix) input formats and normalises output to the official
+ * 10-digit form. Legal persons have a month component >= 20; physical persons
+ * reuse the personnummer or samordningsnummer format.
  */
 export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
   readonly type = "ORGANISATION" as const;
 
   private constructor(private readonly _id: string) {}
 
+  /**
+   * Parses `text` as an organisation number (legal or physical person),
+   * returning `undefined` on failure.
+   *
+   * @param text - the ID string to parse (any supported format)
+   * @returns an `OrganisationId` instance, or `undefined` if `text` is invalid
+   */
   static parse(text: string | null | undefined): OrganisationId | undefined {
     return OrganisationId.parseWithType(text, OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON);
   }
 
+  /**
+   * Parses `text` as an organisation number restricted to `type`,
+   * returning `undefined` on failure.
+   *
+   * @param text - the ID string to parse (any supported format)
+   * @param type - the accepted person categories
+   * @returns an `OrganisationId` instance, or `undefined` if `text` is invalid for `type`
+   */
   static parseWithType(
     text: string | null | undefined,
     type: OrganisationNumberType,
@@ -95,6 +114,14 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     }
   }
 
+  /**
+   * Parses `text` as an organisation number, throwing on failure.
+   *
+   * @param text - the ID string to parse (any supported format)
+   * @param type - the accepted person categories; defaults to `LEGAL_OR_PHYSICAL_PERSON`
+   * @returns a valid `OrganisationId` instance
+   * @throws {InvalidIdNumberError} if `text` is not a valid organisation number for `type`
+   */
   static parseOrThrow(
     text: string,
     type: OrganisationNumberType = OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
@@ -121,14 +148,36 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     return new OrganisationId(full);
   }
 
+  /**
+   * Constructs an `OrganisationId` from an existing {@link PersonOfficialIdBase} instance.
+   *
+   * @param personalId - a {@link PersonalId} or {@link CoordinationId} to convert
+   * @returns the equivalent `OrganisationId`
+   */
   static from(personalId: PersonOfficialIdBase): OrganisationId {
     return personalId.toOrganisationId();
   }
 
+  /**
+   * Parses `text` and returns it formatted according to `format`.
+   *
+   * @param text - the ID string to parse (any supported format)
+   * @param format - the desired output format
+   * @returns the formatted ID string
+   * @throws {InvalidIdNumberError} if `text` is not a valid organisation number
+   */
   static format(text: string, format: PnrFormat): string {
     return OrganisationId.parseOrThrow(text).formatted(format);
   }
 
+  /**
+   * Returns `true` if `text` is a syntactically and semantically valid organisation number
+   * for the given `type`.
+   *
+   * @param text - the ID string to validate
+   * @param type - the accepted person categories; defaults to `LEGAL_OR_PHYSICAL_PERSON`
+   * @returns `true` when valid
+   */
   static isValid(
     text: string | null | undefined,
     type: OrganisationNumberType = OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
@@ -156,6 +205,12 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     }
   }
 
+  /**
+   * Returns the {@link OrganisationFormEntry} for this organisation number,
+   * or `OrganisationForm.NONE` if this ID represents a physical person.
+   *
+   * @returns the organisation form entry
+   */
   getOrganisationForm(): OrganisationFormEntry {
     if (!this.isLegalPerson()) return OrganisationForm.NONE;
     return OrganisationForm.fromOrganisationNumber(this._id);
@@ -178,12 +233,15 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
   longFormat(): string {
     return this.formatted(PnrFormat.LONG_FORMAT);
   }
+
   shortFormat(): string {
     return this.formatted(PnrFormat.SHORT_FORMAT);
   }
+
   longFormatWithSeparator(): string {
     return this.formatted(PnrFormat.LONG_FORMAT_WITH_STANDARD_SEPARATOR);
   }
+
   shortFormatWithSeparator(): string {
     return this.formatted(PnrFormat.SHORT_FORMAT_WITH_STANDARD_SEPARATOR);
   }
@@ -191,6 +249,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
   getCountryCode(): string {
     return "SE";
   }
+
   getIdType(): string {
     return "ORGANISATION";
   }
@@ -198,10 +257,19 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
   isLegalPerson(): boolean {
     return this._id.substring(0, 2) === LEGAL_PERSON_CENTURY_PREFIX;
   }
+
   isPhysicalPerson(): boolean {
     return !this.isLegalPerson();
   }
 
+  /**
+   * Converts this organisation ID to a {@link PersonOfficialIdBase} representation.
+   *
+   * Tries {@link CoordinationId} first, then {@link PersonalId}.
+   *
+   * @returns the equivalent `PersonalId` or `CoordinationId`
+   * @throws {InvalidIdNumberError} if the underlying number cannot be parsed as a person ID
+   */
   toPersonOfficialId(): PersonOfficialIdBase {
     const lf = this.longFormat();
     const coordParsed = CoordinationId.parse(lf);
@@ -213,15 +281,31 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     );
   }
 
+  /**
+   * Re-parses this organisation number and returns a new `OrganisationId` instance.
+   *
+   * @returns a new `OrganisationId` parsed from the long format
+   */
   toOrganisationId(): OrganisationId {
     return OrganisationId.parseOrThrow(this.longFormat());
   }
 
+  /**
+   * Returns `true` if `other` is an `OrganisationId` with the same long-format string.
+   *
+   * @param other - value to compare
+   * @returns `true` when both instances represent the same organisation number
+   */
   equals(other: unknown): boolean {
     if (!(other instanceof OrganisationId)) return false;
     return this.longFormat() === other.longFormat();
   }
 
+  /**
+   * Returns the long-format string representation of this organisation number.
+   *
+   * @returns the 10-digit ID string without separator
+   */
   toString(): string {
     return this.longFormat();
   }

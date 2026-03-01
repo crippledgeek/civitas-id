@@ -28,6 +28,13 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
   createFemale(): PersonalId;
   createCentenarian(): PersonalId;
 } = {
+  /**
+   * Creates a random personal ID, optionally for a specific birth date.
+   *
+   * @param date - optional birth date; random if omitted
+   * @returns a valid {@link PersonalId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
+   */
   create(date?: LocalDate): PersonalId {
     if (date && !date.isValid()) {
       throw new InvalidIdNumberError("Invalid personal ID: birth date is invalid");
@@ -36,6 +43,13 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   },
 
+  /**
+   * @param year - four-digit birth year
+   * @param month - birth month (1-12)
+   * @param dayOfMonth - birth day (1-31)
+   * @returns a valid {@link PersonalId} for the specified date
+   * @throws {InvalidIdNumberError} if the birth date is invalid
+   */
   createFor(year: number, month: number, dayOfMonth: number): PersonalId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
     if (!birthDate.isValid()) {
@@ -44,18 +58,30 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   },
 
+  /**
+   * Creates a random valid personal ID with a male birth number (odd third digit).
+   * @returns a valid {@link PersonalId} with a male birth number
+   */
   createMale(): PersonalId {
     const birthDate = randomBirthDate();
     const birthNumber = makeMaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
   },
 
+  /**
+   * Creates a random valid personal ID with a female birth number (even third digit).
+   * @returns a valid {@link PersonalId} with a female birth number
+   */
   createFemale(): PersonalId {
     const birthDate = randomBirthDate();
     const birthNumber = makeFemaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
   },
 
+  /**
+   * Creates a random valid personal ID for a person who is 100-110 years old (uses `+` separator).
+   * @returns a valid {@link PersonalId} with a `+` separator
+   */
   createCentenarian(): PersonalId {
     const now = LocalDate.now();
     const yearsOld = 100 + randomInt(0, 11);
@@ -65,6 +91,9 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   },
 
+  /**
+   * @returns the ISO 3166-1 alpha-2 country code `"SE"`
+   */
   getCountryCode(): string {
     return "SE";
   },

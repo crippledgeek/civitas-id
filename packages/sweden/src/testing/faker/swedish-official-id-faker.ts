@@ -1,6 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import type { IdFaker } from "@civitas-id/test-common";
 import { CoordinationId } from "../../core/coordination-id.js";
+import type { OrganisationId } from "../../core/organisation-id.js";
 import type { PersonalId } from "../../core/personal-id.js";
 import type { SwedishOfficialId } from "../../core/swedish-official-id.js";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
@@ -31,6 +32,14 @@ function toCoordinationId(personalId: PersonalId): CoordinationId {
 export const SwedishOfficialIdFaker: IdFaker<SwedishOfficialId> & {
   createMany(count: number): ReadonlyArray<SwedishOfficialId>;
 } = {
+  /**
+   * Creates a single random valid Swedish official ID -- randomly one of
+   * {@link PersonalId}, {@link CoordinationId}, or {@link OrganisationId}.
+   *
+   * @param date - optional date; random if omitted
+   * @returns a randomly chosen {@link SwedishOfficialId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
+   */
   create(date?: LocalDate): SwedishOfficialId {
     const choice = randomInt(0, 3);
 
@@ -45,14 +54,30 @@ export const SwedishOfficialIdFaker: IdFaker<SwedishOfficialId> & {
     return date ? SwedishOrganisationIdFaker.create(date) : SwedishOrganisationIdFaker.create();
   },
 
+  /**
+   * @param year - four-digit year
+   * @param month - month (1-12)
+   * @param dayOfMonth - day (1-31)
+   * @returns a valid {@link SwedishOfficialId} for the specified date
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
+   */
   createFor(year: number, month: number, dayOfMonth: number): SwedishOfficialId {
     return SwedishOfficialIdFaker.create(LocalDate.of(year, month, dayOfMonth));
   },
 
+  /**
+   * Creates an array of random valid Swedish official IDs.
+   *
+   * @param count - number of IDs to generate
+   * @returns array of `count` randomly generated {@link SwedishOfficialId} values
+   */
   createMany(count: number): ReadonlyArray<SwedishOfficialId> {
     return Array.from({ length: count }, () => SwedishOfficialIdFaker.create());
   },
 
+  /**
+   * @returns the ISO 3166-1 alpha-2 country code `"SE"`
+   */
   getCountryCode(): string {
     return "SE";
   },

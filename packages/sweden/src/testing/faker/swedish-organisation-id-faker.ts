@@ -41,22 +41,47 @@ export const SwedishOrganisationIdFaker: OrganisationIdFaker<OrganisationId> & {
   createLegalPerson(): OrganisationId;
   createPhysicalPerson(): OrganisationId;
 } = {
+  /**
+   * Creates a random legal-person organisation ID, optionally for a specific registration date.
+   *
+   * @param date - optional registration date; random if omitted
+   * @returns a valid {@link OrganisationId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
+   */
   create(date?: LocalDate): OrganisationId {
     return randomIdNumber(date ?? randomRegistrationDate());
   },
 
+  /**
+   * @param year - four-digit registration year
+   * @param month - registration month (1-12)
+   * @param dayOfMonth - registration day (1-31)
+   * @returns a valid legal-person {@link OrganisationId} for the specified date
+   * @throws {InvalidIdNumberError} if the registration date is invalid
+   */
   createFor(year: number, month: number, dayOfMonth: number): OrganisationId {
     return randomIdNumber(LocalDate.of(year, month, dayOfMonth));
   },
 
+  /**
+   * Creates a random valid organisation ID for a legal person (juridisk person).
+   * @returns a valid {@link OrganisationId} of type LEGAL_PERSON
+   */
   createLegalPerson(): OrganisationId {
     return randomIdNumber(randomRegistrationDate());
   },
 
+  /**
+   * Creates a random valid organisation ID derived from a {@link PersonalId} (physical person as sole trader).
+   * @returns a valid {@link OrganisationId} of type PHYSICAL_PERSON
+   */
   createPhysicalPerson(): OrganisationId {
     return PersonalIdFaker.create().toOrganisationId();
   },
 
+  /**
+   * @returns the ISO 3166-1 alpha-2 country code `"SE"`
+   */
   getCountryCode(): string {
     return "SE";
   },
