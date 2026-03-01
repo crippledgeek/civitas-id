@@ -33,6 +33,7 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
    *
    * @param date - optional birth date; random if omitted
    * @returns a valid {@link PersonalId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
    */
   create(date?: LocalDate): PersonalId {
     if (date && !date.isValid()) {

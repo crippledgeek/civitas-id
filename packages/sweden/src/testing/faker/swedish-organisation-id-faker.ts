@@ -46,6 +46,7 @@ export const SwedishOrganisationIdFaker: OrganisationIdFaker<OrganisationId> & {
    *
    * @param date - optional registration date; random if omitted
    * @returns a valid {@link OrganisationId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
    */
   create(date?: LocalDate): OrganisationId {
     return randomIdNumber(date ?? randomRegistrationDate());

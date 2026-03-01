@@ -33,6 +33,7 @@ export const CoordinationIdFaker: PersonIdFaker<CoordinationId> & {
    *
    * @param date - optional birth date; random if omitted
    * @returns a valid {@link CoordinationId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
    */
   create(date?: LocalDate): CoordinationId {
     if (date && !date.isValid()) {
