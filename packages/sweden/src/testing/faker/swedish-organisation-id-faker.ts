@@ -41,16 +41,36 @@ function randomIdNumber(registrationDate: LocalDate): OrganisationId {
  * Faker for Swedish organisation IDs (organisationsnummer).
  */
 export class SwedishOrganisationIdFaker implements OrganisationIdFaker<OrganisationId> {
+  /**
+   * Creates a new {@link SwedishOrganisationIdFaker} instance.
+   *
+   * @example
+   * const faker = SwedishOrganisationIdFaker.organisationId();
+   * const id = faker.create();
+   */
   static organisationId(): SwedishOrganisationIdFaker {
     return new SwedishOrganisationIdFaker();
   }
 
+  /** Creates a random organisation ID with a random registration date. */
   create(): OrganisationId;
+  /** Creates a random organisation ID for the given registration date. @param date - the registration date */
   create(date: LocalDate): OrganisationId;
+  /**
+   * @param date - optional registration date; random if omitted
+   * @returns a valid {@link OrganisationId}
+   */
   create(date?: LocalDate): OrganisationId {
     return randomIdNumber(date ?? randomRegistrationDate());
   }
 
+  /**
+   * @param year - four-digit registration year
+   * @param month - registration month (1–12)
+   * @param dayOfMonth - registration day (1–31)
+   * @returns a valid {@link OrganisationId} for the specified date
+   * @throws {IllegalIdNumberException} if the registration date is invalid
+   */
   createFor(year: number, month: number, dayOfMonth: number): OrganisationId {
     const registrationDate = LocalDate.of(year, month, dayOfMonth);
     if (!registrationDate.isValid()) {
@@ -59,15 +79,26 @@ export class SwedishOrganisationIdFaker implements OrganisationIdFaker<Organisat
     return randomIdNumber(registrationDate);
   }
 
+  /**
+   * Creates a random valid organisation ID for a legal person (juridisk person).
+   * @returns a valid {@link OrganisationId} of type LEGAL_PERSON
+   */
   createLegalPerson(): OrganisationId {
     return randomIdNumber(randomRegistrationDate());
   }
 
+  /**
+   * Creates a random valid organisation ID derived from a {@link PersonalId} (physical person as sole trader).
+   * @returns a valid {@link OrganisationId} of type PHYSICAL_PERSON
+   */
   createPhysicalPerson(): OrganisationId {
     const personalId = PersonalIdFaker.personalId().create();
     return personalId.toOrganisationId();
   }
 
+  /**
+   * @returns the ISO 3166-1 alpha-2 country code `"SE"`
+   */
   getCountryCode(): string {
     return "SE";
   }

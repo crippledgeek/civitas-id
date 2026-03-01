@@ -3,7 +3,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7%2B-blue)](https://www.typescriptlang.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.30%2B-blue)](https://pnpm.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-34,016%20passing-brightgreen)](packages/sweden/test)
+[![Tests](https://img.shields.io/badge/Tests-34,030%20passing-brightgreen)](packages/sweden/test)
 
 A comprehensive TypeScript library for validating and working with Swedish personal identification numbers (personnummer), coordination numbers (samordningsnummer), and organisation numbers (organisationsnummer).
 
@@ -48,8 +48,8 @@ This library provides comprehensive functionality for working with Swedish offic
 ### Additional Features
 - Checksum validation using the Luhn algorithm
 - Type-safe API with discriminated unions and type guards
-- Comprehensive error messages via `IllegalIdNumberException`
-- Extensive test coverage (34,016 tests)
+- Comprehensive error messages via `InvalidIdNumberError`
+- Extensive test coverage (34,030 tests)
 - Test utilities (fakers) for generating valid test data
 
 ## Installation

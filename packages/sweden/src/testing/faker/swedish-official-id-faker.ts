@@ -9,10 +9,21 @@ import { SwedishOrganisationIdFaker } from "./swedish-organisation-id-faker.js";
  * Faker for any type of Swedish official ID (PersonalId, CoordinationId, OrganisationId).
  */
 export class SwedishOfficialIdFaker {
+  /**
+   * Creates a new {@link SwedishOfficialIdFaker} instance.
+   *
+   * @example
+   * const faker = SwedishOfficialIdFaker.swedishOfficialId();
+   * const id = faker.create(); // PersonalId | CoordinationId | OrganisationId
+   */
   static swedishOfficialId(): SwedishOfficialIdFaker {
     return new SwedishOfficialIdFaker();
   }
 
+  /**
+   * Creates a single random valid Swedish official ID — randomly one of {@link PersonalId}, {@link CoordinationId}, or {@link OrganisationId}.
+   * @returns a randomly chosen {@link SwedishOfficialId}
+   */
   create(): SwedishOfficialId {
     const choice = randomInt(0, 3);
 
@@ -27,6 +38,12 @@ export class SwedishOfficialIdFaker {
     return SwedishOrganisationIdFaker.organisationId().create();
   }
 
+  /**
+   * Creates an array of random valid Swedish official IDs.
+   *
+   * @param count - number of IDs to generate
+   * @returns array of `count` randomly generated {@link SwedishOfficialId} values
+   */
   createMany(count: number): SwedishOfficialId[] {
     const results: SwedishOfficialId[] = [];
     for (let i = 0; i < count; i++) {

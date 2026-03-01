@@ -24,17 +24,37 @@ function createIdWithBirthNumber(birthDate: LocalDate, birthNumber: number): Coo
  * Faker for Swedish coordination IDs (samordningsnummer).
  */
 export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
+  /**
+   * Creates a new {@link CoordinationIdFaker} instance.
+   *
+   * @example
+   * const faker = CoordinationIdFaker.coordinationId();
+   * const id = faker.create();
+   */
   static coordinationId(): CoordinationIdFaker {
     return new CoordinationIdFaker();
   }
 
+  /** Creates a random coordination ID with a random birth date. */
   create(): CoordinationId;
+  /** Creates a random coordination ID for the given birth date. @param date - the birth date */
   create(date: LocalDate): CoordinationId;
+  /**
+   * @param date - optional birth date; random if omitted
+   * @returns a valid {@link CoordinationId}
+   */
   create(date?: LocalDate): CoordinationId {
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   }
 
+  /**
+   * @param year - four-digit birth year
+   * @param month - birth month (1–12)
+   * @param dayOfMonth - birth day (1–31)
+   * @returns a valid {@link CoordinationId} for the specified date
+   * @throws {IllegalIdNumberException} if the birth date is invalid
+   */
   createFor(year: number, month: number, dayOfMonth: number): CoordinationId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
     if (!birthDate.isValid()) {
@@ -43,18 +63,30 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   }
 
+  /**
+   * Creates a random valid coordination ID with a male birth number (odd third digit).
+   * @returns a valid {@link CoordinationId} with a male birth number
+   */
   createMale(): CoordinationId {
     const birthDate = randomBirthDate();
     const birthNumber = makeMaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
   }
 
+  /**
+   * Creates a random valid coordination ID with a female birth number (even third digit).
+   * @returns a valid {@link CoordinationId} with a female birth number
+   */
   createFemale(): CoordinationId {
     const birthDate = randomBirthDate();
     const birthNumber = makeFemaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
   }
 
+  /**
+   * Creates a random valid coordination ID for a person who is 100–110 years old (uses `+` separator).
+   * @returns a valid {@link CoordinationId} with a `+` separator
+   */
   createCentenarian(): CoordinationId {
     const now = LocalDate.now();
     const yearsOld = 100 + randomInt(0, 11);
@@ -63,6 +95,9 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   }
 
+  /**
+   * @returns the ISO 3166-1 alpha-2 country code `"SE"`
+   */
   getCountryCode(): string {
     return "SE";
   }

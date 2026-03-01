@@ -1,10 +1,26 @@
 import type { ChecksumAlgorithm } from "./checksum-algorithm.js";
 
+/**
+ * Singleton implementation of the Luhn algorithm.
+ *
+ * Implements {@link ChecksumAlgorithm} and supports an optional `maxDigits` window
+ * so that only the last N digits of a longer string are considered during validation.
+ *
+ * @example
+ * const luhn = LuhnAlgorithm.getInstance();
+ * luhn.isChecksumValid("79927398713"); // true
+ * luhn.calculateCheckDigit("7992739871"); // 3
+ */
 export class LuhnAlgorithm implements ChecksumAlgorithm {
   private static readonly INSTANCE = new LuhnAlgorithm();
 
   private constructor() {}
 
+  /**
+   * Returns the shared singleton instance.
+   *
+   * @returns the single `LuhnAlgorithm` instance
+   */
   static getInstance(): LuhnAlgorithm {
     return LuhnAlgorithm.INSTANCE;
   }
