@@ -17,6 +17,9 @@ function randomRegistrationDate(): LocalDate {
 }
 
 function randomIdNumber(registrationDate: LocalDate): OrganisationId {
+  if (!registrationDate.isValid()) {
+    throw new InvalidIdNumberError("Invalid organisation ID: registration date is invalid");
+  }
   const uniqueNumber = randomInt(0, 1000);
   const yy = String(registrationDate.year % 100).padStart(2, "0");
   const encodedMonth = registrationDate.month + LEGAL_PERSON_MINIMUM_MONTH;
@@ -48,11 +51,7 @@ export class SwedishOrganisationIdFaker implements OrganisationIdFaker<Organisat
   }
 
   createFor(year: number, month: number, dayOfMonth: number): OrganisationId {
-    const registrationDate = LocalDate.of(year, month, dayOfMonth);
-    if (!registrationDate.isValid()) {
-      throw new InvalidIdNumberError("Invalid organisation ID: registration date is invalid");
-    }
-    return randomIdNumber(registrationDate);
+    return randomIdNumber(LocalDate.of(year, month, dayOfMonth));
   }
 
   createLegalPerson(): OrganisationId {
