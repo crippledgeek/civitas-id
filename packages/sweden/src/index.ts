@@ -21,9 +21,3 @@ export {
   isOrganisationId,
   isPersonOfficialId,
 } from "./core/swedish-official-id.js";
-
-// Testing fakers
-export { PersonalIdFaker } from "./testing/faker/personal-id-faker.js";
-export { CoordinationIdFaker } from "./testing/faker/coordination-id-faker.js";
-export { SwedishOrganisationIdFaker } from "./testing/faker/swedish-organisation-id-faker.js";
-export { SwedishOfficialIdFaker } from "./testing/faker/swedish-official-id-faker.js";
