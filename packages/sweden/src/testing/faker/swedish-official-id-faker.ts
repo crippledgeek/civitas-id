@@ -1,6 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import type { IdFaker } from "@civitas-id/test-common";
 import { CoordinationId } from "../../core/coordination-id.js";
+import type { OrganisationId } from "../../core/organisation-id.js";
 import type { PersonalId } from "../../core/personal-id.js";
 import type { SwedishOfficialId } from "../../core/swedish-official-id.js";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
