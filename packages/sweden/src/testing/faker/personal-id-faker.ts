@@ -23,17 +23,15 @@ function createIdWithBirthNumber(birthDate: LocalDate, birthNumber: number): Per
 /**
  * Faker for Swedish personal IDs (personnummer).
  */
-export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
-  static personalId(): PersonalIdFaker {
-    return new PersonalIdFaker();
-  }
-
-  create(): PersonalId;
-  create(date: LocalDate): PersonalId;
+export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
+  createMale(): PersonalId;
+  createFemale(): PersonalId;
+  createCentenarian(): PersonalId;
+} = {
   create(date?: LocalDate): PersonalId {
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   createFor(year: number, month: number, dayOfMonth: number): PersonalId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
@@ -41,19 +39,19 @@ export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
       throw new InvalidIdNumberError("Invalid personal ID: birth date is invalid");
     }
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   createMale(): PersonalId {
     const birthDate = randomBirthDate();
     const birthNumber = makeMaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   createFemale(): PersonalId {
     const birthDate = randomBirthDate();
     const birthNumber = makeFemaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   createCentenarian(): PersonalId {
     const now = LocalDate.now();
@@ -62,9 +60,9 @@ export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
     const candidate = LocalDate.of(year, now.month, now.day);
     const birthDate = candidate.isValid() ? candidate : LocalDate.of(year, now.month, 1);
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   getCountryCode(): string {
     return "SE";
-  }
-}
+  },
+};

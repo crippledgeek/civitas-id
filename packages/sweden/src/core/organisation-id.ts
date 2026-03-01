@@ -16,7 +16,7 @@ import {
 import { PersonalId } from "./personal-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX, createMatcher } from "./swedish-id-matcher.js";
 
-const ORGANISATION_NUMBER_MINIMUM_MONTH = 20;
+export const ORGANISATION_NUMBER_MINIMUM_MONTH = 20;
 
 function formatOrgId(id: string, format: PnrFormat): string {
   // id is stored internally as "16NNNNNN-NNNN" or "16NNNNNN+NNNN"

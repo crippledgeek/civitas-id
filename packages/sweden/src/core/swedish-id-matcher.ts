@@ -105,9 +105,7 @@ export class SwedishIdMatcher {
 
   private requireGroups(): Record<string, string | undefined> {
     if (this.result === null) {
-      throw new InvalidIdNumberError(
-        "SwedishIdMatcher: attempted to access groups on a no-match result",
-      );
+      throw new Error("SwedishIdMatcher: attempted to access groups on a no-match result");
     }
     return this.result.groups ?? {};
   }

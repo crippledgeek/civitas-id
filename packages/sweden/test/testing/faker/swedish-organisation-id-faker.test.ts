@@ -5,7 +5,7 @@ import { OrganisationNumberType } from "../../../src/format/organisation-number-
 import { SwedishOrganisationIdFaker } from "../../../src/testing/faker/swedish-organisation-id-faker.js";
 
 describe("SwedishOrganisationIdFaker", () => {
-  const faker = SwedishOrganisationIdFaker.organisationId();
+  const faker = SwedishOrganisationIdFaker;
 
   it("create() returns a valid OrganisationId", () => {
     const id = faker.create();
@@ -77,12 +77,6 @@ describe("SwedishOrganisationIdFaker", () => {
 
   it("getCountryCode() returns SE", () => {
     expect(faker.getCountryCode()).toBe("SE");
-  });
-
-  it("organisationId() factory method creates new instance", () => {
-    const fakerInstance = SwedishOrganisationIdFaker.organisationId();
-    expect(fakerInstance).toBeDefined();
-    expect(fakerInstance).not.toBe(faker);
   });
 
   it("create() generates diverse OrganisationIds", () => {

@@ -58,7 +58,7 @@ describe("OrganisationId CSV — personal numbers are valid organisation numbers
 
 describe("OrganisationId format methods", () => {
   it("should return full organisation number from personal ID conversion", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const orgId = personalId.toOrganisationId();
     const formatted = orgId.formatted(PnrFormat.SHORT_FORMAT_WITH_SEPARATOR);
     const parsed = OrganisationId.parseOrThrow(formatted);
@@ -68,7 +68,7 @@ describe("OrganisationId format methods", () => {
   });
 
   it("formatting consistency for legal person", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().create();
+    const orgId = SwedishOrganisationIdFaker.create();
     const longFormat = orgId.longFormat();
     const shortFormat = orgId.shortFormat();
     expect(orgId.formatted(PnrFormat.LONG_FORMAT)).toBe(longFormat);
@@ -76,7 +76,7 @@ describe("OrganisationId format methods", () => {
   });
 
   it("two OrganisationIds from same ID are equal", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().create();
+    const orgId = SwedishOrganisationIdFaker.create();
     const longFormat = orgId.longFormat();
     const shortFormat = orgId.shortFormat();
     const parsedFromLong = OrganisationId.parseOrThrow(longFormat);
@@ -85,13 +85,13 @@ describe("OrganisationId format methods", () => {
   });
 
   it("isLegalPerson() true for legal person org IDs", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     expect(orgId.isLegalPerson()).toBe(true);
     expect(orgId.isPhysicalPerson()).toBe(false);
   });
 
   it("isPhysicalPerson() true for physical person org IDs", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createPhysicalPerson();
+    const orgId = SwedishOrganisationIdFaker.createPhysicalPerson();
     expect(orgId.isPhysicalPerson()).toBe(true);
     expect(orgId.isLegalPerson()).toBe(false);
   });
@@ -171,7 +171,7 @@ describe("OrganisationId format methods", () => {
 
 describe("OrganisationId parse methods", () => {
   it("parse() returns OrganisationId for valid input", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().create();
+    const orgId = SwedishOrganisationIdFaker.create();
     const result = OrganisationId.parse(orgId.longFormat());
     expect(result).toBeDefined();
   });
@@ -195,7 +195,7 @@ describe("OrganisationId parse methods", () => {
   });
 
   it("parseOrThrow() with LEGAL_PERSON type accepts legal persons", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     const parsed = OrganisationId.parseOrThrow(
       orgId.longFormat(),
       OrganisationNumberType.LEGAL_PERSON,
@@ -204,7 +204,7 @@ describe("OrganisationId parse methods", () => {
   });
 
   it("parseOrThrow() with PHYSICAL_PERSON type accepts physical persons", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const orgId = personalId.toOrganisationId();
     const parsed = OrganisationId.parseOrThrow(
       orgId.longFormat(),
@@ -214,7 +214,7 @@ describe("OrganisationId parse methods", () => {
   });
 
   it("parseOrThrow() with LEGAL_PERSON type rejects physical persons", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const orgId = personalId.toOrganisationId();
     expect(() =>
       OrganisationId.parseOrThrow(orgId.longFormat(), OrganisationNumberType.LEGAL_PERSON),
@@ -226,14 +226,14 @@ describe("OrganisationId parse methods", () => {
 
 describe("OrganisationId validity", () => {
   it("isValid() with LEGAL_PERSON type validates legal persons", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     expect(OrganisationId.isValid(orgId.longFormat(), OrganisationNumberType.LEGAL_PERSON)).toBe(
       true,
     );
   });
 
   it("isValid() with PHYSICAL_PERSON type validates physical persons", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const orgId = personalId.toOrganisationId();
     expect(OrganisationId.isValid(orgId.longFormat(), OrganisationNumberType.PHYSICAL_PERSON)).toBe(
       true,
@@ -490,7 +490,7 @@ describe("OrganisationId optional-style API", () => {
 
 describe("OrganisationId conversion round-trips", () => {
   it("personalNumberShouldBePrivatePerson", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const orgId = personalId.toOrganisationId();
     expect(orgId.isPhysicalPerson()).toBe(true);
     const convertedPersonalId = PersonalId.parseOrThrow(orgId.longFormat());
@@ -501,14 +501,14 @@ describe("OrganisationId conversion round-trips", () => {
   });
 
   it("personalNumberCanBeConvertedToOrganisationNumber", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const orgId = personalId.toOrganisationId();
     const reconvertedOrgId = PersonalId.parseOrThrow(orgId.longFormat()).toOrganisationId();
     expect(orgId.equals(reconvertedOrgId)).toBe(true);
   });
 
   it("legal person organisation number cannot be parsed as PersonalId or CoordinationId", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     expect(orgId.isLegalPerson()).toBe(true);
     expect(() => PersonalId.parseOrThrow(orgId.longFormat())).toThrow(InvalidIdNumberError);
     expect(() => orgId.toPersonOfficialId()).toThrow(InvalidIdNumberError);
@@ -516,7 +516,7 @@ describe("OrganisationId conversion round-trips", () => {
   });
 
   it("coordinationNumberShouldBePrivatePerson", () => {
-    const coordId = CoordinationIdFaker.coordinationId().create();
+    const coordId = CoordinationIdFaker.create();
     const orgId = coordId.toOrganisationId();
     expect(orgId.isPhysicalPerson()).toBe(true);
     const convertedCoordId = CoordinationId.parseOrThrow(orgId.longFormat());
@@ -526,30 +526,30 @@ describe("OrganisationId conversion round-trips", () => {
   });
 
   it("toOrganisationId() on OrganisationId returns equal instance", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     const converted = orgId.toOrganisationId();
     expect(orgId.equals(converted)).toBe(true);
   });
 
   it("getRegistrationDate() returns undefined", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     expect(orgId.getRegistrationDate()).toBeUndefined();
   });
 
   it("getOrganisationType() returns form name for legal person", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     const orgType = orgId.getOrganisationType();
     expect(orgType).toBeDefined();
     expect(typeof orgType).toBe("string");
   });
 
   it("getOrganisationType() returns undefined for physical person", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createPhysicalPerson();
+    const orgId = SwedishOrganisationIdFaker.createPhysicalPerson();
     expect(orgId.getOrganisationType()).toBeUndefined();
   });
 
   it("getCountryCode() returns SE", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     expect(orgId.getCountryCode()).toBe("SE");
   });
 });

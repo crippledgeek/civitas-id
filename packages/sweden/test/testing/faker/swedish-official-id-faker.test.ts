@@ -8,7 +8,7 @@ import {
 import { SwedishOfficialIdFaker } from "../../../src/testing/faker/swedish-official-id-faker.js";
 
 describe("SwedishOfficialIdFaker", () => {
-  const faker = SwedishOfficialIdFaker.swedishOfficialId();
+  const faker = SwedishOfficialIdFaker;
 
   it("create() returns a valid SwedishOfficialId", () => {
     const id = faker.create();
@@ -73,11 +73,6 @@ describe("SwedishOfficialIdFaker", () => {
       generatedIds.add(id.longFormat());
     }
     expect(generatedIds.size).toBeGreaterThanOrEqual(90);
-  });
-
-  it("swedishOfficialId() factory method creates new instance", () => {
-    const fakerInstance = SwedishOfficialIdFaker.swedishOfficialId();
-    expect(fakerInstance).toBeDefined();
   });
 
   it("generated IDs have correct format", () => {
@@ -177,19 +172,13 @@ describe("SwedishOfficialIdFaker", () => {
     }
   });
 
-  it("multiple fakers generate different IDs", () => {
-    const faker1 = SwedishOfficialIdFaker.swedishOfficialId();
-    const faker2 = SwedishOfficialIdFaker.swedishOfficialId();
+  it("successive calls generate different IDs", () => {
+    const ids = new Set<string>();
 
-    const ids1 = new Set<string>();
-    const ids2 = new Set<string>();
-
-    for (let i = 0; i < 50; i++) {
-      ids1.add(faker1.create().longFormat());
-      ids2.add(faker2.create().longFormat());
+    for (let i = 0; i < 100; i++) {
+      ids.add(faker.create().longFormat());
     }
 
-    const union = new Set([...ids1, ...ids2]);
-    expect(union.size).toBeGreaterThan(Math.max(ids1.size, ids2.size));
+    expect(ids.size).toBeGreaterThan(50);
   });
 });

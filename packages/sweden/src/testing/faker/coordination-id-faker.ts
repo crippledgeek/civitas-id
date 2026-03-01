@@ -23,17 +23,15 @@ function createIdWithBirthNumber(birthDate: LocalDate, birthNumber: number): Coo
 /**
  * Faker for Swedish coordination IDs (samordningsnummer).
  */
-export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
-  static coordinationId(): CoordinationIdFaker {
-    return new CoordinationIdFaker();
-  }
-
-  create(): CoordinationId;
-  create(date: LocalDate): CoordinationId;
+export const CoordinationIdFaker: PersonIdFaker<CoordinationId> & {
+  createMale(): CoordinationId;
+  createFemale(): CoordinationId;
+  createCentenarian(): CoordinationId;
+} = {
   create(date?: LocalDate): CoordinationId {
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   createFor(year: number, month: number, dayOfMonth: number): CoordinationId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
@@ -41,19 +39,19 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
       throw new InvalidIdNumberError("Invalid coordination ID: birth date is invalid");
     }
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   createMale(): CoordinationId {
     const birthDate = randomBirthDate();
     const birthNumber = makeMaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   createFemale(): CoordinationId {
     const birthDate = randomBirthDate();
     const birthNumber = makeFemaleBirthNumber(randomBirthNumber());
     return createIdWithBirthNumber(birthDate, birthNumber);
-  }
+  },
 
   createCentenarian(): CoordinationId {
     const now = LocalDate.now();
@@ -61,9 +59,9 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
     const year = now.year - yearsOld;
     const birthDate = LocalDate.of(year, now.month, 1);
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
-  }
+  },
 
   getCountryCode(): string {
     return "SE";
-  }
-}
+  },
+};

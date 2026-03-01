@@ -21,7 +21,7 @@ import { loadCsv, loadCsvWithHeaders } from "../helpers/csv-loader.js";
 
 describe("SwedishOfficialId type guards", () => {
   it("isPersonalId() returns true for PersonalId", () => {
-    const id = PersonalIdFaker.personalId().create();
+    const id = PersonalIdFaker.create();
     const official: SwedishOfficialId = id;
     expect(isPersonalId(official)).toBe(true);
     expect(isCoordinationId(official)).toBe(false);
@@ -30,7 +30,7 @@ describe("SwedishOfficialId type guards", () => {
   });
 
   it("isCoordinationId() returns true for CoordinationId", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const official: SwedishOfficialId = id;
     expect(isCoordinationId(official)).toBe(true);
     expect(isPersonalId(official)).toBe(false);
@@ -39,7 +39,7 @@ describe("SwedishOfficialId type guards", () => {
   });
 
   it("isOrganisationId() returns true for OrganisationId", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().create();
+    const id = SwedishOrganisationIdFaker.create();
     const official: SwedishOfficialId = id;
     expect(isOrganisationId(official)).toBe(true);
     expect(isPersonalId(official)).toBe(false);
@@ -127,21 +127,21 @@ describe("SwedishOfficialId CSV — invalid IDs", () => {
 
 describe("SwedishOfficialId.parseAny()", () => {
   it("parses a valid personal ID", () => {
-    const id = PersonalIdFaker.personalId().create();
+    const id = PersonalIdFaker.create();
     const result = SwedishOfficialId.parseAny(id.longFormat());
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(PersonalId);
   });
 
   it("parses a valid coordination ID", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const result = SwedishOfficialId.parseAny(id.longFormat());
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(CoordinationId);
   });
 
   it("parses a valid legal person organisation ID", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const id = SwedishOrganisationIdFaker.createLegalPerson();
     const result = SwedishOfficialId.parseAny(id.longFormat());
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(OrganisationId);
@@ -157,21 +157,21 @@ describe("SwedishOfficialId.parseAny()", () => {
   });
 
   it("handles IDs with SE prefix", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const result = SwedishOfficialId.parseAny(`SE${personalId.longFormat()}`);
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(PersonalId);
   });
 
   it("handles short format IDs", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const result = SwedishOfficialId.parseAny(personalId.shortFormat());
     expect(result).toBeDefined();
     expect(result).toBeInstanceOf(PersonalId);
   });
 
   it("handles centenarian ID with + separator", () => {
-    const personalId = PersonalIdFaker.personalId().createFor(1920, 5, 15);
+    const personalId = PersonalIdFaker.createFor(1920, 5, 15);
     const withPlus = personalId.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR);
     const result = SwedishOfficialId.parseAny(withPlus);
     expect(result).toBeDefined();
@@ -179,7 +179,7 @@ describe("SwedishOfficialId.parseAny()", () => {
   });
 
   it("parseAny and parseAnyOrThrow produce equivalent results", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const optResult = SwedishOfficialId.parseAny(personalId.longFormat());
     const throwResult = SwedishOfficialId.parseAnyOrThrow(personalId.longFormat());
     expect(optResult).toBeDefined();
@@ -256,20 +256,20 @@ describe("SwedishOfficialId CSV — parseAny() invalid IDs", () => {
 
 describe("SwedishOfficialId.parseAnyOrThrow()", () => {
   it("parses a valid personal ID", () => {
-    const id = PersonalIdFaker.personalId().create();
+    const id = PersonalIdFaker.create();
     const result = SwedishOfficialId.parseAnyOrThrow(id.longFormat());
     expect(result).toBeInstanceOf(PersonalId);
     expect(result.longFormat()).toBe(id.longFormat());
   });
 
   it("parses a valid coordination ID", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const result = SwedishOfficialId.parseAnyOrThrow(id.longFormat());
     expect(result).toBeInstanceOf(CoordinationId);
   });
 
   it("parses a valid legal person organisation ID", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const id = SwedishOrganisationIdFaker.createLegalPerson();
     const result = SwedishOfficialId.parseAnyOrThrow(id.longFormat());
     expect(result).toBeInstanceOf(OrganisationId);
   });
@@ -292,19 +292,19 @@ describe("SwedishOfficialId.parseAnyOrThrow()", () => {
   });
 
   it("handles IDs with SE prefix", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const result = SwedishOfficialId.parseAnyOrThrow(`SE${personalId.longFormat()}`);
     expect(result).toBeInstanceOf(PersonalId);
   });
 
   it("handles short format IDs", () => {
-    const personalId = PersonalIdFaker.personalId().create();
+    const personalId = PersonalIdFaker.create();
     const result = SwedishOfficialId.parseAnyOrThrow(personalId.shortFormat());
     expect(result).toBeInstanceOf(PersonalId);
   });
 
   it("handles centenarian with different separators", () => {
-    const personalId = PersonalIdFaker.personalId().createFor(1920, 5, 15);
+    const personalId = PersonalIdFaker.createFor(1920, 5, 15);
     const withPlus = personalId.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR);
     const result = SwedishOfficialId.parseAnyOrThrow(withPlus);
     expect(result).toBeInstanceOf(PersonalId);
@@ -351,25 +351,25 @@ describe("SwedishOfficialId CSV — parseAnyOrThrow() invalid IDs throw", () => 
 
 describe("SwedishOfficialId.isValid()", () => {
   it("returns true for valid personal IDs", () => {
-    const id = PersonalIdFaker.personalId().create();
+    const id = PersonalIdFaker.create();
     expect(SwedishOfficialId.isValid(id.longFormat())).toBe(true);
   });
 
   it("returns true for valid coordination IDs", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     expect(SwedishOfficialId.isValid(id.longFormat())).toBe(true);
   });
 
   it("returns true for valid legal person organisation IDs", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const id = SwedishOrganisationIdFaker.createLegalPerson();
     expect(SwedishOfficialId.isValid(id.longFormat())).toBe(true);
   });
 
   it("coordination numbers with SE prefix are valid", () => {
-    const id1 = CoordinationIdFaker.coordinationId().createFor(1993, 9, 20);
-    const id2 = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
-    const id3 = CoordinationIdFaker.coordinationId().createFor(1981, 7, 21);
-    const id4 = CoordinationIdFaker.coordinationId().createFor(1975, 4, 25);
+    const id1 = CoordinationIdFaker.createFor(1993, 9, 20);
+    const id2 = CoordinationIdFaker.createFor(1982, 6, 22);
+    const id3 = CoordinationIdFaker.createFor(1981, 7, 21);
+    const id4 = CoordinationIdFaker.createFor(1975, 4, 25);
     expect(SwedishOfficialId.isValid(id1.longFormat())).toBe(true);
     expect(SwedishOfficialId.isValid(id2.longFormat())).toBe(true);
     expect(SwedishOfficialId.isValid(`SE${id3.longFormat()}`)).toBe(true);
@@ -386,26 +386,26 @@ describe("SwedishOfficialId.isValid()", () => {
 
 describe("SwedishOfficialId.format()", () => {
   it("formats a personal ID to SHORT_FORMAT (10 digits)", () => {
-    const id = PersonalIdFaker.personalId().create();
+    const id = PersonalIdFaker.create();
     const formatted = SwedishOfficialId.format(id.longFormat(), PnrFormat.SHORT_FORMAT);
     expect(formatted).toHaveLength(10);
     expect(formatted).toBe(id.formatted(PnrFormat.SHORT_FORMAT));
   });
 
   it("formats a personal ID to LONG_FORMAT (12 digits)", () => {
-    const personalId = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const personalId = PersonalIdFaker.createFor(2024, 7, 13);
     const formatted = SwedishOfficialId.format(personalId.longFormat(), PnrFormat.LONG_FORMAT);
     expect(formatted).toBe(personalId.longFormat());
   });
 
   it("formats an organisation ID to LONG_FORMAT (10 digits)", () => {
-    const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const orgId = SwedishOrganisationIdFaker.createLegalPerson();
     const formatted = SwedishOfficialId.format(orgId.longFormat(), PnrFormat.LONG_FORMAT);
     expect(formatted).toHaveLength(10);
   });
 
   it("formats an organisation ID with separator", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const id = SwedishOrganisationIdFaker.createLegalPerson();
     const formatted = SwedishOfficialId.format(
       id.longFormat(),
       PnrFormat.SHORT_FORMAT_WITH_SEPARATOR,
@@ -456,13 +456,13 @@ describe("SwedishOfficialId.format()", () => {
   });
 
   it("formats valid PersonalId to SHORT_FORMAT (10 digits)", () => {
-    const personalId = PersonalIdFaker.personalId().createFor(1990, 5, 15);
+    const personalId = PersonalIdFaker.createFor(1990, 5, 15);
     const formatted = SwedishOfficialId.format(personalId.longFormat(), PnrFormat.SHORT_FORMAT);
     expect(formatted).toHaveLength(10);
   });
 
   it("formats valid OrganisationId to LONG_FORMAT_WITH_SEPARATOR", () => {
-    const organisationId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const organisationId = SwedishOrganisationIdFaker.createLegalPerson();
     const formatted = SwedishOfficialId.format(
       organisationId.longFormat(),
       PnrFormat.LONG_FORMAT_WITH_SEPARATOR,
@@ -475,28 +475,28 @@ describe("SwedishOfficialId.format()", () => {
 
 describe("SwedishOfficialId getIdType()", () => {
   it("returns PERSONAL for PersonalId", () => {
-    const id = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const id = PersonalIdFaker.createFor(2024, 7, 13);
     expect(id.getIdType()).toBe("PERSONAL");
   });
 
   it("returns COORDINATION for CoordinationId", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(2024, 7, 13);
+    const id = CoordinationIdFaker.createFor(2024, 7, 13);
     expect(id.getIdType()).toBe("COORDINATION");
   });
 
   it("returns ORGANISATION for OrganisationId", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const id = SwedishOrganisationIdFaker.createLegalPerson();
     expect(id.getIdType()).toBe("ORGANISATION");
   });
 
   it("returns ORGANISATION after conversion to OrganisationId", () => {
-    const personalId = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const personalId = PersonalIdFaker.createFor(2024, 7, 13);
     const orgId = personalId.toOrganisationId();
     expect(orgId.getIdType()).toBe("ORGANISATION");
   });
 
   it("returns consistent type for same ID in different formats", () => {
-    const personalId = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const personalId = PersonalIdFaker.createFor(2024, 7, 13);
     const fromLong = SwedishOfficialId.parseAnyOrThrow(personalId.longFormat());
     const fromShort = SwedishOfficialId.parseAnyOrThrow(personalId.shortFormat());
     const fromSep = SwedishOfficialId.parseAnyOrThrow(personalId.longFormatWithSeparator());
@@ -510,7 +510,7 @@ describe("SwedishOfficialId getIdType()", () => {
 
 describe("SwedishOfficialId format helpers", () => {
   it("longFormatWithSeparator() returns YYYYMMDD-XXXX (13 chars)", () => {
-    const id = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const id = PersonalIdFaker.createFor(2024, 7, 13);
     const formatted = id.longFormatWithSeparator();
     expect(formatted).toContain("-");
     expect(formatted).toHaveLength(13);
@@ -518,7 +518,7 @@ describe("SwedishOfficialId format helpers", () => {
   });
 
   it("shortFormatWithSeparator() returns YYMMDD-XXXX (11 chars)", () => {
-    const id = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const id = PersonalIdFaker.createFor(2024, 7, 13);
     const formatted = id.shortFormatWithSeparator();
     expect(formatted).toContain("-");
     expect(formatted).toHaveLength(11);
@@ -545,9 +545,9 @@ describe("SwedishOfficialId equality", () => {
   });
 
   it("coordination numbers should be equal in different formats", () => {
-    const id1 = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
-    const id2 = CoordinationIdFaker.coordinationId().createFor(1981, 7, 21);
-    const id3 = CoordinationIdFaker.coordinationId().createFor(1975, 4, 25);
+    const id1 = CoordinationIdFaker.createFor(1982, 6, 22);
+    const id2 = CoordinationIdFaker.createFor(1981, 7, 21);
+    const id3 = CoordinationIdFaker.createFor(1975, 4, 25);
 
     const id1WithSep = `${id1.longFormat().substring(0, 8)}-${id1.longFormat().substring(8)}`;
     expect(
@@ -575,12 +575,12 @@ describe("SwedishOfficialId equality", () => {
 
 describe("SwedishOfficialId isLegalPerson/isPhysicalPerson", () => {
   it("organisation ID created by faker is a legal person", () => {
-    const id = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
+    const id = SwedishOrganisationIdFaker.createLegalPerson();
     expect(id.isLegalPerson()).toBe(true);
   });
 
   it("personal ID is a physical person", () => {
-    const id = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const id = PersonalIdFaker.createFor(2024, 7, 13);
     expect(id.isPhysicalPerson()).toBe(true);
   });
 });
@@ -598,7 +598,7 @@ describe("SwedishOfficialId input rejection", () => {
   });
 
   it("handles input at maximum allowed length after trimming", () => {
-    const id = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const id = PersonalIdFaker.createFor(2024, 7, 13);
     const padded = id.longFormat() + " ".repeat(88);
     expect(SwedishOfficialId.isValid(padded)).toBe(true);
   });
@@ -614,7 +614,7 @@ describe("SwedishOfficialId input rejection", () => {
 describe("SwedishOfficialIdFaker random generation", () => {
   it("randomly generated IDs are valid SwedishOfficialIds", () => {
     for (let i = 0; i < 100; i++) {
-      const id = SwedishOfficialIdFaker.swedishOfficialId().create();
+      const id = SwedishOfficialIdFaker.create();
       const idType = id.getIdType();
       expect(["PERSONAL", "COORDINATION", "ORGANISATION"]).toContain(idType);
     }
