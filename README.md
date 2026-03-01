@@ -209,7 +209,7 @@ The unified parser attempts to parse in this order:
 
 ## Error Handling
 
-All parsing failures throw `InvalidIdNumberError`, which extends the standard `Error` class and supports error cause chaining via `ErrorOptions`:
+All failures from the throwing APIs (`parseOrThrow`, `parseAnyOrThrow`, `format`) throw `InvalidIdNumberError`, which extends the standard `Error` class and supports error cause chaining via `ErrorOptions`. Non-throwing parse helpers (`parse`, `parseAny`) return `undefined` on failure:
 
 ```typescript
 import { PersonalId, InvalidIdNumberError } from "@civitas-id/sweden";
@@ -219,7 +219,7 @@ try {
   const id = PersonalId.parseOrThrow("invalid-input");
 } catch (e) {
   if (e instanceof InvalidIdNumberError) {
-    console.error(e.message); // "Invalid personal ID number: invalid-input"
+    console.error(e.message); // "Invalid personal ID: invalid-input"
   }
 }
 
