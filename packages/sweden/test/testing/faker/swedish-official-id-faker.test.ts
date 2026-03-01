@@ -63,7 +63,7 @@ describe("SwedishOfficialIdFaker", () => {
     const ids = faker.createMany(1);
     expect(ids).toHaveLength(1);
     expect(ids[0]).toBeDefined();
-    expect(SwedishOfficialId.isValid(ids[0]!.longFormat())).toBe(true);
+    expect(SwedishOfficialId.isValid(ids[0]?.longFormat())).toBe(true);
   });
 
   it("createMany(100) generates diverse IDs", () => {
