@@ -42,7 +42,7 @@ export const SwedishOrganisationIdFaker: OrganisationIdFaker<OrganisationId> & {
   createPhysicalPerson(): OrganisationId;
 } = {
   /**
-   * Creates a random organisation ID, optionally for a specific registration date.
+   * Creates a random legal-person organisation ID, optionally for a specific registration date.
    *
    * @param date - optional registration date; random if omitted
    * @returns a valid {@link OrganisationId}
@@ -56,7 +56,7 @@ export const SwedishOrganisationIdFaker: OrganisationIdFaker<OrganisationId> & {
    * @param year - four-digit registration year
    * @param month - registration month (1-12)
    * @param dayOfMonth - registration day (1-31)
-   * @returns a valid {@link OrganisationId} for the specified date
+   * @returns a valid legal-person {@link OrganisationId} for the specified date
    * @throws {InvalidIdNumberError} if the registration date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): OrganisationId {

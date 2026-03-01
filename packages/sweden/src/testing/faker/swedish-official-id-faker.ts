@@ -37,6 +37,7 @@ export const SwedishOfficialIdFaker: IdFaker<SwedishOfficialId> & {
    *
    * @param date - optional date; random if omitted
    * @returns a randomly chosen {@link SwedishOfficialId}
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
    */
   create(date?: LocalDate): SwedishOfficialId {
     const choice = randomInt(0, 3);
