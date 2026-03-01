@@ -231,7 +231,6 @@ try {
 }
 ```
 
-> **Note:** The deprecated alias `IllegalIdNumberException` is also exported for backwards compatibility but new code should use `InvalidIdNumberError`.
 
 ## Format Options
 

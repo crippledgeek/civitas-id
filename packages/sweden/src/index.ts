@@ -1,7 +1,5 @@
 // Errors
 export { InvalidIdNumberError } from "./error/invalid-id-number-error.js";
-/** @deprecated Use InvalidIdNumberError instead */
-export { InvalidIdNumberError as IllegalIdNumberException } from "./error/invalid-id-number-error.js";
 
 // Formats
 export { PnrFormat } from "./format/pnr-format.js";

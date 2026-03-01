@@ -2,7 +2,7 @@ import { LocalDate } from "@civitas-id/core";
 import { describe, expect, it } from "vitest";
 import { getGenderDigit, isValidPersonDate } from "../../src/core/person-official-id-base.js";
 import { CoordinationId, PersonOfficialIdBase, PersonalId } from "../../src/core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
@@ -97,8 +97,8 @@ describe("PersonOfficialId parse type dispatch", () => {
       } catch (e) {
         return e;
       }
-    })() as IllegalIdNumberException;
-    expect(err).toBeInstanceOf(IllegalIdNumberException);
+    })() as InvalidIdNumberError;
+    expect(err).toBeInstanceOf(InvalidIdNumberError);
     expect(err.message).toContain("Invalid person official ID");
   });
 });

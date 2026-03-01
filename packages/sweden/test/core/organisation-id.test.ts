@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CoordinationId, OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { OrganisationForm } from "../../src/format/organisation-form.js";
 import { OrganisationNumberType } from "../../src/format/organisation-number-type.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
@@ -190,8 +190,8 @@ describe("OrganisationId parse methods", () => {
     expect(result?.longFormat()).toBe("5560123456");
   });
 
-  it("parseOrThrow() throws IllegalIdNumberException for invalid input", () => {
-    expect(() => OrganisationId.parseOrThrow("invalid789")).toThrow(IllegalIdNumberException);
+  it("parseOrThrow() throws InvalidIdNumberError for invalid input", () => {
+    expect(() => OrganisationId.parseOrThrow("invalid789")).toThrow(InvalidIdNumberError);
   });
 
   it("parseOrThrow() with LEGAL_PERSON type accepts legal persons", () => {
@@ -261,7 +261,7 @@ describe("OrganisationId validity", () => {
     expect(OrganisationId.isValid("191112300007", OrganisationNumberType.LEGAL_PERSON)).toBe(false);
     expect(() =>
       OrganisationId.parseOrThrow("191112300007", OrganisationNumberType.LEGAL_PERSON),
-    ).toThrow(IllegalIdNumberException);
+    ).toThrow(InvalidIdNumberError);
   });
 
   it("isValid() returns false for PHYSICAL_PERSON type when ID is legal person", () => {
@@ -270,12 +270,12 @@ describe("OrganisationId validity", () => {
     );
     expect(() =>
       OrganisationId.parseOrThrow("165521000009", OrganisationNumberType.PHYSICAL_PERSON),
-    ).toThrow(IllegalIdNumberException);
+    ).toThrow(InvalidIdNumberError);
   });
 
   it("not parseable organisation numbers", () => {
-    expect(() => OrganisationId.parseOrThrow("16202100548")).toThrow(IllegalIdNumberException); // too short
-    expect(() => OrganisationId.parseOrThrow("19111330+0007")).toThrow(IllegalIdNumberException); // month > 12
+    expect(() => OrganisationId.parseOrThrow("16202100548")).toThrow(InvalidIdNumberError); // too short
+    expect(() => OrganisationId.parseOrThrow("19111330+0007")).toThrow(InvalidIdNumberError); // month > 12
   });
 
   it("isValid() returns false for garbage/short/invalid-prefix inputs", () => {
@@ -285,9 +285,9 @@ describe("OrganisationId validity", () => {
   });
 
   it("parseOrThrow() throws for garbage/short/invalid-prefix inputs", () => {
-    expect(() => OrganisationId.parseOrThrow("abc")).toThrow(IllegalIdNumberException);
-    expect(() => OrganisationId.parseOrThrow("19111230000")).toThrow(IllegalIdNumberException);
-    expect(() => OrganisationId.parseOrThrow("DK191112300007")).toThrow(IllegalIdNumberException);
+    expect(() => OrganisationId.parseOrThrow("abc")).toThrow(InvalidIdNumberError);
+    expect(() => OrganisationId.parseOrThrow("19111230000")).toThrow(InvalidIdNumberError);
+    expect(() => OrganisationId.parseOrThrow("DK191112300007")).toThrow(InvalidIdNumberError);
   });
 });
 
@@ -497,7 +497,7 @@ describe("OrganisationId conversion round-trips", () => {
     const personOfficialId = orgId.toPersonOfficialId();
     expect(personalId.equals(convertedPersonalId)).toBe(true);
     expect(personOfficialId).toBeDefined();
-    expect(() => CoordinationId.parseOrThrow(orgId.longFormat())).toThrow(IllegalIdNumberException);
+    expect(() => CoordinationId.parseOrThrow(orgId.longFormat())).toThrow(InvalidIdNumberError);
   });
 
   it("personalNumberCanBeConvertedToOrganisationNumber", () => {
@@ -510,9 +510,9 @@ describe("OrganisationId conversion round-trips", () => {
   it("legal person organisation number cannot be parsed as PersonalId or CoordinationId", () => {
     const orgId = SwedishOrganisationIdFaker.organisationId().createLegalPerson();
     expect(orgId.isLegalPerson()).toBe(true);
-    expect(() => PersonalId.parseOrThrow(orgId.longFormat())).toThrow(IllegalIdNumberException);
-    expect(() => orgId.toPersonOfficialId()).toThrow(IllegalIdNumberException);
-    expect(() => CoordinationId.parseOrThrow(orgId.longFormat())).toThrow(IllegalIdNumberException);
+    expect(() => PersonalId.parseOrThrow(orgId.longFormat())).toThrow(InvalidIdNumberError);
+    expect(() => orgId.toPersonOfficialId()).toThrow(InvalidIdNumberError);
+    expect(() => CoordinationId.parseOrThrow(orgId.longFormat())).toThrow(InvalidIdNumberError);
   });
 
   it("coordinationNumberShouldBePrivatePerson", () => {

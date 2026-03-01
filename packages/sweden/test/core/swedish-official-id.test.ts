@@ -9,7 +9,7 @@ import {
   isPersonOfficialId,
   isPersonalId,
 } from "../../src/core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { CoordinationIdFaker } from "../../src/testing/faker/coordination-id-faker.js";
 import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
@@ -274,8 +274,8 @@ describe("SwedishOfficialId.parseAnyOrThrow()", () => {
     expect(result).toBeInstanceOf(OrganisationId);
   });
 
-  it("throws IllegalIdNumberException for invalid input", () => {
-    expect(() => SwedishOfficialId.parseAnyOrThrow("invalidABC")).toThrow(IllegalIdNumberException);
+  it("throws InvalidIdNumberError for invalid input", () => {
+    expect(() => SwedishOfficialId.parseAnyOrThrow("invalidABC")).toThrow(InvalidIdNumberError);
   });
 
   it("throws with descriptive error message", () => {
@@ -286,7 +286,7 @@ describe("SwedishOfficialId.parseAnyOrThrow()", () => {
       } catch (e) {
         return e;
       }
-    })() as IllegalIdNumberException;
+    })() as InvalidIdNumberError;
     expect(err.message).toContain("Invalid Swedish ID number");
     expect(err.message).toContain("000000-0000");
   });
@@ -343,7 +343,7 @@ describe("SwedishOfficialId CSV — parseAnyOrThrow() personal numbers", () => {
 describe("SwedishOfficialId CSV — parseAnyOrThrow() invalid IDs throw", () => {
   const ids = loadCsv("invalid_swedish_ids.csv");
   it.each(ids)("parseAnyOrThrow(%s) throws", (id) => {
-    expect(() => SwedishOfficialId.parseAnyOrThrow(id)).toThrow(IllegalIdNumberException);
+    expect(() => SwedishOfficialId.parseAnyOrThrow(id)).toThrow(InvalidIdNumberError);
   });
 });
 
@@ -415,7 +415,7 @@ describe("SwedishOfficialId.format()", () => {
 
   it("throws for invalid input", () => {
     expect(() => SwedishOfficialId.format("invalid", PnrFormat.LONG_FORMAT)).toThrow(
-      IllegalIdNumberException,
+      InvalidIdNumberError,
     );
   });
 
@@ -427,21 +427,19 @@ describe("SwedishOfficialId.format()", () => {
       } catch (e) {
         return e;
       }
-    })() as IllegalIdNumberException;
+    })() as InvalidIdNumberError;
     expect(err.message).toContain("Invalid Swedish ID number");
     expect(err.message).toContain("invalid-id-123");
   });
 
   it("throws for ID with invalid checksum", () => {
     expect(() => SwedishOfficialId.format("19900515-1234", PnrFormat.LONG_FORMAT)).toThrow(
-      IllegalIdNumberException,
+      InvalidIdNumberError,
     );
   });
 
   it("throws for empty string", () => {
-    expect(() => SwedishOfficialId.format("", PnrFormat.LONG_FORMAT)).toThrow(
-      IllegalIdNumberException,
-    );
+    expect(() => SwedishOfficialId.format("", PnrFormat.LONG_FORMAT)).toThrow(InvalidIdNumberError);
   });
 
   it("throws for malformed ID with correct message", () => {
@@ -452,7 +450,7 @@ describe("SwedishOfficialId.format()", () => {
       } catch (e) {
         return e;
       }
-    })() as IllegalIdNumberException;
+    })() as InvalidIdNumberError;
     expect(err.message).toContain("Invalid Swedish ID number");
     expect(err.message).toContain("abc123xyz");
   });
@@ -591,14 +589,12 @@ describe("SwedishOfficialId isLegalPerson/isPhysicalPerson", () => {
 
 describe("SwedishOfficialId input rejection", () => {
   it("rejects null input via parseOrThrow", () => {
-    expect(() => PersonalId.parseOrThrow(null as unknown as string)).toThrow(
-      IllegalIdNumberException,
-    );
+    expect(() => PersonalId.parseOrThrow(null as unknown as string)).toThrow(InvalidIdNumberError);
   });
 
   it("rejects too-long input via parseOrThrow", () => {
     const tooLong = "1".repeat(101);
-    expect(() => PersonalId.parseOrThrow(tooLong)).toThrow(IllegalIdNumberException);
+    expect(() => PersonalId.parseOrThrow(tooLong)).toThrow(InvalidIdNumberError);
   });
 
   it("handles input at maximum allowed length after trimming", () => {
@@ -609,7 +605,7 @@ describe("SwedishOfficialId input rejection", () => {
 
   it("rejects excessively long malicious input", () => {
     const malicious = `SE${"1234567890".repeat(100)}`;
-    expect(() => PersonalId.parseOrThrow(malicious)).toThrow(IllegalIdNumberException);
+    expect(() => PersonalId.parseOrThrow(malicious)).toThrow(InvalidIdNumberError);
   });
 });
 
