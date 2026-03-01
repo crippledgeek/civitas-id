@@ -1,5 +1,5 @@
 /**
- * Enumeration of Swedish organisation number types.
+ * Swedish organisation number types (const object + type alias).
  */
 export const OrganisationNumberType = {
   /** Legal person (juridisk person) - month >= 20. */

@@ -6,7 +6,7 @@ const LUHN = LuhnAlgorithm.getInstance();
 
 /**
  * Swedish-specific wrapper around the Luhn algorithm.
- * Swedish IDs in 12-digit format (YYYYMMDD-XXXX) only validate the 10-digit
+ * Swedish IDs in 13-character format (YYYYMMDD-XXXX) only validate the 10-digit
  * portion (YYMMDDXXXX). This object delegates to the generic Luhn algorithm.
  */
 export const SwedishLuhnAlgorithm: ChecksumAlgorithm & { toString(): string } = {
