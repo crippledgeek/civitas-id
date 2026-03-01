@@ -29,6 +29,9 @@ export const CoordinationIdFaker: PersonIdFaker<CoordinationId> & {
   createCentenarian(): CoordinationId;
 } = {
   create(date?: LocalDate): CoordinationId {
+    if (date && !date.isValid()) {
+      throw new InvalidIdNumberError("Invalid coordination ID: birth date is invalid");
+    }
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   },

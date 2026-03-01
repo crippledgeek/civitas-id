@@ -29,6 +29,9 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
   createCentenarian(): PersonalId;
 } = {
   create(date?: LocalDate): PersonalId {
+    if (date && !date.isValid()) {
+      throw new InvalidIdNumberError("Invalid personal ID: birth date is invalid");
+    }
     const birthDate = date ?? randomBirthDate();
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   },
