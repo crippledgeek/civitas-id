@@ -2,6 +2,6 @@ import type { PersonOfficialId } from "@civitas-id/core";
 import type { IdFaker } from "./id-faker.js";
 
 /**
- * Faker interface for person identification numbers.
+ * Faker type for person identification numbers.
  */
-export interface PersonIdFaker<T extends PersonOfficialId<string>> extends IdFaker<T> {}
+export type PersonIdFaker<T extends PersonOfficialId> = IdFaker<T>;

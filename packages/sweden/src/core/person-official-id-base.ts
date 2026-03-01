@@ -1,5 +1,4 @@
 import { LocalDate } from "@civitas-id/core";
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import type { SwedishIdMatcher } from "./swedish-id-matcher.js";
@@ -28,13 +27,11 @@ export function getPossibleFullIdNumber(matcher: SwedishIdMatcher): string {
   const nowYear = new Date().getUTCFullYear();
   const twoDigitYear = matcher.getYear();
   const century = nowYear - (nowYear % 100);
-  let possibleBirthYear = century + twoDigitYear;
-  if (possibleBirthYear > nowYear) {
-    possibleBirthYear -= 100;
-  }
+  const rawBirthYear = century + twoDigitYear;
+  const possibleBirthYear = rawBirthYear > nowYear ? rawBirthYear - 100 : rawBirthYear;
 
   const delimiter = matcher.getDelimiter();
-  if (delimiter === null || delimiter === undefined || delimiter === "-") {
+  if (delimiter === undefined || delimiter === "-") {
     return matcher.withBirthYearAndDelimiter(possibleBirthYear, "-");
   }
   // delimiter === "+"
@@ -48,25 +45,21 @@ const EARLIEST_ALLOWED_BIRTH_YEAR = 1880;
  * has a valid date part.
  */
 export function isValidPersonDate(fullPersonalNumber: string): boolean {
-  try {
-    const yearPart = Number.parseInt(fullPersonalNumber.substring(0, 4), 10);
-    const monthPart = Number.parseInt(fullPersonalNumber.substring(4, 6), 10);
-    const dayPart = Number.parseInt(fullPersonalNumber.substring(6, 8), 10);
+  const yearPart = Number.parseInt(fullPersonalNumber.substring(0, 4), 10);
+  const monthPart = Number.parseInt(fullPersonalNumber.substring(4, 6), 10);
+  const dayPart = Number.parseInt(fullPersonalNumber.substring(6, 8), 10);
 
-    const birthDate = LocalDate.of(yearPart, monthPart, dayPart);
-    if (!birthDate.isValid()) return false;
-    if (yearPart < EARLIEST_ALLOWED_BIRTH_YEAR) return false;
+  const birthDate = LocalDate.of(yearPart, monthPart, dayPart);
+  if (!birthDate.isValid()) return false;
+  if (yearPart < EARLIEST_ALLOWED_BIRTH_YEAR) return false;
 
-    const nowYear = new Date().getUTCFullYear();
-    const age = nowYear - yearPart;
+  const nowYear = new Date().getUTCFullYear();
+  const age = nowYear - yearPart;
 
-    const delimiter = fullPersonalNumber.charAt(8);
-    return (
-      (age < 100 && delimiter === "-") || (age >= 100 && (delimiter === "-" || delimiter === "+"))
-    );
-  } catch {
-    return false;
-  }
+  const delimiter = fullPersonalNumber.charAt(8);
+  return (
+    (age < 100 && delimiter === "-") || (age >= 100 && (delimiter === "-" || delimiter === "+"))
+  );
 }
 
 /**
@@ -92,9 +85,17 @@ export function getGenderDigit(longFormat: string): number {
   // Gender digit is the 3rd birth number digit at index 11
   const ch = longFormat.charAt(11);
   if (ch < "0" || ch > "9") {
-    throw new IllegalIdNumberException(`Invalid gender digit: ${ch}`);
+    throw new Error(`Internal error: invalid gender digit '${ch}' in stored ID '${longFormat}'`);
   }
   return Number.parseInt(ch, 10);
+}
+
+export function isPersonalNumberFull(fullPersonalNumber: string): boolean {
+  return isIdNumberFull(fullPersonalNumber, isValidPersonDate);
+}
+
+export function isCoordinationNumberFull(fullCoordinationNumber: string): boolean {
+  return isIdNumberFull(fullCoordinationNumber, isValidCoordinationDate);
 }
 
 /**
@@ -115,5 +116,9 @@ export function formatPersonId(id: string, format: PnrFormat): string {
       return `${id.substring(2, 8)}-${id.substring(9)}`;
     case "SHORT_FORMAT":
       return id.substring(2, 8) + id.substring(9);
+    default: {
+      const _: never = format;
+      throw new Error(`Unhandled PnrFormat: ${_}`);
+    }
   }
 }

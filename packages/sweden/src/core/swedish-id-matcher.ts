@@ -1,4 +1,4 @@
-import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 
 export const LEGAL_PERSON_CENTURY_PREFIX = "16";
 
@@ -37,11 +37,9 @@ export class SwedishIdMatcher {
   }
 
   inferDelimiter(): string {
-    const century = this.result?.groups?.century;
-    if (century === undefined) {
-      return "-";
-    }
-    if (century === LEGAL_PERSON_CENTURY_PREFIX) {
+    const groups = this.requireGroups();
+    const century = groups.century;
+    if (century === undefined || century === LEGAL_PERSON_CENTURY_PREFIX) {
       return "-";
     }
     const datePart = century + this.getDate();
@@ -52,11 +50,13 @@ export class SwedishIdMatcher {
   }
 
   getDelimiter(): string | undefined {
-    return this.result?.groups?.delimiter;
+    return this.requireGroups().delimiter;
   }
 
   getDate(): string {
-    return this.result?.groups?.date ?? "";
+    const date = this.requireGroups().date;
+    if (date === undefined) throw new Error("SwedishIdMatcher: missing date group in match result");
+    return date;
   }
 
   getYear(): number {
@@ -68,23 +68,33 @@ export class SwedishIdMatcher {
   }
 
   getCentury(): string | undefined {
-    return this.result?.groups?.century;
+    return this.requireGroups().century;
   }
 
   getUnique(): string {
-    return this.result?.groups?.unique ?? "";
+    const unique = this.requireGroups().unique;
+    if (unique === undefined)
+      throw new Error("SwedishIdMatcher: missing unique group in match result");
+    return unique;
   }
 
   getYearGroup(): string {
-    return this.result?.groups?.year ?? "";
+    const year = this.requireGroups().year;
+    if (year === undefined) throw new Error("SwedishIdMatcher: missing year group in match result");
+    return year;
   }
 
   getMonthGroup(): string {
-    return this.result?.groups?.month ?? "";
+    const month = this.requireGroups().month;
+    if (month === undefined)
+      throw new Error("SwedishIdMatcher: missing month group in match result");
+    return month;
   }
 
   getDayGroup(): string {
-    return this.result?.groups?.day ?? "";
+    const day = this.requireGroups().day;
+    if (day === undefined) throw new Error("SwedishIdMatcher: missing day group in match result");
+    return day;
   }
 
   withBirthYearAndDelimiter(birthYear: number, delimiter: string): string {
@@ -93,8 +103,18 @@ export class SwedishIdMatcher {
     );
   }
 
+  private requireGroups(): Record<string, string | undefined> {
+    if (this.result === null) {
+      throw new InvalidIdNumberError(
+        "SwedishIdMatcher: attempted to access groups on a no-match result",
+      );
+    }
+    return this.result.groups ?? {};
+  }
+
   private resolveDelimiter(): string {
-    return this.hasDelimiter() ? (this.getDelimiter() ?? "") : this.inferDelimiter();
+    const delimiter = this.getDelimiter();
+    return delimiter !== undefined ? delimiter : this.inferDelimiter();
   }
 
   getShortFormat(): string {
@@ -111,14 +131,14 @@ export class SwedishIdMatcher {
  */
 export function createMatcher(input: string | null | undefined): SwedishIdMatcher {
   if (input === null || input === undefined) {
-    throw new IllegalIdNumberException("Invalid Swedish ID number: input is null");
+    throw new InvalidIdNumberError("Invalid Swedish ID number: input is null");
   }
   const trimmed = input.trim();
   if (trimmed.length === 0) {
-    throw new IllegalIdNumberException("Invalid Swedish ID number: input is empty");
+    throw new InvalidIdNumberError("Invalid Swedish ID number: input is empty");
   }
   if (trimmed.length > 100) {
-    throw new IllegalIdNumberException("Invalid Swedish ID number: input too long");
+    throw new InvalidIdNumberError("Invalid Swedish ID number: input too long");
   }
   return SwedishIdMatcher.of(trimmed);
 }

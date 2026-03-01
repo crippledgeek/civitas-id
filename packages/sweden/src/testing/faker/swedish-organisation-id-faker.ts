@@ -1,18 +1,18 @@
 import { LocalDate } from "@civitas-id/core";
 import type { OrganisationIdFaker } from "@civitas-id/test-common";
-import { ORGANISATION_NUMBER_MINIMUM_MONTH } from "../../core/organisation-id.js";
+import { OrganisationId } from "../../core/organisation-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX } from "../../core/swedish-id-matcher.js";
-import { OrganisationId } from "../../core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import { OrganisationNumberType } from "../../format/organisation-number-type.js";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
 import { randomInt } from "./faker-utils.js";
 import { PersonalIdFaker } from "./personal-id-faker.js";
 
+const LEGAL_PERSON_MINIMUM_MONTH = 20;
 const ORGANISATION_NUMBER_MAXIMUM_MONTH = 99;
 
 function randomRegistrationDate(): LocalDate {
-  const month = randomInt(ORGANISATION_NUMBER_MINIMUM_MONTH, ORGANISATION_NUMBER_MAXIMUM_MONTH + 1);
+  const month = randomInt(LEGAL_PERSON_MINIMUM_MONTH, ORGANISATION_NUMBER_MAXIMUM_MONTH + 1);
   const day = randomInt(1, 100);
 
   const now = LocalDate.now();
@@ -24,7 +24,7 @@ function randomRegistrationDate(): LocalDate {
 function randomIdNumber(registrationDate: LocalDate): OrganisationId {
   const uniqueNumber = randomInt(0, 1000);
   const yy = String(registrationDate.year % 100).padStart(2, "0");
-  const mm = String(ORGANISATION_NUMBER_MINIMUM_MONTH).padStart(2, "0");
+  const mm = String(LEGAL_PERSON_MINIMUM_MONTH).padStart(2, "0");
   const dd = String(registrationDate.day).padStart(2, "0");
   const uuu = String(uniqueNumber).padStart(3, "0");
 
@@ -54,7 +54,7 @@ export class SwedishOrganisationIdFaker implements OrganisationIdFaker<Organisat
   createFor(year: number, month: number, dayOfMonth: number): OrganisationId {
     const registrationDate = LocalDate.of(year, month, dayOfMonth);
     if (!registrationDate.isValid()) {
-      throw new IllegalIdNumberException("Invalid organisation ID: registration date is invalid");
+      throw new InvalidIdNumberError("Invalid organisation ID: registration date is invalid");
     }
     return randomIdNumber(registrationDate);
   }

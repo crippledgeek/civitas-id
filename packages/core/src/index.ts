@@ -1,5 +1,4 @@
 export { LocalDate } from "./local-date.js";
-export type { IdFormat } from "./id-format.js";
 export { ValidationResult } from "./validation-result.js";
 export type { ChecksumAlgorithm } from "./checksum-algorithm.js";
 export { LuhnAlgorithm } from "./luhn-algorithm.js";

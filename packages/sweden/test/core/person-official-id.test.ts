@@ -182,6 +182,8 @@ describe("isValidPersonDate edge cases", () => {
 describe("getGenderDigit edge cases", () => {
   it("throws for non-digit gender character", () => {
     // Internal format is YYYYMMDD-BBBC (13 chars), gender digit at index 11
-    expect(() => getGenderDigit("20240713-23X4")).toThrow(IllegalIdNumberException);
+    // This is an internal error guard (unreachable in normal use), throws plain Error
+    expect(() => getGenderDigit("20240713-23X4")).toThrow(Error);
+    expect(() => getGenderDigit("20240713-23X4")).toThrow("Internal error");
   });
 });

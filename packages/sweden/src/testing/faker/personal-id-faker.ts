@@ -1,7 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import type { PersonIdFaker } from "@civitas-id/test-common";
-import { PersonalId } from "../../core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../error/illegal-id-number-exception.js";
+import { PersonalId } from "../../core/personal-id.js";
+import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import {
   buildIdString,
   makeFemaleBirthNumber,
@@ -38,7 +38,7 @@ export class PersonalIdFaker implements PersonIdFaker<PersonalId> {
   createFor(year: number, month: number, dayOfMonth: number): PersonalId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
     if (!birthDate.isValid()) {
-      throw new IllegalIdNumberException("Invalid personal ID: birth date is invalid");
+      throw new InvalidIdNumberError("Invalid personal ID: birth date is invalid");
     }
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   }

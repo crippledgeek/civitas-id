@@ -1,7 +1,7 @@
 import { LocalDate } from "@civitas-id/core";
 import type { PersonIdFaker } from "@civitas-id/test-common";
-import { CoordinationId } from "../../core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../error/illegal-id-number-exception.js";
+import { CoordinationId } from "../../core/coordination-id.js";
+import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import {
   buildIdString,
   makeFemaleBirthNumber,
@@ -38,7 +38,7 @@ export class CoordinationIdFaker implements PersonIdFaker<CoordinationId> {
   createFor(year: number, month: number, dayOfMonth: number): CoordinationId {
     const birthDate = LocalDate.of(year, month, dayOfMonth);
     if (!birthDate.isValid()) {
-      throw new IllegalIdNumberException("Invalid coordination ID: birth date is invalid");
+      throw new InvalidIdNumberError("Invalid coordination ID: birth date is invalid");
     }
     return createIdWithBirthNumber(birthDate, randomBirthNumber());
   }

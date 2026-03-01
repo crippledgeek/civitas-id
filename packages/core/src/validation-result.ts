@@ -1,38 +1,22 @@
-export class ValidationResult {
-  private constructor(
-    private readonly _valid: boolean,
-    private readonly _errorMessage?: string,
-    private readonly _errorCode?: string,
-  ) {}
+export type ValidationResult =
+  | { readonly valid: true }
+  | { readonly valid: false; readonly errorMessage: string; readonly errorCode?: string };
 
-  static valid(): ValidationResult {
-    return new ValidationResult(true);
-  }
+export const ValidationResult = {
+  valid(): ValidationResult {
+    return { valid: true };
+  },
 
-  static invalid(errorMessage: string, errorCode?: string): ValidationResult {
-    return new ValidationResult(false, errorMessage, errorCode);
-  }
+  invalid(errorMessage: string, errorCode?: string): ValidationResult {
+    return errorCode !== undefined
+      ? { valid: false, errorMessage, errorCode }
+      : { valid: false, errorMessage };
+  },
 
-  isValid(): boolean {
-    return this._valid;
-  }
-
-  isInvalid(): boolean {
-    return !this._valid;
-  }
-
-  getErrorMessage(): string | undefined {
-    return this._errorMessage;
-  }
-
-  getErrorCode(): string | undefined {
-    return this._errorCode;
-  }
-
-  toString(): string {
-    if (this._valid) return "ValidationResult{valid=true}";
-    let s = `ValidationResult{valid=false, errorMessage='${this._errorMessage}'`;
-    if (this._errorCode !== undefined) s += `, errorCode='${this._errorCode}'`;
+  toString(result: ValidationResult): string {
+    if (result.valid) return "ValidationResult{valid=true}";
+    let s = `ValidationResult{valid=false, errorMessage='${result.errorMessage}'`;
+    if (result.errorCode !== undefined) s += `, errorCode='${result.errorCode}'`;
     return `${s}}`;
-  }
-}
+  },
+} as const;

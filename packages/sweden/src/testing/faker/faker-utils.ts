@@ -4,7 +4,9 @@ import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js
 export function randomInt(min: number, max: number): number {
   const buf = new Uint32Array(1);
   crypto.getRandomValues(buf);
-  return min + ((buf[0] as number) % (max - min));
+  const value = buf[0];
+  if (value === undefined) throw new Error("Failed to generate random value");
+  return min + (value % (max - min));
 }
 
 export function randomBirthDate(): LocalDate {
