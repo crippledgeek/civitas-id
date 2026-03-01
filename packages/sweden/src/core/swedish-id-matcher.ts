@@ -93,14 +93,16 @@ export class SwedishIdMatcher {
     );
   }
 
+  private resolveDelimiter(): string {
+    return this.hasDelimiter() ? (this.getDelimiter() ?? "") : this.inferDelimiter();
+  }
+
   getShortFormat(): string {
-    const delimiter = this.hasDelimiter() ? (this.getDelimiter() ?? "") : this.inferDelimiter();
-    return this.getDate() + delimiter + this.getUnique();
+    return this.getDate() + this.resolveDelimiter() + this.getUnique();
   }
 
   getLongFormat(): string {
-    const delimiter = this.hasDelimiter() ? (this.getDelimiter() ?? "") : this.inferDelimiter();
-    return (this.getCentury() ?? "") + this.getDate() + delimiter + this.getUnique();
+    return (this.getCentury() ?? "") + this.getDate() + this.resolveDelimiter() + this.getUnique();
   }
 }
 

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { ChecksumValidator } from "../../src/core/checksum-validator.js";
 import { CoordinationId, OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
 import { PersonOfficialIdBase } from "../../src/core/swedish-ids.js";
 import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
+import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
 
 describe("Error Message Consistency", () => {
   it("PersonalId provides consistent error messages", () => {
@@ -77,11 +77,11 @@ describe("Error Message Consistency", () => {
     expect(caught?.message).toMatch(/^Invalid/);
   });
 
-  it("ChecksumValidator throws for invalid digit characters", () => {
+  it("SwedishLuhnAlgorithm throws for invalid digit characters", () => {
     const invalidInput = "12345678A";
     let caught: Error | undefined;
     try {
-      ChecksumValidator.calculateCheckDigit(invalidInput);
+      SwedishLuhnAlgorithm.calculateCheckDigit(invalidInput);
     } catch (e) {
       caught = e as Error;
     }

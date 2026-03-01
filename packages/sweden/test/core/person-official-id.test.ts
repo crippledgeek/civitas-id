@@ -1,11 +1,11 @@
 import { LocalDate } from "@civitas-id/core";
 import { describe, expect, it } from "vitest";
-import { ChecksumValidator } from "../../src/core/checksum-validator.js";
 import { getGenderDigit, isValidPersonDate } from "../../src/core/person-official-id-base.js";
 import { CoordinationId, PersonOfficialIdBase, PersonalId } from "../../src/core/swedish-ids.js";
 import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
+import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
 import { loadCsv } from "../helpers/csv-loader.js";
 
 // ===== CSV-driven: age, gender, adult, child =====
@@ -138,7 +138,7 @@ describe("PersonOfficialId isAdult/isChild no-arg", () => {
     let found: PersonalId | undefined;
     for (let i = 0; i < 1000; i++) {
       const base = `${String(birthYear % 100).padStart(2, "0")}0101${String(i).padStart(3, "0")}`;
-      const checkDigit = ChecksumValidator.calculateCheckDigit(base);
+      const checkDigit = SwedishLuhnAlgorithm.calculateCheckDigit(base);
       const fullId = base + checkDigit;
       if (PersonalId.isValid(fullId)) {
         found = PersonalId.parseOrThrow(fullId);

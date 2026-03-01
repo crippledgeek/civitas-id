@@ -2,16 +2,17 @@ import { LocalDate } from "@civitas-id/core";
 import { IllegalIdNumberException } from "../error/illegal-id-number-exception.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { AbstractPersonId } from "./abstract-person-id.js";
-import { ChecksumValidator } from "./checksum-validator.js";
 import { OrganisationId } from "./organisation-id.js";
-import { getPossibleFullIdNumber, isValidCoordinationDate } from "./person-official-id-base.js";
+import {
+  getPossibleFullIdNumber,
+  isIdNumberFull,
+  isValidCoordinationDate,
+} from "./person-official-id-base.js";
 import { PersonalId } from "./personal-id.js";
 import { createMatcher } from "./swedish-id-matcher.js";
 
 export function isCoordinationNumberFull(fullCoordinationNumber: string): boolean {
-  if (!isValidCoordinationDate(fullCoordinationNumber)) return false;
-  const tenDigits = fullCoordinationNumber.substring(2, 8) + fullCoordinationNumber.substring(9);
-  return ChecksumValidator.isChecksumValid(tenDigits);
+  return isIdNumberFull(fullCoordinationNumber, isValidCoordinationDate);
 }
 
 /**
@@ -75,15 +76,6 @@ export class CoordinationId extends AbstractPersonId {
 
   toOrganisationId(): OrganisationId {
     return OrganisationId.parseOrThrow(this._id);
-  }
-
-  toPersonOfficialId(): PersonOfficialIdBase {
-    return this;
-  }
-
-  equals(other: unknown): boolean {
-    if (!(other instanceof CoordinationId)) return false;
-    return this.longFormat() === other.longFormat();
   }
 }
 

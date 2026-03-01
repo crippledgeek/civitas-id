@@ -1,20 +1,15 @@
 import { LocalDate } from "@civitas-id/core";
 import type { OrganisationIdFaker } from "@civitas-id/test-common";
-import { ChecksumValidator } from "../../core/checksum-validator.js";
+import { ORGANISATION_NUMBER_MINIMUM_MONTH } from "../../core/organisation-id.js";
+import { LEGAL_PERSON_CENTURY_PREFIX } from "../../core/swedish-id-matcher.js";
 import { OrganisationId } from "../../core/swedish-ids.js";
 import { IllegalIdNumberException } from "../../error/illegal-id-number-exception.js";
 import { OrganisationNumberType } from "../../format/organisation-number-type.js";
+import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
+import { randomInt } from "./faker-utils.js";
 import { PersonalIdFaker } from "./personal-id-faker.js";
 
-const LEGAL_PERSON_CENTURY_PREFIX = "16";
-const ORGANISATION_NUMBER_MINIMUM_MONTH = 20;
 const ORGANISATION_NUMBER_MAXIMUM_MONTH = 99;
-
-function randomInt(min: number, max: number): number {
-  const buf = new Uint32Array(1);
-  crypto.getRandomValues(buf);
-  return min + ((buf[0] as number) % (max - min));
-}
 
 function randomRegistrationDate(): LocalDate {
   const month = randomInt(ORGANISATION_NUMBER_MINIMUM_MONTH, ORGANISATION_NUMBER_MAXIMUM_MONTH + 1);
@@ -34,7 +29,7 @@ function randomIdNumber(registrationDate: LocalDate): OrganisationId {
   const uuu = String(uniqueNumber).padStart(3, "0");
 
   const base = yy + mm + dd + uuu;
-  const checkDigit = ChecksumValidator.calculateCheckDigit(base);
+  const checkDigit = SwedishLuhnAlgorithm.calculateCheckDigit(base);
 
   return OrganisationId.parseOrThrow(
     LEGAL_PERSON_CENTURY_PREFIX + base + checkDigit,

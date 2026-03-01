@@ -1,14 +1,9 @@
-import { ChecksumValidator } from "../../core/checksum-validator.js";
 import { CoordinationId, OrganisationId, type PersonalId } from "../../core/swedish-ids.js";
 import type { SwedishOfficialId } from "../../core/swedish-ids.js";
+import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
+import { randomInt } from "./faker-utils.js";
 import { PersonalIdFaker } from "./personal-id-faker.js";
 import { SwedishOrganisationIdFaker } from "./swedish-organisation-id-faker.js";
-
-function randomInt(min: number, max: number): number {
-  const buf = new Uint32Array(1);
-  crypto.getRandomValues(buf);
-  return min + ((buf[0] as number) % (max - min));
-}
 
 /**
  * Faker for any type of Swedish official ID (PersonalId, CoordinationId, OrganisationId).
@@ -52,7 +47,7 @@ export class SwedishOfficialIdFaker {
     const coordDay = String(dayValue + 60).padStart(2, "0");
 
     const base = year.substring(2) + month + coordDay + birthNumber;
-    const checkDigit = ChecksumValidator.calculateCheckDigit(base);
+    const checkDigit = SwedishLuhnAlgorithm.calculateCheckDigit(base);
 
     return CoordinationId.parseOrThrow(year + month + coordDay + birthNumber + checkDigit);
   }
