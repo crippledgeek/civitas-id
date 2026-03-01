@@ -200,12 +200,16 @@ The unified parser attempts to parse in this order:
 
 ## Test Utilities (Fakers)
 
-The library includes test utilities for generating valid test data. These are useful for unit tests, integration tests, and development.
+The library includes test utilities for generating valid test data, available via a separate subpath export to keep them out of production bundles:
+
+```typescript
+import { PersonalIdFaker } from "@civitas-id/sweden/testing";
+```
 
 ### Personal ID Faker
 
 ```typescript
-import { PersonalIdFaker } from "@civitas-id/sweden";
+import { PersonalIdFaker } from "@civitas-id/sweden/testing";
 import { LocalDate } from "@civitas-id/core";
 
 const faker = PersonalIdFaker.personalId();
@@ -230,7 +234,7 @@ const centenarian = faker.createCentenarian();
 ### Coordination ID Faker
 
 ```typescript
-import { CoordinationIdFaker } from "@civitas-id/sweden";
+import { CoordinationIdFaker } from "@civitas-id/sweden/testing";
 
 const faker = CoordinationIdFaker.coordinationId();
 
@@ -246,7 +250,7 @@ const centenarian = faker.createCentenarian();
 ### Organisation ID Faker
 
 ```typescript
-import { SwedishOrganisationIdFaker } from "@civitas-id/sweden";
+import { SwedishOrganisationIdFaker } from "@civitas-id/sweden/testing";
 
 const faker = SwedishOrganisationIdFaker.organisationId();
 
@@ -261,7 +265,7 @@ const physical = faker.createPhysicalPerson();
 ### Swedish Official ID Faker
 
 ```typescript
-import { SwedishOfficialIdFaker } from "@civitas-id/sweden";
+import { SwedishOfficialIdFaker } from "@civitas-id/sweden/testing";
 
 const faker = SwedishOfficialIdFaker.swedishOfficialId();
 
@@ -291,13 +295,13 @@ civitas-id/
 └── @civitas-id/sweden        — Swedish implementations
     ├── PersonalId, CoordinationId, OrganisationId
     ├── Swedish-specific validation and formatting
-    └── Test utilities (fakers) for generating Swedish IDs
+    └── @civitas-id/sweden/testing — Test fakers for generating Swedish IDs
 ```
 
 **Design Principles:**
 - **Core package**: Contains only country-agnostic interfaces and truly generic utilities
 - **Country packages**: Implement core interfaces with country-specific validation rules
-- **Test utilities**: Bundled in the country package for easy consumption
+- **Test utilities**: Available via `@civitas-id/sweden/testing` subpath to keep production bundles clean
 - **Discriminated unions**: Type-safe ID hierarchy using TypeScript discriminated unions with `type` field
 
 **Extensibility:**
