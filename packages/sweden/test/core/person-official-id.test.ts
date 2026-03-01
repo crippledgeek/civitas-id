@@ -2,7 +2,7 @@ import { LocalDate } from "@civitas-id/core";
 import { describe, expect, it } from "vitest";
 import { getGenderDigit, isValidPersonDate } from "../../src/core/person-official-id-base.js";
 import { CoordinationId, PersonOfficialIdBase, PersonalId } from "../../src/core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
@@ -97,8 +97,8 @@ describe("PersonOfficialId parse type dispatch", () => {
       } catch (e) {
         return e;
       }
-    })() as IllegalIdNumberException;
-    expect(err).toBeInstanceOf(IllegalIdNumberException);
+    })() as InvalidIdNumberError;
+    expect(err).toBeInstanceOf(InvalidIdNumberError);
     expect(err.message).toContain("Invalid person official ID");
   });
 });
@@ -109,7 +109,7 @@ describe("PersonOfficialId isAdult/isChild with fixed clock", () => {
   it("returns true for child (10 years old) using fixed clock", () => {
     // Fixed clock: 2025-04-23; birth date: 2015-04-23 → age 10 → child
     const fixedClock: () => LocalDate = () => LocalDate.of(2025, 4, 23);
-    const id = PersonalIdFaker.personalId().createFor(2015, 4, 23);
+    const id = PersonalIdFaker.createFor(2015, 4, 23);
     expect(id.isChild(fixedClock)).toBe(true);
     expect(id.isAdult(fixedClock)).toBe(false);
   });
@@ -117,7 +117,7 @@ describe("PersonOfficialId isAdult/isChild with fixed clock", () => {
   it("returns false for child and true for adult (25 years old) using fixed clock", () => {
     // Fixed clock: 2025-04-23; birth date: 2000-04-23 → age 25 → adult
     const fixedClock: () => LocalDate = () => LocalDate.of(2025, 4, 23);
-    const id = PersonalIdFaker.personalId().createFor(2000, 4, 23);
+    const id = PersonalIdFaker.createFor(2000, 4, 23);
     expect(id.isChild(fixedClock)).toBe(false);
     expect(id.isAdult(fixedClock)).toBe(true);
   });
@@ -127,7 +127,7 @@ describe("PersonOfficialId isAdult/isChild with fixed clock", () => {
 
 describe("PersonOfficialId isAdult/isChild no-arg", () => {
   it("isAdult() no-arg returns true for born 2000-01-01", () => {
-    const id = PersonalIdFaker.personalId().createFor(2000, 1, 1);
+    const id = PersonalIdFaker.createFor(2000, 1, 1);
     expect(id.isAdult()).toBe(true);
   });
 
@@ -150,7 +150,7 @@ describe("PersonOfficialId isAdult/isChild no-arg", () => {
   });
 
   it("getAge() no-arg returns age around 25 for born 2000-01-01", () => {
-    const id = PersonalIdFaker.personalId().createFor(2000, 1, 1);
+    const id = PersonalIdFaker.createFor(2000, 1, 1);
     const age = id.getAge();
     expect(age).toBeGreaterThanOrEqual(24);
     expect(age).toBeLessThanOrEqual(26);
@@ -161,7 +161,7 @@ describe("PersonOfficialId isAdult/isChild no-arg", () => {
 
 describe("PersonOfficialIdBase.format()", () => {
   it("formats personal ID with LONG_FORMAT", () => {
-    const id = PersonalIdFaker.personalId().createFor(2024, 7, 13);
+    const id = PersonalIdFaker.createFor(2024, 7, 13);
     const formatted = PersonOfficialIdBase.format(id.longFormat(), PnrFormat.LONG_FORMAT);
     expect(formatted).toBe(id.longFormat());
   });
@@ -182,6 +182,8 @@ describe("isValidPersonDate edge cases", () => {
 describe("getGenderDigit edge cases", () => {
   it("throws for non-digit gender character", () => {
     // Internal format is YYYYMMDD-BBBC (13 chars), gender digit at index 11
-    expect(() => getGenderDigit("20240713-23X4")).toThrow(IllegalIdNumberException);
+    // This is an internal error guard (unreachable in normal use), throws plain Error
+    expect(() => getGenderDigit("20240713-23X4")).toThrow(Error);
+    expect(() => getGenderDigit("20240713-23X4")).toThrow("Internal error");
   });
 });

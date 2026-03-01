@@ -68,7 +68,7 @@ describe("CoordinationId CSV — test data", () => {
 
 describe("CoordinationId format methods", () => {
   it("parses short format with inferred century", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     const longFmt = id.longFormat();
     const shortWithSep = `${longFmt.substring(2, 8)}-${longFmt.substring(8)}`;
     const parsed = CoordinationId.parseOrThrow(shortWithSep);
@@ -76,13 +76,13 @@ describe("CoordinationId format methods", () => {
   });
 
   it("isValid() validates short format", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     const short = `${id.longFormat().substring(2, 8)}-${id.longFormat().substring(8)}`;
     expect(CoordinationId.isValid(short)).toBe(true);
   });
 
   it("format() with LONG_FORMAT returns 12-char no-separator format", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     const formatted = CoordinationId.format(id.longFormat(), PnrFormat.LONG_FORMAT);
     expect(formatted).toHaveLength(12);
     expect(formatted).not.toContain("-");
@@ -92,22 +92,22 @@ describe("CoordinationId format methods", () => {
   });
 
   it("LONG_FORMAT_WITH_SEPARATOR contains dash", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     expect(id.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)).toContain("-");
   });
 
   it("LONG_FORMAT_WITH_SEPARATOR contains plus for centenarian", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1920, 3, 15);
+    const id = CoordinationIdFaker.createFor(1920, 3, 15);
     expect(id.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)).toContain("+");
   });
 
   it("SHORT_FORMAT_WITH_SEPARATOR has length 11", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     expect(id.formatted(PnrFormat.SHORT_FORMAT_WITH_SEPARATOR)).toHaveLength(11);
   });
 
   it("LONG_FORMAT has no separator and length 12", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     const formatted = id.formatted(PnrFormat.LONG_FORMAT);
     expect(formatted).not.toContain("-");
     expect(formatted).not.toContain("+");
@@ -115,7 +115,7 @@ describe("CoordinationId format methods", () => {
   });
 
   it("SHORT_FORMAT has no separator and length 10", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1982, 6, 22);
+    const id = CoordinationIdFaker.createFor(1982, 6, 22);
     const formatted = id.formatted(PnrFormat.SHORT_FORMAT);
     expect(formatted).not.toContain("-");
     expect(formatted).not.toContain("+");
@@ -125,7 +125,7 @@ describe("CoordinationId format methods", () => {
 
 describe("CoordinationId parse methods", () => {
   it("parse() returns CoordinationId for valid input", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1985, 3, 15);
+    const id = CoordinationIdFaker.createFor(1985, 3, 15);
     const result = CoordinationId.parse(id.longFormat());
     expect(result).toBeDefined();
     expect(result?.longFormat()).toBe(id.longFormat());
@@ -145,7 +145,7 @@ describe("CoordinationId birth date", () => {
     const birthYear = 1985;
     const birthMonth = 6;
     const birthDay = 15;
-    const id = CoordinationIdFaker.coordinationId().createFor(birthYear, birthMonth, birthDay);
+    const id = CoordinationIdFaker.createFor(birthYear, birthMonth, birthDay);
     const birthDate = id.getBirthDate();
     expect(birthDate.year).toBe(birthYear);
     expect(birthDate.month).toBe(birthMonth);
@@ -153,7 +153,7 @@ describe("CoordinationId birth date", () => {
   });
 
   it("coordination ID day component is birthDay + 60", () => {
-    const id = CoordinationIdFaker.coordinationId().createFor(1990, 4, 5);
+    const id = CoordinationIdFaker.createFor(1990, 4, 5);
     const longFmt = id.longFormat();
     const dayInId = Number.parseInt(longFmt.substring(6, 8), 10);
     expect(dayInId).toBe(5 + 60);
@@ -162,42 +162,42 @@ describe("CoordinationId birth date", () => {
 
 describe("CoordinationId conversion methods", () => {
   it("isPhysicalPerson() returns true", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     expect(id.isPhysicalPerson()).toBe(true);
     expect(id.isLegalPerson()).toBe(false);
   });
 
   it("toPersonOfficialId() returns itself", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const person = id.toPersonOfficialId();
     expect(person).toBe(id);
   });
 
   it("toOrganisationId() converts to physical person OrganisationId", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const orgId = id.toOrganisationId();
     expect(orgId).toBeInstanceOf(OrganisationId);
     expect(orgId.isPhysicalPerson()).toBe(true);
   });
 
   it("toString() returns longFormat", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     expect(id.toString()).toBe(id.longFormat());
   });
 
   it("getCountryCode() returns SE", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     expect(id.getCountryCode()).toBe("SE");
   });
 
   it("shortFormatWithSeparator() returns 10-digit format with separator", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const short = id.shortFormatWithSeparator();
     expect(short).toMatch(/^\d{6}-\d{4}$/);
   });
 
   it("shortFormat() returns 10-digit format without separator", () => {
-    const id = CoordinationIdFaker.coordinationId().create();
+    const id = CoordinationIdFaker.create();
     const short = id.shortFormat();
     expect(short).toMatch(/^\d{10}$/);
   });

@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { CoordinationId, OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
 import { PersonOfficialIdBase } from "../../src/core/swedish-ids.js";
-import { IllegalIdNumberException } from "../../src/error/illegal-id-number-exception.js";
+import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
 
 describe("Error Message Consistency", () => {
   it("PersonalId provides consistent error messages", () => {
     const invalidId = "invalid123";
-    expect(() => PersonalId.parseOrThrow(invalidId)).toThrow(IllegalIdNumberException);
+    expect(() => PersonalId.parseOrThrow(invalidId)).toThrow(InvalidIdNumberError);
     let caught: Error | undefined;
     try {
       PersonalId.parseOrThrow(invalidId);

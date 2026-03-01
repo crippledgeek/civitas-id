@@ -3,7 +3,7 @@ import type { LocalDate, OfficialId } from "@civitas-id/core";
 /**
  * Base interface for creating fake/random official IDs for testing purposes.
  */
-export interface IdFaker<T extends OfficialId<string>> {
+export interface IdFaker<T extends OfficialId> {
   /** Creates a random valid ID with a random date within a reasonable range. */
   create(): T;
 

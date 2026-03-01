@@ -1,6 +1,4 @@
-import type { IdFormat } from "./id-format.js";
-
-export interface OfficialId<F extends IdFormat> {
+export interface OfficialId<F extends string = string> {
   longFormat(): string;
   shortFormat(): string;
   formatted(format: F): string;

@@ -151,10 +151,9 @@ const FORMS: Record<OrganisationFormKey, OrganisationFormEntry> = {
 };
 
 /** Reverse lookup: numeric code → OrganisationFormEntry */
-const CODE_MAP = new Map<number, OrganisationFormEntry>();
-for (const entry of Object.values(FORMS)) {
-  CODE_MAP.set(entry.code, entry);
-}
+const CODE_MAP = new Map<number, OrganisationFormEntry>(
+  Object.values(FORMS).map((e) => [e.code, e] as const),
+);
 
 export const OrganisationForm = {
   ...FORMS,
@@ -198,5 +197,3 @@ export const OrganisationForm = {
     return CODE_MAP.get(formCode) ?? FORMS.JURIDISK_FORM_EJ_UTREDD;
   },
 } as const;
-
-export type OrganisationForm = OrganisationFormEntry;
