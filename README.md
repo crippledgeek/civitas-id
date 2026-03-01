@@ -3,7 +3,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7%2B-blue)](https://www.typescriptlang.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.30%2B-blue)](https://pnpm.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-34,030%20passing-brightgreen)](packages/sweden/test)
+[![Tests](https://img.shields.io/badge/Tests-34,026%20passing-brightgreen)](packages/sweden/test)
 
 A comprehensive TypeScript library for validating and working with Swedish personal identification numbers (personnummer), coordination numbers (samordningsnummer), and organisation numbers (organisationsnummer).
 
@@ -53,7 +53,7 @@ This library provides comprehensive functionality for working with Swedish offic
 - Checksum validation using the Luhn algorithm
 - Type-safe API with discriminated unions and type guards
 - Comprehensive error messages via `InvalidIdNumberError`
-- Extensive test coverage (34,030 tests)
+- Extensive test coverage (34,026 tests)
 - Test utilities (fakers) for generating valid test data
 
 ## Installation
@@ -339,23 +339,21 @@ import { PersonalIdFaker } from "@civitas-id/sweden/testing";
 import { PersonalIdFaker } from "@civitas-id/sweden/testing";
 import { LocalDate } from "@civitas-id/core";
 
-const faker = PersonalIdFaker.personalId();
-
 // Generate random valid personal ID
-const randomId = faker.create();
+const randomId = PersonalIdFaker.create();
 
 // Generate with specific birth date
-const specificId = faker.create(LocalDate.of(1990, 5, 15));
+const specificId = PersonalIdFaker.create(LocalDate.of(1990, 5, 15));
 
 // Generate with specific date components
-const id = faker.createFor(1990, 5, 15);
+const id = PersonalIdFaker.createFor(1990, 5, 15);
 
 // Generate gender-specific IDs
-const male = faker.createMale();
-const female = faker.createFemale();
+const male = PersonalIdFaker.createMale();
+const female = PersonalIdFaker.createFemale();
 
 // Generate centenarian (100+ years old)
-const centenarian = faker.createCentenarian();
+const centenarian = PersonalIdFaker.createCentenarian();
 ```
 
 ### Coordination ID Faker
@@ -363,15 +361,13 @@ const centenarian = faker.createCentenarian();
 ```typescript
 import { CoordinationIdFaker } from "@civitas-id/sweden/testing";
 
-const faker = CoordinationIdFaker.coordinationId();
-
 // Generate random coordination ID
-const randomId = faker.create();
+const randomId = CoordinationIdFaker.create();
 
 // Gender-specific and centenarian methods also available
-const male = faker.createMale();
-const female = faker.createFemale();
-const centenarian = faker.createCentenarian();
+const male = CoordinationIdFaker.createMale();
+const female = CoordinationIdFaker.createFemale();
+const centenarian = CoordinationIdFaker.createCentenarian();
 ```
 
 ### Organisation ID Faker
@@ -379,14 +375,12 @@ const centenarian = faker.createCentenarian();
 ```typescript
 import { SwedishOrganisationIdFaker } from "@civitas-id/sweden/testing";
 
-const faker = SwedishOrganisationIdFaker.organisationId();
-
 // Generate random organisation ID (legal person)
-const legalPerson = faker.create();
+const legalPerson = SwedishOrganisationIdFaker.create();
 
 // Generate specific types
-const legal = faker.createLegalPerson();
-const physical = faker.createPhysicalPerson();
+const legal = SwedishOrganisationIdFaker.createLegalPerson();
+const physical = SwedishOrganisationIdFaker.createPhysicalPerson();
 ```
 
 ### Swedish Official ID Faker
@@ -394,13 +388,11 @@ const physical = faker.createPhysicalPerson();
 ```typescript
 import { SwedishOfficialIdFaker } from "@civitas-id/sweden/testing";
 
-const faker = SwedishOfficialIdFaker.swedishOfficialId();
-
 // Generate random Swedish ID (PersonalId, CoordinationId, or OrganisationId)
-const randomId = faker.create();
+const randomId = SwedishOfficialIdFaker.create();
 
 // Generate multiple IDs at once
-const ids = faker.createMany(10);
+const ids = SwedishOfficialIdFaker.createMany(10);
 ```
 
 **Note:** All fakers generate cryptographically secure random IDs using `crypto.getRandomValues()` and ensure proper Luhn checksum validation.

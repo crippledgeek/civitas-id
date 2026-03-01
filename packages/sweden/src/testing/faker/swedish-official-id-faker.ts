@@ -33,7 +33,7 @@ export const SwedishOfficialIdFaker: IdFaker<SwedishOfficialId> & {
 } = {
   /**
    * Creates a single random valid Swedish official ID -- randomly one of
-   * {@link PersonalId}, {@link CoordinationId}, or OrganisationId.
+   * {@link PersonalId}, {@link CoordinationId}, or {@link OrganisationId}.
    *
    * @param date - optional date; random if omitted
    * @returns a randomly chosen {@link SwedishOfficialId}
@@ -57,6 +57,7 @@ export const SwedishOfficialIdFaker: IdFaker<SwedishOfficialId> & {
    * @param month - month (1-12)
    * @param dayOfMonth - day (1-31)
    * @returns a valid {@link SwedishOfficialId} for the specified date
+   * @throws {InvalidIdNumberError} if the supplied date is invalid
    */
   createFor(year: number, month: number, dayOfMonth: number): SwedishOfficialId {
     return SwedishOfficialIdFaker.create(LocalDate.of(year, month, dayOfMonth));
