@@ -2,6 +2,7 @@ import { LocalDate } from "@civitas-id/core";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
 
 export function randomInt(min: number, max: number): number {
+  if (max <= min) throw new RangeError(`max (${max}) must be greater than min (${min})`);
   const buf = new Uint32Array(1);
   crypto.getRandomValues(buf);
   const value = buf[0];

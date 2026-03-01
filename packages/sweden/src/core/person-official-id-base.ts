@@ -85,7 +85,9 @@ export function getGenderDigit(longFormat: string): number {
   // Gender digit is the 3rd birth number digit at index 11
   const ch = longFormat.charAt(11);
   if (ch < "0" || ch > "9") {
-    throw new Error(`Internal error: invalid gender digit '${ch}' in stored ID '${longFormat}'`);
+    throw new Error(
+      `Internal error: invalid gender digit '${ch}' at index 11 in stored ID (length ${longFormat.length})`,
+    );
   }
   return Number.parseInt(ch, 10);
 }
