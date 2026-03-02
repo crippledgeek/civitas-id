@@ -62,11 +62,10 @@ importers:
         version: 2.1.9(@types/node@25.3.3)
 
   packages/test-common:
-    dependencies:
+    devDependencies:
       '@deathbycode/civitas-id-core':
         specifier: workspace:*
         version: link:../core
-    devDependencies:
       tsup:
         specifier: '*'
         version: 8.5.1(postcss@8.5.6)(typescript@5.9.3)
