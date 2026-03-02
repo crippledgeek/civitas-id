@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 (2026-03-02)
+
+### Fixes
+
+- Include README.md in published npm packages
+
 ## 1.0.0 (2026-03-02)
 
 Initial release of the civitas-id TypeScript library for Swedish official identity number validation.
