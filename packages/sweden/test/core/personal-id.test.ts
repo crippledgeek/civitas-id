@@ -1,4 +1,4 @@
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
 import { OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";

@@ -1,4 +1,4 @@
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
 
 export function randomInt(min: number, max: number): number {

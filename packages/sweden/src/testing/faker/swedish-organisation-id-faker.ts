@@ -1,5 +1,5 @@
-import { LocalDate } from "@civitas-id/core";
-import type { OrganisationIdFaker } from "@civitas-id/test-common";
+import { LocalDate } from "@deathbycode/civitas-id-core";
+import type { OrganisationIdFaker } from "@deathbycode/civitas-id-test-common";
 import { ORGANISATION_NUMBER_MINIMUM_MONTH, OrganisationId } from "../../core/organisation-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX } from "../../core/swedish-id-matcher.js";
 import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";

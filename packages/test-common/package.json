@@ -1,5 +1,5 @@
 {
-  "name": "@civitas-id/test-common",
+  "name": "@deathbycode/civitas-id-test-common",
   "version": "0.1.0",
   "type": "module",
   "exports": {
@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@civitas-id/core": "workspace:*"
+    "@deathbycode/civitas-id-core": "workspace:*"
   },
   "devDependencies": {
     "tsup": "*",

@@ -1,4 +1,4 @@
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
 import { PersonalId } from "../../../src/core/swedish-ids.js";
 import { PersonalIdFaker } from "../../../src/testing/faker/personal-id-faker.js";

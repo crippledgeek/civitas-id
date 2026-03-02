@@ -1,5 +1,5 @@
-import { LocalDate } from "@civitas-id/core";
-import type { PersonOfficialId as IPersonOfficialId } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
+import type { PersonOfficialId as IPersonOfficialId } from "@deathbycode/civitas-id-core";
 import { PnrFormat } from "../format/pnr-format.js";
 import { formatPersonId, getGenderDigit } from "./person-official-id-base.js";
 import { LEGAL_PERSON_CENTURY_PREFIX } from "./swedish-id-matcher.js";

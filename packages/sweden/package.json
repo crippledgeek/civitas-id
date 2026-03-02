@@ -1,5 +1,5 @@
 {
-  "name": "@civitas-id/sweden",
+  "name": "@deathbycode/civitas-id-sweden",
   "version": "0.1.0",
   "type": "module",
   "exports": {
@@ -18,8 +18,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@civitas-id/core": "workspace:*",
-    "@civitas-id/test-common": "workspace:*"
+    "@deathbycode/civitas-id-core": "workspace:*",
+    "@deathbycode/civitas-id-test-common": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^25.3.3",

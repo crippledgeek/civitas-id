@@ -1,4 +1,4 @@
-import type { LocalDate, OfficialId } from "@civitas-id/core";
+import type { LocalDate, OfficialId } from "@deathbycode/civitas-id-core";
 
 /**
  * Base interface for creating fake/random official IDs for testing purposes.

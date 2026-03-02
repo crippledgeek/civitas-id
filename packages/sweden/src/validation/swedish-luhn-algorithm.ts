@@ -1,5 +1,5 @@
-import { LuhnAlgorithm } from "@civitas-id/core";
-import type { ChecksumAlgorithm } from "@civitas-id/core";
+import { LuhnAlgorithm } from "@deathbycode/civitas-id-core";
+import type { ChecksumAlgorithm } from "@deathbycode/civitas-id-core";
 import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 
 const LUHN = LuhnAlgorithm.getInstance();
