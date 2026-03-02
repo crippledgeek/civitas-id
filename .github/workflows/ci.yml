@@ -24,6 +24,6 @@ jobs:
 
       - run: pnpm -r build
 
-      - run: pnpm biome check .
+      - run: pnpm lint
 
       - run: pnpm -r test
