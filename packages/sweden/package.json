@@ -28,7 +28,6 @@
     "dist"
   ],
   "devDependencies": {
-    "@deathbycode/civitas-id-test-common": "workspace:*",
     "@types/node": "^25.3.3",
     "tsup": "*",
     "typescript": "*",

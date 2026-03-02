@@ -45,9 +45,6 @@ importers:
         specifier: workspace:*
         version: link:../core
     devDependencies:
-      '@deathbycode/civitas-id-test-common':
-        specifier: workspace:*
-        version: link:../test-common
       '@types/node':
         specifier: ^25.3.3
         version: 25.3.3
