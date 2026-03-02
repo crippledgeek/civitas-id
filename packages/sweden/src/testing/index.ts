@@ -1,3 +1,4 @@
+export type { IdFaker, OrganisationIdFaker, PersonIdFaker } from "./faker/faker-types.js";
 export { PersonalIdFaker } from "./faker/personal-id-faker.js";
 export { CoordinationIdFaker } from "./faker/coordination-id-faker.js";
 export { SwedishOrganisationIdFaker } from "./faker/swedish-organisation-id-faker.js";
