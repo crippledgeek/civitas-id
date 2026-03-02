@@ -5,19 +5,17 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@deathbycode/civitas-id-core": "workspace:*"
-  },
   "devDependencies": {
+    "@deathbycode/civitas-id-core": "workspace:*",
     "tsup": "*",
     "typescript": "*",
     "vitest": "*"
