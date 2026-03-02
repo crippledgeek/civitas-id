@@ -409,8 +409,6 @@ civitas-id/
 │   ├── OfficialId, PersonOfficialId, OrganisationOfficialId interfaces
 │   ├── Generic Luhn algorithm implementation
 │   └── LocalDate value object
-├── @deathbycode/civitas-id-test-common   — Generic faker interfaces
-│   └── IdFaker<T>, PersonIdFaker<T>, OrganisationIdFaker<T>
 └── @deathbycode/civitas-id-sweden        — Swedish implementations
     ├── PersonalId, CoordinationId, OrganisationId
     ├── Swedish-specific validation and formatting

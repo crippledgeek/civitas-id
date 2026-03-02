@@ -1,15 +1,16 @@
 {
   "name": "@deathbycode/civitas-id-sweden",
   "version": "0.1.0",
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./testing": {
-      "import": "./dist/testing.js",
-      "types": "./dist/testing.d.ts"
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js"
     }
   },
   "scripts": {
@@ -18,9 +19,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@deathbycode/civitas-id-core": "workspace:*",
-    "@deathbycode/civitas-id-test-common": "workspace:*"
+    "@deathbycode/civitas-id-core": "workspace:*"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@types/node": "^25.3.3",
     "tsup": "*",

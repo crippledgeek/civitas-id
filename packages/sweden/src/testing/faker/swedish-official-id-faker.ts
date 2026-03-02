@@ -1,10 +1,10 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
-import type { IdFaker } from "@deathbycode/civitas-id-test-common";
 import { CoordinationId } from "../../core/coordination-id.js";
 import type { OrganisationId } from "../../core/organisation-id.js";
 import type { PersonalId } from "../../core/personal-id.js";
 import type { SwedishOfficialId } from "../../core/swedish-official-id.js";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
+import type { IdFaker } from "./faker-types.js";
 import { randomInt } from "./faker-utils.js";
 import { PersonalIdFaker } from "./personal-id-faker.js";
 import { SwedishOrganisationIdFaker } from "./swedish-organisation-id-faker.js";
