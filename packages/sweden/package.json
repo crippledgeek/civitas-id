@@ -1,8 +1,29 @@
 {
   "name": "@deathbycode/civitas-id-sweden",
   "version": "0.1.0",
+  "description": "Swedish identity number validation — personnummer, samordningsnummer, organisationsnummer",
   "license": "MIT",
   "type": "module",
+  "keywords": [
+    "sweden",
+    "personnummer",
+    "samordningsnummer",
+    "organisationsnummer",
+    "swedish-id",
+    "identity",
+    "validation",
+    "luhn",
+    "typescript"
+  ],
+  "homepage": "https://github.com/crippledgeek/civitas-id#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crippledgeek/civitas-id.git",
+    "directory": "packages/sweden"
+  },
+  "bugs": {
+    "url": "https://github.com/crippledgeek/civitas-id/issues"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
