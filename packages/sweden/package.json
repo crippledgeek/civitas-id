@@ -18,10 +18,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@deathbycode/civitas-id-core": "workspace:*",
-    "@deathbycode/civitas-id-test-common": "workspace:*"
+    "@deathbycode/civitas-id-core": "workspace:*"
   },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
+    "@deathbycode/civitas-id-test-common": "workspace:*",
     "@types/node": "^25.3.3",
     "tsup": "*",
     "typescript": "*",

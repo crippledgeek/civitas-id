@@ -44,10 +44,10 @@ importers:
       '@deathbycode/civitas-id-core':
         specifier: workspace:*
         version: link:../core
+    devDependencies:
       '@deathbycode/civitas-id-test-common':
         specifier: workspace:*
         version: link:../test-common
-    devDependencies:
       '@types/node':
         specifier: ^25.3.3
         version: 25.3.3
