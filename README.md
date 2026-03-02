@@ -59,9 +59,9 @@ This library provides comprehensive functionality for working with Swedish offic
 ## Installation
 
 ```bash
-npm install @civitas-id/sweden
+npm install @deathbycode/civitas-id-sweden
 # or
-pnpm add @civitas-id/sweden
+pnpm add @deathbycode/civitas-id-sweden
 ```
 
 ## Usage Examples
@@ -69,7 +69,7 @@ pnpm add @civitas-id/sweden
 ### Personal Numbers
 
 ```typescript
-import { PersonalId } from "@civitas-id/sweden";
+import { PersonalId } from "@deathbycode/civitas-id-sweden";
 
 // Parse and validate a personal number (returns undefined on failure)
 const personalId = PersonalId.parse("202407132394");
@@ -104,7 +104,7 @@ PersonalId.isValid("202407132394"); // true
 ### Coordination Numbers
 
 ```typescript
-import { CoordinationId } from "@civitas-id/sweden";
+import { CoordinationId } from "@deathbycode/civitas-id-sweden";
 
 // Parse a coordination number (returns undefined on failure)
 const coordId = CoordinationId.parse("198206822390");
@@ -119,7 +119,7 @@ const birthDate = id.getBirthDate(); // 1982-06-22 (not 1982-06-82)
 ### Organisation Numbers
 
 ```typescript
-import { OrganisationId, OrganisationNumberType } from "@civitas-id/sweden";
+import { OrganisationId, OrganisationNumberType } from "@deathbycode/civitas-id-sweden";
 
 // Parse an organisation number (accepts both 10 and 12-digit formats)
 const orgId = OrganisationId.parse("556012-3456");
@@ -157,7 +157,7 @@ import {
   isPersonalId,
   isCoordinationId,
   isOrganisationId,
-} from "@civitas-id/sweden";
+} from "@deathbycode/civitas-id-sweden";
 
 // Parse any Swedish ID type (returns undefined on failure)
 const result = SwedishOfficialId.parseAny("202407132394");
@@ -212,7 +212,7 @@ The unified parser attempts to parse in this order:
 All failures from the throwing APIs (`parseOrThrow`, `parseAnyOrThrow`, `format`) throw `InvalidIdNumberError`, which extends the standard `Error` class and supports error cause chaining via `ErrorOptions`. Non-throwing parse helpers (`parse`, `parseAny`) return `undefined` on failure:
 
 ```typescript
-import { PersonalId, InvalidIdNumberError } from "@civitas-id/sweden";
+import { PersonalId, InvalidIdNumberError } from "@deathbycode/civitas-id-sweden";
 
 // Catch and inspect parsing errors
 try {
@@ -246,7 +246,7 @@ Personal and coordination IDs support six output formats via the `PnrFormat` uni
 | `SHORT_FORMAT_WITH_SEPARATOR` | `YYMMDD-XXXX` or `YYMMDD+XXXX` | `900515-1239` | `900515+1239` |
 
 ```typescript
-import { PersonalId, PnrFormat } from "@civitas-id/sweden";
+import { PersonalId, PnrFormat } from "@deathbycode/civitas-id-sweden";
 
 const id = PersonalId.parseOrThrow("199005151239");
 
@@ -284,7 +284,7 @@ import {
   isCoordinationId,
   isOrganisationId,
   isPersonOfficialId,
-} from "@civitas-id/sweden";
+} from "@deathbycode/civitas-id-sweden";
 
 const id = SwedishOfficialId.parseAnyOrThrow(input);
 
@@ -330,14 +330,14 @@ switch (id.type) {
 The library includes test utilities for generating valid test data, available via a separate subpath export to keep them out of production bundles:
 
 ```typescript
-import { PersonalIdFaker } from "@civitas-id/sweden/testing";
+import { PersonalIdFaker } from "@deathbycode/civitas-id-sweden/testing";
 ```
 
 ### Personal ID Faker
 
 ```typescript
-import { PersonalIdFaker } from "@civitas-id/sweden/testing";
-import { LocalDate } from "@civitas-id/core";
+import { PersonalIdFaker } from "@deathbycode/civitas-id-sweden/testing";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 
 // Generate random valid personal ID
 const randomId = PersonalIdFaker.create();
@@ -359,7 +359,7 @@ const centenarian = PersonalIdFaker.createCentenarian();
 ### Coordination ID Faker
 
 ```typescript
-import { CoordinationIdFaker } from "@civitas-id/sweden/testing";
+import { CoordinationIdFaker } from "@deathbycode/civitas-id-sweden/testing";
 
 // Generate random coordination ID
 const randomId = CoordinationIdFaker.create();
@@ -373,7 +373,7 @@ const centenarian = CoordinationIdFaker.createCentenarian();
 ### Organisation ID Faker
 
 ```typescript
-import { SwedishOrganisationIdFaker } from "@civitas-id/sweden/testing";
+import { SwedishOrganisationIdFaker } from "@deathbycode/civitas-id-sweden/testing";
 
 // Generate random organisation ID (legal person)
 const legalPerson = SwedishOrganisationIdFaker.create();
@@ -386,7 +386,7 @@ const physical = SwedishOrganisationIdFaker.createPhysicalPerson();
 ### Swedish Official ID Faker
 
 ```typescript
-import { SwedishOfficialIdFaker } from "@civitas-id/sweden/testing";
+import { SwedishOfficialIdFaker } from "@deathbycode/civitas-id-sweden/testing";
 
 // Generate random Swedish ID (PersonalId, CoordinationId, or OrganisationId)
 const randomId = SwedishOfficialIdFaker.create();
@@ -405,22 +405,22 @@ The library is architected for multi-country support with a clear separation of 
 
 ```
 civitas-id/
-├── @civitas-id/core          — Generic interfaces and utilities
+├── @deathbycode/civitas-id-core          — Generic interfaces and utilities
 │   ├── OfficialId, PersonOfficialId, OrganisationOfficialId interfaces
 │   ├── Generic Luhn algorithm implementation
 │   └── LocalDate value object
-├── @civitas-id/test-common   — Generic faker interfaces
+├── @deathbycode/civitas-id-test-common   — Generic faker interfaces
 │   └── IdFaker<T>, PersonIdFaker<T>, OrganisationIdFaker<T>
-└── @civitas-id/sweden        — Swedish implementations
+└── @deathbycode/civitas-id-sweden        — Swedish implementations
     ├── PersonalId, CoordinationId, OrganisationId
     ├── Swedish-specific validation and formatting
-    └── @civitas-id/sweden/testing — Test fakers for generating Swedish IDs
+    └── @deathbycode/civitas-id-sweden/testing — Test fakers for generating Swedish IDs
 ```
 
 **Design Principles:**
 - **Core package**: Contains only country-agnostic interfaces and truly generic utilities
 - **Country packages**: Implement core interfaces with country-specific validation rules
-- **Test utilities**: Available via `@civitas-id/sweden/testing` subpath to keep production bundles clean
+- **Test utilities**: Available via `@deathbycode/civitas-id-sweden/testing` subpath to keep production bundles clean
 - **Discriminated unions**: Type-safe ID hierarchy using TypeScript discriminated unions with `type` field
 - **Idiomatic TypeScript**: Default generic parameters, exhaustiveness guards, discriminated union results, const object singletons
 
@@ -431,10 +431,10 @@ The architecture is ready for additional countries (Norway, Finland, Denmark, et
 
 ### LocalDate
 
-A minimal, immutable date value object from `@civitas-id/core`. No external date library dependencies.
+A minimal, immutable date value object from `@deathbycode/civitas-id-core`. No external date library dependencies.
 
 ```typescript
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 
 // Factories
 const date = LocalDate.of(1990, 5, 15);  // from components
@@ -463,10 +463,10 @@ id.getAge(() => LocalDate.of(2026, 1, 1)); // 35
 
 ### ValidationResult
 
-A discriminated union for validation outcomes, from `@civitas-id/core`:
+A discriminated union for validation outcomes, from `@deathbycode/civitas-id-core`:
 
 ```typescript
-import { ValidationResult } from "@civitas-id/core";
+import { ValidationResult } from "@deathbycode/civitas-id-core";
 
 // Factory methods
 const ok = ValidationResult.valid();
@@ -492,10 +492,10 @@ ValidationResult.toString(fail); // "ValidationResult{valid=false, errorMessage=
 
 ### LuhnAlgorithm
 
-A `const` object implementing the standard Luhn (mod-10) checksum algorithm, from `@civitas-id/core`:
+A `const` object implementing the standard Luhn (mod-10) checksum algorithm, from `@deathbycode/civitas-id-core`:
 
 ```typescript
-import { LuhnAlgorithm } from "@civitas-id/core";
+import { LuhnAlgorithm } from "@deathbycode/civitas-id-core";
 
 // Calculate the check digit for a digit string
 LuhnAlgorithm.calculateCheckDigit("7992739871"); // 3

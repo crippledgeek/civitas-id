@@ -1,5 +1,5 @@
-import { LocalDate } from "@civitas-id/core";
-import type { IdFaker } from "@civitas-id/test-common";
+import { LocalDate } from "@deathbycode/civitas-id-core";
+import type { IdFaker } from "@deathbycode/civitas-id-test-common";
 import { CoordinationId } from "../../core/coordination-id.js";
 import type { OrganisationId } from "../../core/organisation-id.js";
 import type { PersonalId } from "../../core/personal-id.js";

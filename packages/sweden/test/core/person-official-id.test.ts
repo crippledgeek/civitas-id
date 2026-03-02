@@ -1,4 +1,4 @@
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
 import { getGenderDigit, isValidPersonDate } from "../../src/core/person-official-id-base.js";
 import { CoordinationId, PersonOfficialIdBase, PersonalId } from "../../src/core/swedish-ids.js";

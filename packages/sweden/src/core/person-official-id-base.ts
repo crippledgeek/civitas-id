@@ -1,4 +1,4 @@
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import type { SwedishIdMatcher } from "./swedish-id-matcher.js";

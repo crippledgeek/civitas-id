@@ -1,4 +1,4 @@
-import type { OrganisationOfficialId } from "@civitas-id/core";
+import type { OrganisationOfficialId } from "@deathbycode/civitas-id-core";
 import type { IdFaker } from "./id-faker.js";
 
 /**

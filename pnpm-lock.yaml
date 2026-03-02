@@ -41,10 +41,10 @@ importers:
 
   packages/sweden:
     dependencies:
-      '@civitas-id/core':
+      '@deathbycode/civitas-id-core':
         specifier: workspace:*
         version: link:../core
-      '@civitas-id/test-common':
+      '@deathbycode/civitas-id-test-common':
         specifier: workspace:*
         version: link:../test-common
     devDependencies:
@@ -63,7 +63,7 @@ importers:
 
   packages/test-common:
     dependencies:
-      '@civitas-id/core':
+      '@deathbycode/civitas-id-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

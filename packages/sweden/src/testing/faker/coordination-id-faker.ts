@@ -1,5 +1,5 @@
-import { LocalDate } from "@civitas-id/core";
-import type { PersonIdFaker } from "@civitas-id/test-common";
+import { LocalDate } from "@deathbycode/civitas-id-core";
+import type { PersonIdFaker } from "@deathbycode/civitas-id-test-common";
 import { CoordinationId } from "../../core/coordination-id.js";
 import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import {

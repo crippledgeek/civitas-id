@@ -1,5 +1,5 @@
-import type { LocalDate } from "@civitas-id/core";
-import type { OrganisationOfficialId } from "@civitas-id/core";
+import type { LocalDate } from "@deathbycode/civitas-id-core";
+import type { OrganisationOfficialId } from "@deathbycode/civitas-id-core";
 import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import { OrganisationForm } from "../format/organisation-form.js";
 import type { OrganisationFormEntry } from "../format/organisation-form.js";

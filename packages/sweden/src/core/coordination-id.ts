@@ -1,4 +1,4 @@
-import { LocalDate } from "@civitas-id/core";
+import { LocalDate } from "@deathbycode/civitas-id-core";
 import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { AbstractPersonId } from "./abstract-person-id.js";
