@@ -1,8 +1,9 @@
 {
   "name": "civitas-id",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
+    "prepare": "pnpm run build",
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "coverage": "vitest run --coverage",
