@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.3 (2026-03-31)
+
+### Fixes
+
+- Add `prepare` lifecycle script to auto-build workspace packages after `pnpm install` ([#9](https://github.com/crippledgeek/civitas-id/issues/9))
+
+### Docs
+
+- Add BUILDING.md with full development setup guide for contributors
+
 ## 1.0.1 (2026-03-02)
 
 ### Fixes

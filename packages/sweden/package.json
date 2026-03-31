@@ -1,6 +1,6 @@
 {
   "name": "@deathbycode/civitas-id-sweden",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Swedish identity number validation — personnummer, samordningsnummer, organisationsnummer",
   "license": "MIT",
   "type": "module",

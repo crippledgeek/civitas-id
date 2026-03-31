@@ -1,6 +1,6 @@
 {
   "name": "@deathbycode/civitas-id-core",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Core interfaces and utilities for official identity number validation",
   "license": "MIT",
   "type": "module",
