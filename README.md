@@ -512,21 +512,14 @@ Both methods accept an optional `maxDigits` parameter to limit validation to the
 ## Building the Project
 
 ```bash
-# Install dependencies
+# Install dependencies and build all packages
 pnpm install
 
-# Build all packages
-pnpm -r build
-
 # Run all tests
-pnpm -r test
-
-# Type check
-pnpm -r exec tsc --noEmit
-
-# Lint
-pnpm biome check .
+pnpm run test
 ```
+
+See [BUILDING.md](BUILDING.md) for the full development setup guide.
 
 ## API Design
 
