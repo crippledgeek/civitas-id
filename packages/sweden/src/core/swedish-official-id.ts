@@ -2,7 +2,7 @@ import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { CoordinationId } from "./coordination-id.js";
-import { PersonOfficialIdBase } from "./coordination-id.js";
+import { PersonOfficialIdBase } from "./person-official-id-union.js";
 import { OrganisationId } from "./organisation-id.js";
 import { PersonalId } from "./personal-id.js";
 

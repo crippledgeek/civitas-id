@@ -2,9 +2,15 @@
 
 ## 2.0.0 (2026-05-10)
 
+**v2.0.0 is the first release with legally-correct Stockholm civil-time age computation under Swedish law.** Prior versions anchored age, century inference, and centenarian-`+`-separator decisions to UTC, which produced the wrong year-age during the 1–2 hour window between Stockholm midnight and UTC midnight every birthday. v2 fixes this and refactors the core/sweden split so future country packages can ship their own jurisdiction rules.
+
 ### BREAKING CHANGES
 
 - **`@deathbycode/civitas-id-core`**: removed `LocalDate.now()` and `LocalDate.age()`. These methods picked an implicit jurisdiction (UTC for `now`, Feb-29-strict for `age`), which is legally incorrect for any caller subject to a real civil-time jurisdiction. Migration: call the country package's clock helper (e.g. `todayInSweden()`) and `computeAge(birth, today, resolver)` from core. ([#14](https://github.com/crippledgeek/civitas-id/issues/14))
+- **`@deathbycode/civitas-id-core`**: removed `IdValidator` and `ValidationResult` from public exports. These were internal implementation details exposed by accident; they are no longer part of the public API.
+- **`@deathbycode/civitas-id-core`**: removed `IdFormat` type. Replaced by package-specific format discriminators (e.g. `PnrFormat` from `@deathbycode/civitas-id-sweden`).
+- **`@deathbycode/civitas-id-sweden`**: removed the `swedish-ids.ts` re-export shim. All imports must now come from per-class modules or the package barrel (`@deathbycode/civitas-id-sweden`).
+- **`@deathbycode/civitas-id-sweden`**: `PersonOfficialIdBase` type and companion object have moved from `core/coordination-id.ts` to the dedicated `core/person-official-id-union.ts`. The name, shape, and behaviour are unchanged; only the source file path differs for consumers who import directly from internal modules.
 
 ### Added
 

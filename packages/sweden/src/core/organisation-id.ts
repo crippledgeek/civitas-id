@@ -7,7 +7,7 @@ import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import { PnrFormat } from "../format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import { CoordinationId } from "./coordination-id.js";
-import type { PersonOfficialIdBase } from "./coordination-id.js";
+import type { PersonOfficialIdBase } from "./person-official-id-union.js";
 import {
   getPossibleFullIdNumber,
   isCoordinationNumberFull,

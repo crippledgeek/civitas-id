@@ -10,7 +10,7 @@ export { OrganisationNumberType } from "./format/organisation-number-type.js";
 // Core ID classes
 export { PersonalId } from "./core/personal-id.js";
 export { CoordinationId } from "./core/coordination-id.js";
-export { PersonOfficialIdBase } from "./core/coordination-id.js";
+export { PersonOfficialIdBase } from "./core/person-official-id-union.js";
 export { OrganisationId } from "./core/organisation-id.js";
 export {
   SwedishOfficialId,
