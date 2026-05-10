@@ -216,6 +216,19 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     return OrganisationForm.fromOrganisationNumber(this._id);
   }
 
+  /**
+   * Returns the registration date encoded in the ID, if available.
+   *
+   * For Swedish organisation numbers this method always returns
+   * `undefined`. The 6-digit prefix is a date-shaped fingerprint with
+   * month encoded as `month + 20`, but Bolagsverket does not publish
+   * a guarantee that this prefix corresponds to the actual registration
+   * date. To avoid presenting derived dates as authoritative, the library
+   * returns undefined; callers needing a real registration date should
+   * query Bolagsverket directly.
+   *
+   * @returns always `undefined` for Swedish organisation IDs
+   */
   getRegistrationDate(): LocalDate | undefined {
     return undefined;
   }
@@ -271,6 +284,11 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
    * @throws {InvalidIdNumberError} if the underlying number cannot be parsed as a person ID
    */
   toPersonOfficialId(): PersonOfficialIdBase {
+    // Order is irrelevant for correctness — coordination IDs encode day-offset 60
+    // (days 61-91), which fail PersonalId date validation, and personnummer with
+    // days 1-31 fail CoordinationId's day-offset check. We try Coordination first
+    // here for historic reasons; either order produces identical results for
+    // valid input.
     const lf = this.longFormat();
     const coordParsed = CoordinationId.parse(lf);
     if (coordParsed !== undefined) return coordParsed;

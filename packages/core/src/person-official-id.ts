@@ -19,7 +19,9 @@ export interface PersonOfficialId<F extends string = string> extends OfficialId<
   /**
    * Returns the holder's age in whole years relative to the given reference date.
    *
-   * @param clock - optional function returning the reference date; defaults to today
+   * @param clock - optional function returning the reference date; defaults to the
+   *   implementation's clock (e.g. the country package's TZ-pinned helper such as
+   *   `todayInSweden()` for Sweden)
    * @returns age in whole years
    */
   getAge(clock?: () => LocalDate): number;
@@ -41,7 +43,9 @@ export interface PersonOfficialId<F extends string = string> extends OfficialId<
   /**
    * Returns `true` if the holder is 18 years of age or older at the reference date.
    *
-   * @param clock - optional function returning the reference date; defaults to today
+   * @param clock - optional function returning the reference date; defaults to the
+   *   implementation's clock (e.g. the country package's TZ-pinned helper such as
+   *   `todayInSweden()` for Sweden)
    * @returns `true` if the person is an adult
    */
   isAdult(clock?: () => LocalDate): boolean;
@@ -49,7 +53,9 @@ export interface PersonOfficialId<F extends string = string> extends OfficialId<
   /**
    * Returns `true` if the holder is under 18 years of age at the reference date.
    *
-   * @param clock - optional function returning the reference date; defaults to today
+   * @param clock - optional function returning the reference date; defaults to the
+   *   implementation's clock (e.g. the country package's TZ-pinned helper such as
+   *   `todayInSweden()` for Sweden)
    * @returns `true` if the person is a child
    */
   isChild(clock?: () => LocalDate): boolean;

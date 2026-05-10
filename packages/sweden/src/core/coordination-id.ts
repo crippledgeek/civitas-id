@@ -148,6 +148,11 @@ export const PersonOfficialIdBase = {
    * @throws {InvalidIdNumberError} if `text` is neither a valid personnummer nor a samordningsnummer
    */
   format(text: string, format: PnrFormat): string {
+    // Order is irrelevant for correctness — coordination IDs encode day-offset 60
+    // (days 61-91), which fail PersonalId date validation, and personnummer with
+    // days 1-31 fail CoordinationId's day-offset check. We try Coordination first
+    // here for historic reasons; either order produces identical results for
+    // valid input.
     if (CoordinationId.isValid(text)) return CoordinationId.parseOrThrow(text).formatted(format);
     if (PersonalId.isValid(text)) return PersonalId.parseOrThrow(text).formatted(format);
     throw new InvalidIdNumberError("Invalid person official ID: input is neither a valid personnummer nor samordningsnummer");
