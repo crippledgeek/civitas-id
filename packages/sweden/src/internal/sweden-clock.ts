@@ -10,12 +10,22 @@ import { LocalDate } from "@deathbycode/civitas-id-core";
  * `en-CA` produces ISO-style `YYYY-MM-DD` parts which we read via
  * `formatToParts` for robustness against locale-data variation.
  */
-const STOCKHOLM_DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "Europe/Stockholm",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
+let STOCKHOLM_DATE_FORMATTER: Intl.DateTimeFormat;
+try {
+  STOCKHOLM_DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Stockholm",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+} catch (cause) {
+  throw new Error(
+    "@deathbycode/civitas-id-sweden requires full ICU support for the Europe/Stockholm timezone. " +
+      "Either run a Node.js build with full-icu (default since Node 13), install the `full-icu` npm package, " +
+      "or supply the necessary ICU data via NODE_ICU_DATA. See: https://nodejs.org/api/intl.html",
+    { cause },
+  );
+}
 
 /**
  * Returns the calendar date currently in force in Sweden's civil
