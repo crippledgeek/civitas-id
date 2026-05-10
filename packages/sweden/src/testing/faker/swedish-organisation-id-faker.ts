@@ -1,4 +1,5 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
+import { todayInSweden } from "../../internal/sweden-clock.js";
 import { ORGANISATION_NUMBER_MINIMUM_MONTH, OrganisationId } from "../../core/organisation-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX } from "../../core/swedish-id-matcher.js";
 import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
@@ -11,7 +12,7 @@ import { PersonalIdFaker } from "./personal-id-faker.js";
 function randomRegistrationDate(): LocalDate {
   const month = randomInt(1, 13);
   const day = randomInt(1, 29);
-  return LocalDate.of(LocalDate.now().year, month, day);
+  return LocalDate.of(todayInSweden().year, month, day);
 }
 
 function randomIdNumber(registrationDate: LocalDate): OrganisationId {

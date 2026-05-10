@@ -1,4 +1,6 @@
-import { LocalDate } from "@deathbycode/civitas-id-core";
+import { LocalDate, computeAge } from "@deathbycode/civitas-id-core";
+import { todayInSweden } from "../../internal/sweden-clock.js";
+import { swedishAnniversaryResolver } from "../../internal/swedish-anniversary.js";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
 
 export function randomInt(min: number, max: number): number {
@@ -45,7 +47,7 @@ export function buildIdString(
 
   const base = yy + mm + dd + bbb;
   const checkDigit = SwedishLuhnAlgorithm.calculateCheckDigit(base);
-  const age = birthDate.age(LocalDate.now());
+  const age = computeAge(birthDate, todayInSweden(), swedishAnniversaryResolver);
 
   return { base, checkDigit, age };
 }
