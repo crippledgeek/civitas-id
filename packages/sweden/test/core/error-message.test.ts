@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { CoordinationId, OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
-import { PersonOfficialIdBase } from "../../src/core/swedish-ids.js";
+import { CoordinationId, PersonOfficialIdBase } from "../../src/core/coordination-id.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
+import { PersonalId } from "../../src/core/personal-id.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";

@@ -1,6 +1,6 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
-import { CoordinationId } from "../../../src/core/swedish-ids.js";
+import { CoordinationId } from "../../../src/core/coordination-id.js";
 import { CoordinationIdFaker } from "../../../src/testing/faker/coordination-id-faker.js";
 
 describe("CoordinationIdFaker", () => {

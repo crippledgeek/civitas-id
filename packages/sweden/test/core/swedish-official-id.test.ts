@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { CoordinationId } from "../../src/core/coordination-id.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
+import { PersonalId } from "../../src/core/personal-id.js";
 import {
-  CoordinationId,
-  OrganisationId,
-  PersonalId,
   SwedishOfficialId,
   isCoordinationId,
   isOrganisationId,
   isPersonOfficialId,
   isPersonalId,
-} from "../../src/core/swedish-ids.js";
+} from "../../src/core/swedish-official-id.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { CoordinationIdFaker } from "../../src/testing/faker/coordination-id-faker.js";
