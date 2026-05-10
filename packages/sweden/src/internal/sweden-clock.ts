@@ -37,5 +37,10 @@ export function todayInSweden(): LocalDate {
     else if (part.type === "month") month = Number(part.value);
     else if (part.type === "day") day = Number(part.value);
   }
+  if (year === 0 || month === 0 || day === 0) {
+    throw new Error(
+      "todayInSweden: Intl.DateTimeFormat returned no year/month/day part — tzdata for Europe/Stockholm may be missing",
+    );
+  }
   return LocalDate.of(year, month, day);
 }

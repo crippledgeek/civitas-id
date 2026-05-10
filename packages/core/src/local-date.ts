@@ -40,7 +40,7 @@ export class LocalDate {
    */
   static parse(iso: string): LocalDate {
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-    if (!match) throw new Error(`Invalid ISO date string: ${iso}`);
+    if (!match) throw new Error("Invalid ISO date string: expected YYYY-MM-DD format");
     return new LocalDate(Number(match[1]), Number(match[2]), Number(match[3]));
   }
 
