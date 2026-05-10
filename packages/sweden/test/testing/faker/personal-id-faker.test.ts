@@ -1,6 +1,6 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
-import { PersonalId } from "../../../src/core/swedish-ids.js";
+import { PersonalId } from "../../../src/core/personal-id.js";
 import { PersonalIdFaker } from "../../../src/testing/faker/personal-id-faker.js";
 
 describe("PersonalIdFaker", () => {
@@ -126,7 +126,7 @@ describe("PersonalIdFaker", () => {
   });
 
   it("create() with recent date uses minus separator", () => {
-    const now = LocalDate.now();
+    const now = LocalDate.of(2026, 1, 1);
     const recentDate = LocalDate.of(now.year - 30, now.month, 1);
     const id = faker.create(recentDate);
     const longFormatWithSep = id.longFormatWithSeparator();

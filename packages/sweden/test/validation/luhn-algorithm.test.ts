@@ -4,8 +4,8 @@ import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorith
 
 describe("SwedishLuhnAlgorithm", () => {
   describe("getAlgorithmName", () => {
-    it("returns LUHN", () => {
-      expect(SwedishLuhnAlgorithm.getAlgorithmName()).toBe("LUHN");
+    it("returns LUHN_SE_10", () => {
+      expect(SwedishLuhnAlgorithm.getAlgorithmName()).toBe("LUHN_SE_10");
     });
   });
 

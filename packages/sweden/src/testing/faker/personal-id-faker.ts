@@ -1,6 +1,7 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { PersonalId } from "../../core/personal-id.js";
 import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
+import { todayInSweden } from "../../internal/sweden-clock.js";
 import type { PersonIdFaker } from "./faker-types.js";
 import {
   buildIdString,
@@ -83,7 +84,7 @@ export const PersonalIdFaker: PersonIdFaker<PersonalId> & {
    * @returns a valid {@link PersonalId} with a `+` separator
    */
   createCentenarian(): PersonalId {
-    const now = LocalDate.now();
+    const now = todayInSweden();
     const yearsOld = 100 + randomInt(0, 11);
     const year = now.year - yearsOld;
     const candidate = LocalDate.of(year, now.month, now.day);

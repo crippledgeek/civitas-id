@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { CoordinationId } from "../../src/core/coordination-id.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
+import { PersonalId } from "../../src/core/personal-id.js";
 import {
-  CoordinationId,
-  OrganisationId,
-  PersonalId,
   SwedishOfficialId,
   isCoordinationId,
   isOrganisationId,
   isPersonOfficialId,
   isPersonalId,
-} from "../../src/core/swedish-ids.js";
+} from "../../src/core/swedish-official-id.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { CoordinationIdFaker } from "../../src/testing/faker/coordination-id-faker.js";
@@ -288,7 +288,8 @@ describe("SwedishOfficialId.parseAnyOrThrow()", () => {
       }
     })() as InvalidIdNumberError;
     expect(err.message).toContain("Invalid Swedish ID number");
-    expect(err.message).toContain("000000-0000");
+    // Must NOT echo the raw input (PII protection)
+    expect(err.message).not.toContain("000000-0000");
   });
 
   it("handles IDs with SE prefix", () => {
@@ -429,7 +430,8 @@ describe("SwedishOfficialId.format()", () => {
       }
     })() as InvalidIdNumberError;
     expect(err.message).toContain("Invalid Swedish ID number");
-    expect(err.message).toContain("invalid-id-123");
+    // Must NOT echo the raw input (PII protection)
+    expect(err.message).not.toContain("invalid-id-123");
   });
 
   it("throws for ID with invalid checksum", () => {
@@ -452,7 +454,8 @@ describe("SwedishOfficialId.format()", () => {
       }
     })() as InvalidIdNumberError;
     expect(err.message).toContain("Invalid Swedish ID number");
-    expect(err.message).toContain("abc123xyz");
+    // Must NOT echo the raw input (PII protection)
+    expect(err.message).not.toContain("abc123xyz");
   });
 
   it("formats valid PersonalId to SHORT_FORMAT (10 digits)", () => {

@@ -3,9 +3,16 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7%2B-blue)](https://www.typescriptlang.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.30%2B-blue)](https://pnpm.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-34,026%20passing-brightgreen)](packages/sweden/test)
+[![Tests](https://img.shields.io/badge/Tests-passing-brightgreen)](packages/sweden/test)
 
 A comprehensive TypeScript library for validating and working with Swedish personal identification numbers (personnummer), coordination numbers (samordningsnummer), and organisation numbers (organisationsnummer).
+
+## v2.0.0 (breaking)
+
+- `getAge` / `isAdult` / `isChild` on Swedish ID classes now anchor to **Europe/Stockholm** civil time when called without a clock argument. v1 anchored to UTC and returned the wrong age during the 1–2 hour window between Stockholm and UTC midnight every birthday.
+- Leap-day birthdays (born 29 February) now attain age on **28 February** in non-leap years per **Lag (1930:173) §1**. v1 reported them as one year younger on 28 February.
+- **Removed** from `@deathbycode/civitas-id-core`: `LocalDate.now()`, `LocalDate.prototype.age()`, `IdValidator`, `ValidationResult`, `IdFormat`. Replacement: `computeAge(birth, today, resolver)` with the country package's `AnniversaryResolver`. The Sweden ID classes apply this internally; consumers using `LocalDate.now()` or `localDate.age(ref)` directly must migrate.
+- Public method signatures of `PersonalId` / `CoordinationId` / `OrganisationId` are unchanged.
 
 ## Table of Contents
 
@@ -52,8 +59,9 @@ This library provides comprehensive functionality for working with Swedish offic
 ### Additional Features
 - Checksum validation using the Luhn algorithm
 - Type-safe API with discriminated unions and type guards
-- Comprehensive error messages via `InvalidIdNumberError`
-- Extensive test coverage (34,026 tests)
+- Stockholm civil-time anchoring for legally correct age computation under Swedish statute
+- Lag (1930:173) §1 leap-day rule for 29 February birthdays
+- Zero runtime dependencies
 - Test utilities (fakers) for generating valid test data
 
 ## Installation
@@ -92,7 +100,7 @@ id.shortFormatWithSeparator();    // "240713-2394"
 id.isMale();    // true or false
 id.isFemale();  // true or false
 
-// Check age
+// Check age (anchored to Europe/Stockholm civil time when called with no arg)
 id.getAge();    // current age in years
 id.isAdult();   // true if 18+
 id.isChild();   // true if under 18
@@ -432,11 +440,10 @@ The architecture is ready for additional countries (Norway, Finland, Denmark, et
 A minimal, immutable date value object from `@deathbycode/civitas-id-core`. No external date library dependencies.
 
 ```typescript
-import { LocalDate } from "@deathbycode/civitas-id-core";
+import { LocalDate, computeAge } from "@deathbycode/civitas-id-core";
 
 // Factories
 const date = LocalDate.of(1990, 5, 15);  // from components
-const today = LocalDate.now();            // current UTC date
 const parsed = LocalDate.parse("1990-05-15"); // from ISO string
 
 // Read-only properties
@@ -445,47 +452,19 @@ date.month;  // 5
 date.day;    // 15
 
 // Methods
-date.age();                       // age in years relative to today
-date.age(LocalDate.of(2026, 1, 1)); // age relative to a specific date
 date.isValid();                   // true if the date exists in the calendar
 date.equals(other);               // structural equality
 date.toString();                  // "1990-05-15"
 ```
 
-**Clock injection:** Methods like `getAge()` on ID objects accept an optional clock function `() => LocalDate` so tests can control the current date:
+`LocalDate` deliberately does **not** expose `now()` or `age()` — clock access and age computation are jurisdiction-bound. Sweden's `getAge`/`isAdult`/`isChild` methods automatically anchor to `Europe/Stockholm` when called with no argument; the `todayInSweden()` clock helper and `swedishAnniversaryResolver` (implementing Lag (1930:173) §1) are used internally and are not part of the public surface.
+
+**Clock injection:** Methods like `getAge()` on Swedish ID objects accept an optional clock function `() => LocalDate` so tests can control the current date. The default anchor is `todayInSweden()` (legally correct for Swedish civil age):
 
 ```typescript
 const id = PersonalId.parseOrThrow("199005151239");
-id.getAge(() => LocalDate.of(2026, 1, 1)); // 35
-```
-
-### ValidationResult
-
-A discriminated union for validation outcomes, from `@deathbycode/civitas-id-core`:
-
-```typescript
-import { ValidationResult } from "@deathbycode/civitas-id-core";
-
-// Factory methods
-const ok = ValidationResult.valid();
-//    ^? { valid: true }
-
-const fail = ValidationResult.invalid("Bad checksum", "CHECKSUM");
-//    ^? { valid: false, errorMessage: "Bad checksum", errorCode: "CHECKSUM" }
-
-// Narrowing
-function check(result: ValidationResult) {
-  if (result.valid) {
-    // result is { valid: true } — no error fields
-  } else {
-    console.error(result.errorMessage); // string
-    console.error(result.errorCode);    // string | undefined
-  }
-}
-
-// String representation
-ValidationResult.toString(ok);   // "ValidationResult{valid=true}"
-ValidationResult.toString(fail); // "ValidationResult{valid=false, errorMessage='Bad checksum', errorCode='CHECKSUM'}"
+id.getAge(() => LocalDate.of(2026, 1, 1)); // 35 — deterministic for tests
+id.getAge();                                 // anchored to Europe/Stockholm civil date
 ```
 
 ### LuhnAlgorithm

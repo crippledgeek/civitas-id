@@ -1,6 +1,7 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
-import { OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
+import { PersonalId } from "../../src/core/personal-id.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
 import { loadCsv } from "../helpers/csv-loader.js";
@@ -47,12 +48,19 @@ describe("PersonalId CSV — extended test data", () => {
       const expectedAge = Number.parseInt(row.Age, 10);
 
       // Use a clock that gives the expected age:
-      // Set date to one day before birthday at (expectedAge+1) years
+      // Set date to one day before the anniversary at (expectedAge+1) years.
+      // Per Lag (1930:173) §1, a Feb-29 person's anniversary falls on Feb-28
+      // in non-leap years.  "One day before" that anniversary is therefore
+      // Feb-27 (not Feb-28).  Detect this case explicitly so the computed
+      // clock date stays strictly before the anniversary.
       const birthDate = id.getBirthDate();
       const targetYear = birthDate.year + expectedAge + 1;
+      const isLeapYear = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+      const isLeapDayBirth = birthDate.month === 2 && birthDate.day === 29;
+      const anniversaryDayInTarget = isLeapDayBirth && !isLeapYear(targetYear) ? 28 : birthDate.day;
       let clockYear = targetYear;
       let clockMonth = birthDate.month;
-      let clockDay = birthDate.day - 1;
+      let clockDay = anniversaryDayInTarget - 1;
       if (clockDay < 1) {
         clockMonth -= 1;
         if (clockMonth < 1) {

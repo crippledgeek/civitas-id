@@ -28,7 +28,7 @@ export const SwedishLuhnAlgorithm: ChecksumAlgorithm & { toString(): string } = 
   },
 
   getAlgorithmName(): string {
-    return "LUHN";
+    return "LUHN_SE_10";
   },
 
   toString(): string {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { OrganisationId } from "../../src/core/swedish-ids.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 
 /**

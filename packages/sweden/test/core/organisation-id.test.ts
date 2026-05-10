@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { CoordinationId, OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
+import { CoordinationId } from "../../src/core/coordination-id.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
+import { PersonalId } from "../../src/core/personal-id.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { OrganisationForm } from "../../src/format/organisation-form.js";
 import { OrganisationNumberType } from "../../src/format/organisation-number-type.js";

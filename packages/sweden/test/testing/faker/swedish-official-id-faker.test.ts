@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
-import {
-  CoordinationId,
-  OrganisationId,
-  PersonalId,
-  SwedishOfficialId,
-} from "../../../src/core/swedish-ids.js";
+import { CoordinationId } from "../../../src/core/coordination-id.js";
+import { OrganisationId } from "../../../src/core/organisation-id.js";
+import { PersonalId } from "../../../src/core/personal-id.js";
+import { SwedishOfficialId } from "../../../src/core/swedish-official-id.js";
 import { SwedishOfficialIdFaker } from "../../../src/testing/faker/swedish-official-id-faker.js";
 
 describe("SwedishOfficialIdFaker", () => {

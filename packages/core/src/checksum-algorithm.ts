@@ -10,7 +10,8 @@ export interface ChecksumAlgorithm {
    * @param input - a string of decimal digits (the payload, excluding the check digit)
    * @param maxDigits - maximum number of trailing digits to include in the calculation
    * @returns the single check digit (0–9)
-   * @throws {Error} if `input` is empty or contains non-digit characters
+   * @throws {Error} - implementations may throw on empty or non-digit input;
+   *   see the concrete algorithm for specifics
    */
   calculateCheckDigit(input: string, maxDigits?: number): number;
 

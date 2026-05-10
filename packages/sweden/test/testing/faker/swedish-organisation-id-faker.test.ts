@@ -1,6 +1,6 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
-import { OrganisationId } from "../../../src/core/swedish-ids.js";
+import { OrganisationId } from "../../../src/core/organisation-id.js";
 import { OrganisationNumberType } from "../../../src/format/organisation-number-type.js";
 import { SwedishOrganisationIdFaker } from "../../../src/testing/faker/swedish-organisation-id-faker.js";
 
