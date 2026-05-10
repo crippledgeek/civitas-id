@@ -57,4 +57,22 @@ describe("Centenarian + separator — Stockholm anchor (N5 group)", () => {
     const id = PersonalId.parseOrThrow(ID_NO_SEP);
     expect(id.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)).toContain("-");
   });
+
+  it("N5c: decisive centenarian (born 1900-01-01) always infers + regardless of TZ boundary", () => {
+    // Born 1900-01-01: age >= 126 in any year this test runs — decisively centenarian.
+    // A flipped `age < 100` comparison would return "-" here; this guards the polarity.
+    // Pre-computed: YY=00, MM=01, DD=01, BBB=001, Luhn check = 6 → "190001010016"
+    vi.useRealTimers();
+    const id = PersonalId.parseOrThrow("190001010016");
+    expect(id.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)).toContain("+");
+  });
+
+  it("N5d: decisive non-centenarian (born 1990-01-01) always infers - regardless of TZ boundary", () => {
+    // Born 1990-01-01: age <= 36 in any year this test runs — decisively non-centenarian.
+    // A flipped `age < 100` comparison would return "+" here; this guards the polarity.
+    // Pre-computed: YY=90, MM=01, DD=01, BBB=001, Luhn check = 7 → "199001010017"
+    vi.useRealTimers();
+    const id = PersonalId.parseOrThrow("199001010017");
+    expect(id.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)).toContain("-");
+  });
 });

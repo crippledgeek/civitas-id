@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { LocalDate } from "../src/local-date.js";
 import { type AnniversaryResolver, computeAge } from "../src/anniversary.js";
+import * as core from "../src/index.js";
 
 // Stub resolver for core tests — uses literal birth-month/day every year.
 const literalResolver: AnniversaryResolver = {
@@ -49,8 +50,6 @@ describe("computeAge", () => {
     expect(computeAge(birth, LocalDate.of(2026, 2, 27), swedishStyleResolver)).toBe(17);
   });
 });
-
-import * as core from "../src/index.js";
 
 describe("core package exports", () => {
   it("re-exports computeAge from index", () => {
