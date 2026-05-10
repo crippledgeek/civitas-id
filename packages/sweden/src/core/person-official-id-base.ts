@@ -1,5 +1,6 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import type { PnrFormat } from "../format/pnr-format.js";
+import { todayInSweden } from "../internal/sweden-clock.js";
 import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import type { SwedishIdMatcher } from "./swedish-id-matcher.js";
 
@@ -24,7 +25,7 @@ export function isIdNumberFull(full: string, dateValidator: (s: string) => boole
  * inferring century and delimiter.
  */
 export function getPossibleFullIdNumber(matcher: SwedishIdMatcher): string {
-  const nowYear = new Date().getUTCFullYear();
+  const nowYear = todayInSweden().year;
   const twoDigitYear = matcher.getYear();
   const century = nowYear - (nowYear % 100);
   const rawBirthYear = century + twoDigitYear;
@@ -52,7 +53,7 @@ export function isValidPersonDate(fullPersonalNumber: string): boolean {
   if (!birthDate.isValid()) return false;
   if (yearPart < EARLIEST_ALLOWED_BIRTH_YEAR) return false;
 
-  const nowYear = new Date().getUTCFullYear();
+  const nowYear = todayInSweden().year;
   const age = nowYear - yearPart;
 
   const delimiter = fullPersonalNumber.charAt(8);

@@ -1,6 +1,7 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
-import { CoordinationId, OrganisationId } from "../../src/core/swedish-ids.js";
+import { CoordinationId } from "../../src/core/coordination-id.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { CoordinationIdFaker } from "../../src/testing/faker/coordination-id-faker.js";
 import { loadCsv } from "../helpers/csv-loader.js";

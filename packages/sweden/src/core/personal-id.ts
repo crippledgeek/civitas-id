@@ -46,10 +46,16 @@ export class PersonalId extends AbstractPersonId {
    */
   static parseOrThrow(text: string): PersonalId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new InvalidIdNumberError(`Invalid personal ID: ${text}`);
+    if (m.noMatch())
+      throw new InvalidIdNumberError(
+        "Invalid personal ID: input did not match a valid personnummer format",
+      );
 
     const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
-    if (!isPersonalNumberFull(full)) throw new InvalidIdNumberError(`Invalid personal ID: ${text}`);
+    if (!isPersonalNumberFull(full))
+      throw new InvalidIdNumberError(
+        "Invalid personal ID: input failed validation (date, checksum, or range)",
+      );
     return new PersonalId(full);
   }
 

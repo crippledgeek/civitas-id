@@ -1,4 +1,5 @@
 import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
+import { todayInSweden } from "../internal/sweden-clock.js";
 
 export const LEGAL_PERSON_CENTURY_PREFIX = "16";
 
@@ -44,7 +45,7 @@ export class SwedishIdMatcher {
     }
     const datePart = century + this.getDate();
     const birthYear = Number.parseInt(datePart.substring(0, 4), 10);
-    const now = new Date().getUTCFullYear();
+    const now = todayInSweden().year;
     const age = now - birthYear;
     return age < 100 ? "-" : "+";
   }

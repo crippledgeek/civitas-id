@@ -1,6 +1,8 @@
-import { LocalDate } from "@deathbycode/civitas-id-core";
+import { type LocalDate, computeAge } from "@deathbycode/civitas-id-core";
 import type { PersonOfficialId as IPersonOfficialId } from "@deathbycode/civitas-id-core";
 import { PnrFormat } from "../format/pnr-format.js";
+import { todayInSweden } from "../internal/sweden-clock.js";
+import { swedishAnniversaryResolver } from "../internal/swedish-anniversary.js";
 import { formatPersonId, getGenderDigit } from "./person-official-id-base.js";
 import { LEGAL_PERSON_CENTURY_PREFIX } from "./swedish-id-matcher.js";
 
@@ -24,8 +26,8 @@ export abstract class AbstractPersonId implements IPersonOfficialId<PnrFormat> {
   abstract getIdType(): string;
 
   getAge(clock?: () => LocalDate): number {
-    const now = clock ? clock() : LocalDate.now();
-    return this.getBirthDate().age(now);
+    const now = clock ? clock() : todayInSweden();
+    return computeAge(this.getBirthDate(), now, swedishAnniversaryResolver);
   }
 
   isFemale(): boolean {

@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { CoordinationId, OrganisationId, PersonalId } from "../../src/core/swedish-ids.js";
-import { PersonOfficialIdBase } from "../../src/core/swedish-ids.js";
+import { CoordinationId } from "../../src/core/coordination-id.js";
+import { OrganisationId } from "../../src/core/organisation-id.js";
+import { PersonOfficialIdBase } from "../../src/core/person-official-id-union.js";
+import { PersonalId } from "../../src/core/personal-id.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
 
 describe("Error Message Consistency", () => {
-  it("PersonalId provides consistent error messages", () => {
+  it("PersonalId provides consistent error messages (no PII echo)", () => {
     const invalidId = "invalid123";
     expect(() => PersonalId.parseOrThrow(invalidId)).toThrow(InvalidIdNumberError);
     let caught: Error | undefined;
@@ -17,10 +19,11 @@ describe("Error Message Consistency", () => {
     }
     expect(caught?.message).toBeTruthy();
     expect(caught?.message).toMatch(/^Invalid personal ID:/);
-    expect(caught?.message).toContain(invalidId);
+    // Must NOT echo the raw input (PII protection)
+    expect(caught?.message).not.toContain(invalidId);
   });
 
-  it("CoordinationId provides consistent error messages", () => {
+  it("CoordinationId provides consistent error messages (no PII echo)", () => {
     const invalidId = "invalid456";
     let caught: Error | undefined;
     try {
@@ -29,10 +32,11 @@ describe("Error Message Consistency", () => {
       caught = e as Error;
     }
     expect(caught?.message).toMatch(/^Invalid coordination ID:/);
-    expect(caught?.message).toContain(invalidId);
+    // Must NOT echo the raw input (PII protection)
+    expect(caught?.message).not.toContain(invalidId);
   });
 
-  it("OrganisationId provides consistent error messages", () => {
+  it("OrganisationId provides consistent error messages (no PII echo)", () => {
     const invalidId = "invalid789";
     let caught: Error | undefined;
     try {
@@ -41,10 +45,11 @@ describe("Error Message Consistency", () => {
       caught = e as Error;
     }
     expect(caught?.message).toMatch(/^Invalid organisation ID:/);
-    expect(caught?.message).toContain(invalidId);
+    // Must NOT echo the raw input (PII protection)
+    expect(caught?.message).not.toContain(invalidId);
   });
 
-  it("PersonOfficialId.format throws for invalid input", () => {
+  it("PersonOfficialId.format throws for invalid input (no PII echo)", () => {
     const invalidId = "invalidXYZ";
     let caught: Error | undefined;
     try {
@@ -53,7 +58,8 @@ describe("Error Message Consistency", () => {
       caught = e as Error;
     }
     expect(caught?.message).toMatch(/^Invalid person official ID:/);
-    expect(caught?.message).toContain(invalidId);
+    // Must NOT echo the raw input (PII protection)
+    expect(caught?.message).not.toContain(invalidId);
   });
 
   it("null input provides clear error message", () => {
