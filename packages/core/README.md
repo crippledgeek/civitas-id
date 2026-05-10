@@ -7,6 +7,13 @@
 
 A comprehensive TypeScript library for validating and working with Swedish personal identification numbers (personnummer), coordination numbers (samordningsnummer), and organisation numbers (organisationsnummer).
 
+## v2.0.0 (breaking)
+
+- `getAge` / `isAdult` / `isChild` on Swedish ID classes now anchor to **Europe/Stockholm** civil time when called without a clock argument. v1 anchored to UTC and returned the wrong age during the 1–2 hour window between Stockholm and UTC midnight every birthday.
+- Leap-day birthdays (born 29 February) now attain age on **28 February** in non-leap years per **Lag (1930:173) §1**. v1 reported them as one year younger on 28 February.
+- **Removed** from `@deathbycode/civitas-id-core`: `LocalDate.now()`, `LocalDate.prototype.age()`, `IdValidator`, `ValidationResult`, `IdFormat`. Replacement: `computeAge(birth, today, resolver)` with the country package's `AnniversaryResolver`. The Sweden ID classes apply this internally; consumers using `LocalDate.now()` or `localDate.age(ref)` directly must migrate.
+- Public method signatures of `PersonalId` / `CoordinationId` / `OrganisationId` are unchanged.
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -52,8 +59,9 @@ This library provides comprehensive functionality for working with Swedish offic
 ### Additional Features
 - Checksum validation using the Luhn algorithm
 - Type-safe API with discriminated unions and type guards
-- Comprehensive error messages via `InvalidIdNumberError`
-- Extensive test coverage across both packages
+- Stockholm civil-time anchoring for legally correct age computation under Swedish statute
+- Lag (1930:173) §1 leap-day rule for 29 February birthdays
+- Zero runtime dependencies
 - Test utilities (fakers) for generating valid test data
 
 ## Installation
@@ -457,35 +465,6 @@ date.toString();                  // "1990-05-15"
 const id = PersonalId.parseOrThrow("199005151239");
 id.getAge(() => LocalDate.of(2026, 1, 1)); // 35 — deterministic for tests
 id.getAge();                                 // anchored to Europe/Stockholm civil date
-```
-
-### ValidationResult
-
-A discriminated union for validation outcomes, from `@deathbycode/civitas-id-core`:
-
-```typescript
-import { ValidationResult } from "@deathbycode/civitas-id-core";
-
-// Factory methods
-const ok = ValidationResult.valid();
-//    ^? { valid: true }
-
-const fail = ValidationResult.invalid("Bad checksum", "CHECKSUM");
-//    ^? { valid: false, errorMessage: "Bad checksum", errorCode: "CHECKSUM" }
-
-// Narrowing
-function check(result: ValidationResult) {
-  if (result.valid) {
-    // result is { valid: true } — no error fields
-  } else {
-    console.error(result.errorMessage); // string
-    console.error(result.errorCode);    // string | undefined
-  }
-}
-
-// String representation
-ValidationResult.toString(ok);   // "ValidationResult{valid=true}"
-ValidationResult.toString(fail); // "ValidationResult{valid=false, errorMessage='Bad checksum', errorCode='CHECKSUM'}"
 ```
 
 ### LuhnAlgorithm
