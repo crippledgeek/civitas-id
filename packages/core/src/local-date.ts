@@ -51,8 +51,7 @@ export class LocalDate {
    */
   isValid(): boolean {
     if (this.month < 1 || this.month > 12 || this.day < 1 || this.year < 1) return false;
-    const maxDay = new Date(this.year, this.month, 0).getDate();
-    return this.day <= maxDay;
+    return this.day <= daysInMonth(this.year, this.month);
   }
 
   /**
@@ -73,4 +72,15 @@ export class LocalDate {
   equals(other: LocalDate): boolean {
     return this.year === other.year && this.month === other.month && this.day === other.day;
   }
+}
+
+const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] as const;
+
+function daysInMonth(year: number, month: number): number {
+  if (month === 2 && isLeapYear(year)) return 29;
+  return DAYS_IN_MONTH[month - 1] ?? 0;
+}
+
+function isLeapYear(year: number): boolean {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }

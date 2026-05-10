@@ -36,6 +36,18 @@ describe("LocalDate", () => {
       expect(LocalDate.of(2024, 13, 1).isValid()).toBe(false);
       expect(LocalDate.of(2024, 4, 31).isValid()).toBe(false);
     });
+
+    it("validates dates with two-digit years correctly (no JS Date coercion)", () => {
+      // Year 50 is not a leap year (50 % 4 !== 0), so Feb 28 valid, Feb 29 invalid.
+      expect(LocalDate.of(50, 2, 28).isValid()).toBe(true);
+      expect(LocalDate.of(50, 2, 29).isValid()).toBe(false);
+      // Year 4 IS a leap year (4 % 4 === 0, 4 % 100 !== 0), so Feb 29 is valid.
+      expect(LocalDate.of(4, 2, 29).isValid()).toBe(true);
+      // Year 100 is NOT a leap year (divisible by 100 but not 400).
+      expect(LocalDate.of(100, 2, 29).isValid()).toBe(false);
+      // Year 400 IS a leap year.
+      expect(LocalDate.of(400, 2, 29).isValid()).toBe(true);
+    });
   });
 
   describe("toString()", () => {
