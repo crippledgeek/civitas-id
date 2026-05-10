@@ -432,11 +432,10 @@ The architecture is ready for additional countries (Norway, Finland, Denmark, et
 A minimal, immutable date value object from `@deathbycode/civitas-id-core`. No external date library dependencies.
 
 ```typescript
-import { LocalDate } from "@deathbycode/civitas-id-core";
+import { LocalDate, computeAge } from "@deathbycode/civitas-id-core";
 
 // Factories
 const date = LocalDate.of(1990, 5, 15);  // from components
-const today = LocalDate.now();            // current UTC date
 const parsed = LocalDate.parse("1990-05-15"); // from ISO string
 
 // Read-only properties
@@ -445,18 +444,19 @@ date.month;  // 5
 date.day;    // 15
 
 // Methods
-date.age();                       // age in years relative to today
-date.age(LocalDate.of(2026, 1, 1)); // age relative to a specific date
 date.isValid();                   // true if the date exists in the calendar
 date.equals(other);               // structural equality
 date.toString();                  // "1990-05-15"
 ```
 
-**Clock injection:** Methods like `getAge()` on ID objects accept an optional clock function `() => LocalDate` so tests can control the current date:
+`LocalDate` deliberately does **not** expose `now()` or `age()` — clock access and age computation are jurisdiction-bound. Sweden's `getAge`/`isAdult`/`isChild` methods automatically anchor to `Europe/Stockholm` when called with no argument; the `todayInSweden()` clock helper and `swedishAnniversaryResolver` (implementing Lag (1930:173) §1) are used internally and are not part of the public surface.
+
+**Clock injection:** Methods like `getAge()` on Swedish ID objects accept an optional clock function `() => LocalDate` so tests can control the current date. The default anchor is `todayInSweden()` (legally correct for Swedish civil age):
 
 ```typescript
 const id = PersonalId.parseOrThrow("199005151239");
-id.getAge(() => LocalDate.of(2026, 1, 1)); // 35
+id.getAge(() => LocalDate.of(2026, 1, 1)); // 35 — deterministic for tests
+id.getAge();                                 // anchored to Europe/Stockholm civil date
 ```
 
 ### ValidationResult
