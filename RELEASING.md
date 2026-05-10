@@ -37,6 +37,7 @@ Before opening the release PR to master:
 - [ ] `publishConfig: { access: public, provenance: true }` present on both `package.json` files.
 - [ ] `CHANGELOG.md` has an entry for the new version, dated `YYYY-MM-DD`, with sections matching prior releases (Added / Fixes / BREAKING CHANGES if applicable).
 - [ ] For major versions: README(s) carry a "vX.0.0 (breaking)" callout near the top listing removed/changed API.
+- [ ] **Any docs referenced from the GitHub release page** (e.g., `RELEASING.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, ADRs) **are present on `master`** at the cut point. Release-notes links typically point at `https://github.com/.../blob/master/<file>`; if the file lives only on `develop`, the link 404s. Verify with `git ls-tree origin/master --name-only <file>` for each file referenced.
 - [ ] `pnpm -r test && pnpm -r typecheck && pnpm -r build && pnpm lint` all clean locally.
 - [ ] CI green on `develop`.
 
@@ -188,3 +189,4 @@ If you ever need to set up trusted publishing for a new package:
 Documenting failures so we don't repeat them:
 
 - **v2.0.0** — initial publish failed at `npm install -g npm@latest` (broken on Node 22.22.2 runner image, [npm/cli#9151](https://github.com/npm/cli/issues/9151)). Two hotfixes ([#17](https://github.com/crippledgeek/civitas-id/pull/17), [#18](https://github.com/crippledgeek/civitas-id/pull/18)) removed the self-upgrade and bumped the workflow to Node 24. **Lesson**: don't rely on `npm install -g npm@latest`; pin a Node version whose bundled npm already meets the OIDC trusted-publishing floor (≥11.5.1).
+- **v2.0.0** — `RELEASING.md` was added to `develop` only ([#19](https://github.com/crippledgeek/civitas-id/pull/19)), but the release-notes link pointed to `https://github.com/.../blob/master/RELEASING.md` and 404'd. Cherry-picked to master via [#20](https://github.com/crippledgeek/civitas-id/pull/20). **Lesson**: any doc referenced from a release page MUST be on `master` before the release tag is created — see the pre-release checklist above.
