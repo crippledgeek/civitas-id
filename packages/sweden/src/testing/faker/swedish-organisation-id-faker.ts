@@ -1,9 +1,9 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
-import { todayInSweden } from "../../internal/sweden-clock.js";
 import { ORGANISATION_NUMBER_MINIMUM_MONTH, OrganisationId } from "../../core/organisation-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX } from "../../core/swedish-id-matcher.js";
 import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
 import { OrganisationNumberType } from "../../format/organisation-number-type.js";
+import { todayInSweden } from "../../internal/sweden-clock.js";
 import { SwedishLuhnAlgorithm } from "../../validation/swedish-luhn-algorithm.js";
 import type { OrganisationIdFaker } from "./faker-types.js";
 import { randomInt } from "./faker-utils.js";

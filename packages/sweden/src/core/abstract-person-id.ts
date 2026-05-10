@@ -1,4 +1,4 @@
-import { LocalDate, computeAge } from "@deathbycode/civitas-id-core";
+import { type LocalDate, computeAge } from "@deathbycode/civitas-id-core";
 import type { PersonOfficialId as IPersonOfficialId } from "@deathbycode/civitas-id-core";
 import { PnrFormat } from "../format/pnr-format.js";
 import { todayInSweden } from "../internal/sweden-clock.js";

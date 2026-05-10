@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { LocalDate } from "@deathbycode/civitas-id-core";
+import { describe, expect, it } from "vitest";
 import { swedishAnniversaryResolver } from "../../src/internal/swedish-anniversary.js";
 
 describe("swedishAnniversaryResolver (Lag 1930:173 §1)", () => {

@@ -1,7 +1,7 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
-import { todayInSweden } from "../../internal/sweden-clock.js";
 import { CoordinationId } from "../../core/coordination-id.js";
 import { InvalidIdNumberError } from "../../error/invalid-id-number-error.js";
+import { todayInSweden } from "../../internal/sweden-clock.js";
 import type { PersonIdFaker } from "./faker-types.js";
 import {
   buildIdString,

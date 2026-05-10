@@ -1,4 +1,4 @@
-import { LocalDate, type AnniversaryResolver } from "@deathbycode/civitas-id-core";
+import { type AnniversaryResolver, LocalDate } from "@deathbycode/civitas-id-core";
 
 /**
  * Swedish anniversary rule per **Lag (1930:173) §1**:

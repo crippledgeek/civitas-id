@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { LocalDate } from "@deathbycode/civitas-id-core";
+import { describe, expect, it } from "vitest";
 import { CoordinationId } from "../../../src/core/coordination-id.js";
 import { OrganisationId } from "../../../src/core/organisation-id.js";
 import { PersonalId } from "../../../src/core/personal-id.js";
@@ -54,9 +54,7 @@ describe("Faker invariants — generated outputs always pass validation", () => 
       const long = id.longFormat();
       // Every result must be valid as at least one of the three subtypes.
       const valid =
-        PersonalId.isValid(long) ||
-        CoordinationId.isValid(long) ||
-        OrganisationId.isValid(long);
+        PersonalId.isValid(long) || CoordinationId.isValid(long) || OrganisationId.isValid(long);
       expect(valid).toBe(true);
     }
   });

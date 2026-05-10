@@ -1,4 +1,4 @@
-import { LocalDate } from "./local-date.js";
+import type { LocalDate } from "./local-date.js";
 
 /**
  * Resolves the anniversary date of `birth` in a given calendar `year`.
@@ -38,10 +38,7 @@ export function computeAge(
 ): number {
   let years = today.year - birth.year;
   const anniv = resolver.resolve(birth, today.year);
-  if (
-    today.month < anniv.month ||
-    (today.month === anniv.month && today.day < anniv.day)
-  ) {
+  if (today.month < anniv.month || (today.month === anniv.month && today.day < anniv.day)) {
     years--;
   }
   return Math.max(0, years);

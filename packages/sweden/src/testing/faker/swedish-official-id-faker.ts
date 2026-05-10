@@ -73,9 +73,7 @@ export const SwedishOfficialIdFaker: IdFaker<SwedishOfficialId> & {
    */
   createMany(count: number): ReadonlyArray<SwedishOfficialId> {
     if (!Number.isInteger(count) || count < 0 || count > 10_000) {
-      throw new RangeError(
-        `createMany: count must be an integer in [0, 10000], got ${count}`,
-      );
+      throw new RangeError(`createMany: count must be an integer in [0, 10000], got ${count}`);
     }
     return Array.from({ length: count }, () => SwedishOfficialIdFaker.create());
   },

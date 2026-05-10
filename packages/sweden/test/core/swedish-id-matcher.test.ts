@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createMatcher, SwedishIdMatcher } from "../../src/core/swedish-id-matcher.js";
+import { SwedishIdMatcher, createMatcher } from "../../src/core/swedish-id-matcher.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";
 
 describe("SwedishIdMatcher — parser state", () => {

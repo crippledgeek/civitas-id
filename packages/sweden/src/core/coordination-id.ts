@@ -46,11 +46,16 @@ export class CoordinationId extends AbstractPersonId {
    */
   static parseOrThrow(text: string): CoordinationId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new InvalidIdNumberError("Invalid coordination ID: input did not match a valid samordningsnummer format");
+    if (m.noMatch())
+      throw new InvalidIdNumberError(
+        "Invalid coordination ID: input did not match a valid samordningsnummer format",
+      );
 
     const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
     if (!isCoordinationNumberFull(full))
-      throw new InvalidIdNumberError("Invalid coordination ID: input failed validation (date, checksum, or range)");
+      throw new InvalidIdNumberError(
+        "Invalid coordination ID: input failed validation (date, checksum, or range)",
+      );
     return new CoordinationId(full);
   }
 

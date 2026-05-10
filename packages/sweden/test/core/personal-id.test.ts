@@ -55,11 +55,9 @@ describe("PersonalId CSV — extended test data", () => {
       // clock date stays strictly before the anniversary.
       const birthDate = id.getBirthDate();
       const targetYear = birthDate.year + expectedAge + 1;
-      const isLeapYear = (y: number) =>
-        (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+      const isLeapYear = (y: number) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
       const isLeapDayBirth = birthDate.month === 2 && birthDate.day === 29;
-      const anniversaryDayInTarget =
-        isLeapDayBirth && !isLeapYear(targetYear) ? 28 : birthDate.day;
+      const anniversaryDayInTarget = isLeapDayBirth && !isLeapYear(targetYear) ? 28 : birthDate.day;
       let clockYear = targetYear;
       let clockMonth = birthDate.month;
       let clockDay = anniversaryDayInTarget - 1;

@@ -1,4 +1,4 @@
-import { test, fc } from "@fast-check/vitest";
+import { fc, test } from "@fast-check/vitest";
 import { describe, expect } from "vitest";
 import { SwedishLuhnAlgorithm } from "../../src/validation/swedish-luhn-algorithm.js";
 

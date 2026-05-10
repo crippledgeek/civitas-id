@@ -1,7 +1,7 @@
 import { LocalDate } from "@deathbycode/civitas-id-core";
 import { describe, expect, it } from "vitest";
-import { getGenderDigit, isValidPersonDate } from "../../src/core/person-official-id-base.js";
 import { CoordinationId } from "../../src/core/coordination-id.js";
+import { getGenderDigit, isValidPersonDate } from "../../src/core/person-official-id-base.js";
 import { PersonOfficialIdBase } from "../../src/core/person-official-id-union.js";
 import { PersonalId } from "../../src/core/personal-id.js";
 import { InvalidIdNumberError } from "../../src/error/invalid-id-number-error.js";

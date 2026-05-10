@@ -7,12 +7,12 @@ import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import { PnrFormat } from "../format/pnr-format.js";
 import { SwedishLuhnAlgorithm } from "../validation/swedish-luhn-algorithm.js";
 import { CoordinationId } from "./coordination-id.js";
-import type { PersonOfficialIdBase } from "./person-official-id-union.js";
 import {
   getPossibleFullIdNumber,
   isCoordinationNumberFull,
   isPersonalNumberFull,
 } from "./person-official-id-base.js";
+import type { PersonOfficialIdBase } from "./person-official-id-union.js";
 import { PersonalId } from "./personal-id.js";
 import { LEGAL_PERSON_CENTURY_PREFIX, createMatcher } from "./swedish-id-matcher.js";
 
@@ -127,7 +127,10 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     type: OrganisationNumberType = OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
   ): OrganisationId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new InvalidIdNumberError("Invalid organisation ID: input did not match a valid organisationsnummer format");
+    if (m.noMatch())
+      throw new InvalidIdNumberError(
+        "Invalid organisation ID: input did not match a valid organisationsnummer format",
+      );
 
     let full: string;
     if (m.hasCentury()) {
@@ -143,7 +146,9 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     }
 
     if (!isValidPerson(full, type)) {
-      throw new InvalidIdNumberError("Invalid organisation ID: input failed validation (form, checksum, or range)");
+      throw new InvalidIdNumberError(
+        "Invalid organisation ID: input failed validation (form, checksum, or range)",
+      );
     }
     return new OrganisationId(full);
   }

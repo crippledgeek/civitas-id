@@ -2,8 +2,8 @@ import { InvalidIdNumberError } from "../error/invalid-id-number-error.js";
 import { OrganisationNumberType } from "../format/organisation-number-type.js";
 import type { PnrFormat } from "../format/pnr-format.js";
 import { CoordinationId } from "./coordination-id.js";
-import { PersonOfficialIdBase } from "./person-official-id-union.js";
 import { OrganisationId } from "./organisation-id.js";
+import { PersonOfficialIdBase } from "./person-official-id-union.js";
 import { PersonalId } from "./personal-id.js";
 
 /**
@@ -63,7 +63,10 @@ export const SwedishOfficialId = {
    */
   parseAnyOrThrow(text: string): SwedishOfficialId {
     const result = SwedishOfficialId.parseAny(text);
-    if (result === undefined) throw new InvalidIdNumberError("Invalid Swedish ID number: input did not match any supported Swedish ID format");
+    if (result === undefined)
+      throw new InvalidIdNumberError(
+        "Invalid Swedish ID number: input did not match any supported Swedish ID format",
+      );
     return result;
   },
 
@@ -84,7 +87,9 @@ export const SwedishOfficialId = {
         format,
       );
     }
-    throw new InvalidIdNumberError("Invalid Swedish ID number: input did not match any supported Swedish ID format");
+    throw new InvalidIdNumberError(
+      "Invalid Swedish ID number: input did not match any supported Swedish ID format",
+    );
   },
 };
 

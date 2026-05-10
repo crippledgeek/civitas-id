@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LocalDate } from "@deathbycode/civitas-id-core";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
 
 describe("AbstractPersonId — Stockholm anchor and computeAge", () => {

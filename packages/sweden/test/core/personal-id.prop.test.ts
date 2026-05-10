@@ -1,9 +1,9 @@
-import { test, fc } from "@fast-check/vitest";
-import { describe, expect } from "vitest";
 import { LocalDate } from "@deathbycode/civitas-id-core";
+import { fc, test } from "@fast-check/vitest";
+import { describe, expect } from "vitest";
 import { PersonalId } from "../../src/core/personal-id.js";
-import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
 import { PnrFormat } from "../../src/format/pnr-format.js";
+import { PersonalIdFaker } from "../../src/testing/faker/personal-id-faker.js";
 
 describe("PersonalId — property-based round-trip invariants", () => {
   // Generators: a valid Swedish birth date in [1927, 2024].
