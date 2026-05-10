@@ -27,10 +27,16 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          # Node 24 bundles npm 11.x. OIDC trusted publishing requires
+          # npm >= 11.5.1 (https://docs.npmjs.com/trusted-publishers/);
+          # Node 22's bundled npm 10.9.7 does NOT meet that floor.
+          node-version: "24"
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
           scope: "@deathbycode"
+
+      # Diagnostic: confirm Node/npm versions per run.
+      - run: node --version && npm --version
 
       - run: pnpm install --frozen-lockfile
 
@@ -38,6 +44,9 @@ jobs:
 
       - run: pnpm -r test
 
+      # NO NODE_AUTH_TOKEN: OIDC trusted publishing activates when the
+      # env var is absent and `id-token: write` is granted above. The
+      # npm registry accepts the GitHub OIDC token in place of a static
+      # auth token. Trusted publisher must be configured on npmjs.com
+      # for each package (which it already is for v1.0.0–v1.0.2).
       - run: pnpm -r --filter "./packages/core" --filter "./packages/sweden" publish --provenance --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
