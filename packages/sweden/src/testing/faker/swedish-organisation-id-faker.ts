@@ -10,9 +10,15 @@ import { randomInt } from "./faker-utils.js";
 import { PersonalIdFaker } from "./personal-id-faker.js";
 
 function randomRegistrationDate(): LocalDate {
-  const month = randomInt(1, 13);
-  const day = randomInt(1, 29);
-  return LocalDate.of(todayInSweden().year, month, day);
+  const currentYear = todayInSweden().year;
+  let date: LocalDate;
+  do {
+    const year = randomInt(1900, currentYear + 1); // [1900, currentYear]
+    const month = randomInt(1, 13);
+    const day = randomInt(1, 32); // 1..31; isValid() loop rejects invalid combos (e.g. Feb 30)
+    date = LocalDate.of(year, month, day);
+  } while (!date.isValid());
+  return date;
 }
 
 function randomIdNumber(registrationDate: LocalDate): OrganisationId {
