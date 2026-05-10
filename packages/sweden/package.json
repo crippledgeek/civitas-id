@@ -50,7 +50,9 @@
     "dist"
   ],
   "devDependencies": {
+    "@fast-check/vitest": "^0.3.0",
     "@types/node": "^25.3.3",
+    "fast-check": "^4.7.0",
     "tsup": "*",
     "typescript": "*",
     "vitest": "*"
