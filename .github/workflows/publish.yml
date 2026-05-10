@@ -3,6 +3,12 @@ name: Publish to npm
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag or branch to publish from (e.g. v2.0.0)"
+        required: true
+        default: "master"
 
 jobs:
   publish:
@@ -14,6 +20,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
 
       - uses: pnpm/action-setup@v4
 
@@ -30,6 +38,6 @@ jobs:
 
       - run: pnpm -r test
 
-      - run: npm install -g npm@latest
-
       - run: pnpm -r --filter "./packages/core" --filter "./packages/sweden" publish --provenance --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
