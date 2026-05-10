@@ -63,7 +63,7 @@ export const SwedishOfficialId = {
    */
   parseAnyOrThrow(text: string): SwedishOfficialId {
     const result = SwedishOfficialId.parseAny(text);
-    if (result === undefined) throw new InvalidIdNumberError(`Invalid Swedish ID number: ${text}`);
+    if (result === undefined) throw new InvalidIdNumberError("Invalid Swedish ID number: input did not match any supported Swedish ID format");
     return result;
   },
 
@@ -84,7 +84,7 @@ export const SwedishOfficialId = {
         format,
       );
     }
-    throw new InvalidIdNumberError(`Invalid Swedish ID number: ${text}`);
+    throw new InvalidIdNumberError("Invalid Swedish ID number: input did not match any supported Swedish ID format");
   },
 };
 

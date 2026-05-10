@@ -127,7 +127,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     type: OrganisationNumberType = OrganisationNumberType.LEGAL_OR_PHYSICAL_PERSON,
   ): OrganisationId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new InvalidIdNumberError(`Invalid organisation ID: ${text}`);
+    if (m.noMatch()) throw new InvalidIdNumberError("Invalid organisation ID: input did not match a valid organisationsnummer format");
 
     let full: string;
     if (m.hasCentury()) {
@@ -143,7 +143,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     }
 
     if (!isValidPerson(full, type)) {
-      throw new InvalidIdNumberError(`Invalid organisation ID: ${text}`);
+      throw new InvalidIdNumberError("Invalid organisation ID: input failed validation (form, checksum, or range)");
     }
     return new OrganisationId(full);
   }
@@ -277,7 +277,7 @@ export class OrganisationId implements OrganisationOfficialId<PnrFormat> {
     const personalParsed = PersonalId.parse(lf);
     if (personalParsed !== undefined) return personalParsed;
     throw new InvalidIdNumberError(
-      `Invalid person official ID: ${this.formatted(PnrFormat.LONG_FORMAT_WITH_SEPARATOR)}`,
+      "Invalid person official ID: organisation ID does not encode a personnummer or samordningsnummer",
     );
   }
 

@@ -47,11 +47,11 @@ export class CoordinationId extends AbstractPersonId {
    */
   static parseOrThrow(text: string): CoordinationId {
     const m = createMatcher(text);
-    if (m.noMatch()) throw new InvalidIdNumberError(`Invalid coordination ID: ${text}`);
+    if (m.noMatch()) throw new InvalidIdNumberError("Invalid coordination ID: input did not match a valid samordningsnummer format");
 
     const full = m.hasCentury() ? m.getLongFormat() : getPossibleFullIdNumber(m);
     if (!isCoordinationNumberFull(full))
-      throw new InvalidIdNumberError(`Invalid coordination ID: ${text}`);
+      throw new InvalidIdNumberError("Invalid coordination ID: input failed validation (date, checksum, or range)");
     return new CoordinationId(full);
   }
 
@@ -150,6 +150,6 @@ export const PersonOfficialIdBase = {
   format(text: string, format: PnrFormat): string {
     if (CoordinationId.isValid(text)) return CoordinationId.parseOrThrow(text).formatted(format);
     if (PersonalId.isValid(text)) return PersonalId.parseOrThrow(text).formatted(format);
-    throw new InvalidIdNumberError(`Invalid person official ID: ${text}`);
+    throw new InvalidIdNumberError("Invalid person official ID: input is neither a valid personnummer nor samordningsnummer");
   },
 };
