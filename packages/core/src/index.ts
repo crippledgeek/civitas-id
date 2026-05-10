@@ -6,3 +6,5 @@ export type { OfficialId } from "./official-id.js";
 export type { PersonOfficialId } from "./person-official-id.js";
 export type { OrganisationOfficialId } from "./organisation-official-id.js";
 export type { IdValidator } from "./id-validator.js";
+export { computeAge } from "./anniversary.js";
+export type { AnniversaryResolver } from "./anniversary.js";

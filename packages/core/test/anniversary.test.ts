@@ -49,3 +49,11 @@ describe("computeAge", () => {
     expect(computeAge(birth, LocalDate.of(2026, 2, 27), swedishStyleResolver)).toBe(17);
   });
 });
+
+import * as core from "../src/index.js";
+
+describe("core package exports", () => {
+  it("re-exports computeAge from index", () => {
+    expect(core.computeAge).toBe(computeAge);
+  });
+});
