@@ -11,21 +11,6 @@ describe("LocalDate", () => {
     });
   });
 
-  describe("now()", () => {
-    it("returns today in UTC without clock", () => {
-      const d = LocalDate.now();
-      const now = new Date();
-      expect(d.year).toBe(now.getUTCFullYear());
-      expect(d.month).toBe(now.getUTCMonth() + 1);
-      expect(d.day).toBe(now.getUTCDate());
-    });
-
-    it("uses provided clock", () => {
-      const fixed = LocalDate.of(2000, 6, 15);
-      expect(LocalDate.now(() => fixed).equals(fixed)).toBe(true);
-    });
-  });
-
   describe("parse()", () => {
     it("parses ISO date string YYYY-MM-DD", () => {
       const d = LocalDate.parse("1990-01-15");
@@ -37,20 +22,6 @@ describe("LocalDate", () => {
     it("throws for invalid format", () => {
       expect(() => LocalDate.parse("19900115")).toThrow();
       expect(() => LocalDate.parse("1990/01/15")).toThrow();
-    });
-  });
-
-  describe("age()", () => {
-    it("calculates full years", () => {
-      expect(LocalDate.of(1990, 1, 1).age(LocalDate.of(2026, 1, 1))).toBe(36);
-    });
-
-    it("does not count birthday if not yet reached", () => {
-      expect(LocalDate.of(1990, 12, 31).age(LocalDate.of(2025, 12, 30))).toBe(34);
-    });
-
-    it("counts birthday on exact birthday", () => {
-      expect(LocalDate.of(1990, 6, 15).age(LocalDate.of(2025, 6, 15))).toBe(35);
     });
   });
 
@@ -82,5 +53,16 @@ describe("LocalDate", () => {
     it("returns false for different dates", () => {
       expect(LocalDate.of(2024, 6, 15).equals(LocalDate.of(2024, 6, 16))).toBe(false);
     });
+  });
+});
+
+describe("LocalDate — removed clock-shaped API", () => {
+  it("N18: LocalDate.now is not exposed (clock access belongs in country packages)", () => {
+    expect((LocalDate as unknown as { now?: unknown }).now).toBeUndefined();
+  });
+
+  it("N18: LocalDate.prototype.age is not exposed (jurisdiction-bound; use computeAge)", () => {
+    const d = LocalDate.of(1990, 1, 1) as unknown as { age?: unknown };
+    expect(d.age).toBeUndefined();
   });
 });
